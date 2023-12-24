@@ -1,0 +1,35 @@
+/* Home.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 4px;
+  border: 2px solid #000; /* Outline */
+  background-color: transparent;
+  cursor: pointer;
+  color: black;
+  font-family: 'Ubuntu', 'Open Sans', sans-serif;
+  text-decoration: none; /* Remove underline */
+
+  &:hover {
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+  }
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.icon {
+  margin-right: 8px; /* Spacing between icon and text */
+}

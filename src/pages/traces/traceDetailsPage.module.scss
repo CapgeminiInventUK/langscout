@@ -1,0 +1,10 @@
+.traceDetailsContainer {
+  display: flex;
+  gap: 0;
+}
+
+@media (max-width: 768px) {
+  .traceDetailsContainer {
+    flex-direction: column;
+  }
+}

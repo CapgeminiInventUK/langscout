@@ -1,0 +1,42 @@
+.traceTree {
+  width: 30%;
+  padding-right: 16px;
+  border-right: 1px solid #ddd;
+}
+
+.traceNode {
+}
+
+.traceHeader {
+  padding: 0 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    background-color: black;
+    border-radius: 4px;
+    color: #fff;
+  }
+}
+
+.traceTitle {
+  flex: 1;
+  font-weight: normal;
+}
+
+.toggleIcon {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.traceChildren {
+  margin-left: 20px;
+}
+
+.active {
+  border-radius: 4px;
+  border: 2px solid #333333;
+}

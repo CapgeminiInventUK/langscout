@@ -1,0 +1,59 @@
+@use '../../styles/constants' as c;
+
+.traceTree {
+  width: 30%;
+  padding-right: 16px;
+  border-right: c.$border-width solid #ddd;
+  height: calc(100vh - #{c.$breadcrumb-height} - 34px);
+}
+
+.runTypeBox {
+  display: inline-block;
+  border: c.$border-width solid c.$border-color;
+  border-radius: c.$border-radius;
+  padding: 2px 4px;
+  margin-right: 8px;
+  background-color: c.$background-color;
+  color: c.$primary-color;
+  flex-shrink: 0;
+}
+
+.traceHeader {
+  margin: 2px 0;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    transition: background-color 0.2s ease;
+    background-color: c.$primary-color;
+    color: c.$background-color;
+    border-radius: c.$border-radius;
+  }
+}
+
+.traceTitle {
+  flex: 1;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toggleIcon {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.traceChildren {
+  margin-left: 16px;
+}
+
+.active {
+  border-radius: c.$border-radius;
+  border: c.$border-width solid #333333;
+}

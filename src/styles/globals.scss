@@ -1,0 +1,11 @@
+@use '../styles/constants' as c;
+
+html, body {
+  font-family: 'Ubuntu', 'Open Sans', sans-serif;
+  margin: 0;
+  background-color: c.$background-color;
+}
+
+body {
+  padding: 4px 16px;
+}

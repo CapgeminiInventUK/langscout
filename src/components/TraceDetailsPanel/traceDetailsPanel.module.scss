@@ -1,0 +1,27 @@
+@use '../../styles/constants' as c;
+
+.traceDetailsPanel {
+  width: 70%;
+  padding-left: 16px;
+  overflow: auto;
+}
+
+.title {
+  color: c.$text-color;
+  margin-bottom: 16px;
+}
+
+.content {
+  background-color: c.$background-color;
+  border: c.$border-width solid c.$border-color;
+  padding: 8px;
+  border-radius: c.$border-radius;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.contentInput {
+  margin-bottom: 32px;
+}

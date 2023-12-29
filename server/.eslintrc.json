@@ -1,0 +1,38 @@
+{
+  "root": true,
+  "env": {
+    "jest": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json"
+    ]
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "deprecation"
+  ],
+  "rules": {
+    "indent": [2, 2, { "SwitchCase": 1 }],
+    "no-console": ["error", { "allow": ["debug", "info", "warn", "error"] }],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "max-len": ["error", { "code": 100 }]
+
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}

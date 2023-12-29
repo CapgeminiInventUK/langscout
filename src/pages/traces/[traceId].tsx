@@ -25,7 +25,7 @@ const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({traceData}) => {
   const breadcrumbItems = [
     {name: 'Home', path: '/'},
     {name: 'Traces', path: '/traces'},
-    {name: `Trace Details for ${traceData.run_id} @ ${traceData.start_time}`, path: undefined} // Current page
+    {name: `Trace Details for ${traceData.run_id} @ ${traceData.start_time}`, path: undefined}
   ];
 
   return (

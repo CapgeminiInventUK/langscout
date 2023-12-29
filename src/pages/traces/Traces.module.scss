@@ -9,8 +9,8 @@
   width: 100%;
   border: c.$border-width solid c.$border-color;
   border-radius: c.$border-radius;
-  border-collapse: separate; /* Use 'separate' to allow border-radius on individual cells */
-  border-spacing: 0; /* Remove spacing between cells */
+  border-collapse: separate;
+  border-spacing: 0;
 
   th {
     border-bottom: c.$border-width solid c.$border-color;

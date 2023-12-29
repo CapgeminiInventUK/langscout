@@ -2,15 +2,7 @@ import Link from 'next/link';
 import styles from './Breadcrumb.module.scss';
 import React from "react"; // Import your styles
 import { ArrowRight2 } from 'iconic-react';
-
-interface BreadcrumbItem {
-  name: string;
-  path?: string;
-}
-
-interface BreadcrumbProps {
-  items: BreadcrumbItem[];
-}
+import {BreadcrumbProps} from "@/components/Breadcrumb/props";
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   return (

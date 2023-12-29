@@ -1,28 +1,29 @@
-/* Home.module.css */
+@use '../styles/constants' as c;
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
 }
 
 .button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  border-radius: 4px;
-  border: 2px solid #000; /* Outline */
+  padding: 8px;
+  border-radius: c.$border-radius;
+  border: c.$border-width solid c.$border-color;
   background-color: transparent;
   cursor: pointer;
-  color: black;
+  color: c.$primary-color;
   font-family: 'Ubuntu', 'Open Sans', sans-serif;
-  text-decoration: none; /* Remove underline */
+  text-decoration: none;
 
   &:hover {
-    background-color: #000;
-    color: #fff;
+    background-color: c.$primary-color;
+    color: c.$background-color;
     text-decoration: none;
   }
   &:focus {
@@ -31,5 +32,5 @@
 }
 
 .icon {
-  margin-right: 8px; /* Spacing between icon and text */
+  margin-right: 8px;
 }

@@ -1,25 +1,28 @@
+@use '../../styles/constants' as c;
+
 .breadcrumbList {
   list-style: none;
   padding-left: 0;
   display: flex;
   align-items: center;
   font-size: small;
+  height: 24px;
 }
 
 .breadcrumbItem {
-  margin-right: 4px;
-  margin-left: 4px;
+  margin: 0 4px;
 
   &:last-child {
     margin-right: 0;
+    font-weight: normal;
+    font-style: italic;
   }
 
   a {
-    color: blue;
-    text-decoration: none;
+    color: c.$text-color;
 
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
     }
   }
 }

@@ -9,10 +9,11 @@ const TraceDetailsPanel = ({ selectedTrace }) => {
           <h2 className={styles.title}>Details for Trace: {selectedTrace.run_id}</h2>
           <div>
             <strong>Inputs:</strong>
-            <pre className={styles.content}>
+            <pre className={styles.content + " " + styles.contentInput} >
               {JSON.stringify(selectedTrace.inputs, null, 2)}
             </pre>
           </div>
+          <div className={styles.divider} />
           <div>
             <strong>Outputs:</strong>
             <pre className={styles.content}>

@@ -1,3 +1,5 @@
+@use '../../styles/constants' as c;
+
 .traceDetailsPanel {
   width: 70%;
   padding-left: 16px;
@@ -5,14 +7,21 @@
 }
 
 .title {
-  color: #555;
-  margin-bottom: 15px;
+  color: c.$text-color;
+  margin-bottom: 16px;
 }
 
 .content {
-  background-color: #f9f9f9;
-  border: 1px solid #eee;
-  padding: 10px;
+  background-color: c.$background-color;
+  border: c.$border-width solid c.$border-color;
+  padding: 8px;
+  border-radius: c.$border-radius;
   white-space: pre-wrap;
   word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.contentInput {
+  margin-bottom: 32px;
 }

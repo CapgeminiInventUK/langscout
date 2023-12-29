@@ -1,6 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import styles from './Traces.module.scss';
 import React from "react";
+import {getTraces} from "@/services/traceService";
 
 const breadcrumbItems = [
   {name: 'Home', path: '/'},
@@ -54,8 +55,7 @@ const Traces: React.FC<TracesProps> = ({ traces }) => {
 };
 
 export async function getServerSideProps() {
-  const response = await fetch('http://localhost:1984/api/traces');
-  const data = await response.json();
+  const data = await getTraces();
   return { props: { traces: data.traces } };
 }
 

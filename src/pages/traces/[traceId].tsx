@@ -1,15 +1,19 @@
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import TraceTree from '../../components/TraceTree';
 import TraceDetailsPanel from '../../components/TraceDetailsPanel';
 import {getTraceData} from '@/services/traceService';
 import styles from './traceDetailsPage.module.scss';
-import {useRouter} from 'next/router';
 import Breadcrumb from "@/components/Breadcrumb";
+import {TraceDetailResponse} from "@/models/trace_detail_response";
+import {GetServerSidePropsContext} from "next";
 
-const TraceDetailsPage = ({traceData}) => {
-  const [expandedNodes, setExpandedNodes] = useState(new Set());
-  const [selectedTrace, setSelectedTrace] = useState(null);
-  const router = useRouter();
+interface TraceDetailsPageProps {
+  traceData: TraceDetailResponse;
+}
+
+const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({traceData}) => {
+  const [expandedNodes, setExpandedNodes] = useState(new Set<string>());
+  const [selectedTrace, setSelectedTrace] = useState<TraceDetailResponse | null>(null);
 
   useEffect(() => {
     if (traceData) {
@@ -21,7 +25,7 @@ const TraceDetailsPage = ({traceData}) => {
   const breadcrumbItems = [
     {name: 'Home', path: '/'},
     {name: 'Traces', path: '/traces'},
-    {name: `Trace Details`, path: undefined} // Current page
+    {name: `Trace Details for ${traceData.run_id} @ ${traceData.start_time}`, path: undefined} // Current page
   ];
 
   return (
@@ -40,12 +44,12 @@ const TraceDetailsPage = ({traceData}) => {
   );
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    const traceData = await getTraceData(context.params.traceId);
+    const traceId = context.params?.traceId as string;
+    const traceData = await getTraceData(traceId);
     return {props: {traceData}};
   } catch (error) {
-    // Handle error appropriately
     return {props: {error: 'Failed to fetch trace data'}};
   }
 }

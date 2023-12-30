@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  langtrace-ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    image: langtrace-ui:local
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./ui/.env
+    depends_on:
+      - langtrace-api
+
+  langtrace-ingest:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.ingest
+    image: langtrace-ingest:local
+    ports:
+      - "1984:1984"
+    env_file:
+      - ./server/.env
+
+  langtrace-api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.langtrace
+    image: langtrace-api:local
+    ports:
+      - "1994:1994"
+    env_file:
+      - ./server/.env

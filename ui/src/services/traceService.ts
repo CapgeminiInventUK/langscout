@@ -3,7 +3,7 @@ import {TracesResponse} from "@/models/traces_response";
 import config from "@/utils/config";
 
 export async function getTraces(): Promise<TracesResponse> {
-  const response = await fetch(`${config.langMonitorApiUrl}/api/traces`);
+  const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/traces`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -12,7 +12,7 @@ export async function getTraces(): Promise<TracesResponse> {
 }
 
 export async function getTraceData(traceId: string): Promise<TraceDetailResponse> {
-  const response = await fetch(`${config.langMonitorApiUrl}/api/traces/${traceId}`);
+  const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/traces/${traceId}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }

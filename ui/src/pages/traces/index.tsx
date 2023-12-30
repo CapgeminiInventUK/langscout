@@ -44,7 +44,7 @@ const Traces: React.FC<TracesProps> = ({ traces }) => {
               <td>{trace.run_id}</td>
               <td>{trace.name}</td>
               <td>{trace.start_time}</td>
-              <td>{`${trace.latency.toFixed(2)}s`}</td>
+              <td>{`${(trace.latency / 1000).toFixed(2)}s`}</td>
             </tr>
           ))}
           </tbody>

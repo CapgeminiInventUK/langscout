@@ -1,4 +1,4 @@
-# LangMonitor
+# Langtrace
 
 ## Getting Started
 

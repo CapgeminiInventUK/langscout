@@ -4,5 +4,5 @@ export interface TraceData {
   start_time: string | Date;
   end_time?: string | Date;
 
-  [key: string]: any;
+  [key: string]: unknown;
 }

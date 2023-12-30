@@ -1,14 +1,7 @@
 {
   "root": true,
-  "env": {
-    "jest": true
-  },
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": [
-      "./tsconfig.json"
-    ]
-  },
   "plugins": [
     "@typescript-eslint",
     "import",
@@ -23,16 +16,5 @@
     "object-curly-spacing": ["error", "always"],
     "max-len": ["error", { "code": 100 }]
 
-  },
-  "settings": {
-    "import/parsers": {
-      "@typescript-eslint/parser": [
-        ".ts",
-        ".tsx"
-      ]
-    },
-    "import/resolver": {
-      "typescript": {}
-    }
   }
 }

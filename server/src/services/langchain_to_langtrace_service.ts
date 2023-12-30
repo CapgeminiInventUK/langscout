@@ -1,11 +1,11 @@
-import { LangmonitorRepository } from '../repositories/langmonitor_repository';
+import { LangtraceRepository } from '../repositories/langtrace_repository';
 import { TraceData } from '../models/requests/trace_request';
 
-export class LangchainToLangmonitorService {
-  private langmonitorRepository: LangmonitorRepository;
+export class LangchainToLangtraceService {
+  private langtraceRepository: LangtraceRepository;
 
   constructor() {
-    this.langmonitorRepository = new LangmonitorRepository();
+    this.langtraceRepository = new LangtraceRepository();
   }
 
   private convertToDates(data: TraceData): void {
@@ -26,14 +26,14 @@ export class LangchainToLangmonitorService {
 
     this.convertToDates(langchainData);
 
-    await this.langmonitorRepository.insertTrace(langchainData);
+    await this.langtraceRepository.insertTrace(langchainData);
     return langchainData.run_id;
   }
 
   async updateTrace(trace_id: string, langchainData: TraceData): Promise<boolean> {
     this.convertToDates(langchainData);
 
-    const updateResult = await this.langmonitorRepository.updateTrace(trace_id, langchainData);
+    const updateResult = await this.langtraceRepository.updateTrace(trace_id, langchainData);
     return updateResult.matchedCount > 0;
   }
 }

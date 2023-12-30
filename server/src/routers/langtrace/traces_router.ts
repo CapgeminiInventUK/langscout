@@ -21,7 +21,7 @@ tracesRouter.get('/', async (req, res) => {
 });
 
 tracesRouter.get('/:traceId', async (req, res) => {
-  console.debug('GET /traces/:traceId');
+  console.debug(`GET /traces/${req.params.traceId}}`);
   const traceId = req.params.traceId;
   try {
     const trace = await traceService.getTrace(traceId);

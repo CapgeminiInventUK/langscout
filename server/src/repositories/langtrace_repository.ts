@@ -44,7 +44,7 @@ export class LangtraceRepository {
     return await collection.find<TraceDetailResponse>(query, { projection: fields }).toArray();
   }
 
-  async getTrace(langtraceId: string): Promise<TraceDetailResponse | null> {
+  async getTraceByRunId(langtraceId: string): Promise<TraceDetailResponse | null> {
     const collection = this.db.collection(this.collectionName);
     return collection.findOne<TraceDetailResponse>({ run_id: langtraceId });
   }

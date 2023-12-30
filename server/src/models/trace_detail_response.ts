@@ -8,6 +8,6 @@ export interface TraceDetailResponse {
   input: Map<string, unknown>;
   session_name: string;
   run_type: string;
-  parent_run_id: string;
+  parent_run_id: string | null;
   children: TraceDetailResponse[];
 }

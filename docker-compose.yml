@@ -7,8 +7,8 @@ services:
     image: langtrace-ui:local
     ports:
       - "3000:3000"
-    environment:
-      - LANGTRACE_API_URL=http://langtrace-api:1994
+    env_file:
+      - ./ui/.env
     depends_on:
       - langtrace-api
 
@@ -19,10 +19,8 @@ services:
     image: langtrace-ingest:local
     ports:
       - "1984:1984"
-    environment:
-      - MONGODB_ATLAS_CLUSTER_URI=mongodb+srv://george:xMnLtjtgXHugGqYP@capgpt.fwnm8.mongodb.net/?retryWrites=true&w=majority
-      - MONGODB_DB_NAME=capgpt
-      - MONGODB_TRACE_COLLECTION_NAME=traces
+    env_file:
+      - ./server/.env
 
   langtrace-api:
     build:
@@ -31,7 +29,5 @@ services:
     image: langtrace-api:local
     ports:
       - "1994:1994"
-    environment:
-      - MONGODB_ATLAS_CLUSTER_URI=mongodb+srv://george:xMnLtjtgXHugGqYP@capgpt.fwnm8.mongodb.net/?retryWrites=true&w=majority
-      - MONGODB_DB_NAME=capgpt
-      - MONGODB_TRACE_COLLECTION_NAME=traces
+    env_file:
+      - ./server/.env

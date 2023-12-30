@@ -8,6 +8,15 @@ It is built using NextJS, Node.js, Typescript and MongoDB.
 
 ## Getting Started
 
+- [Prerequisites](#prerequisites)
+- [Configuration](#configuration)
+- [Running Services Individually](#running-services-individually)
+    * [UI](#ui)
+    * [Servers](#servers)
+        + [Ingest Server](#ingest-server)
+        + [Langtrace API](#langtrace-api)
+- [Running Services with Docker Compose](#running-services-with-docker-compose)
+
 ### Prerequisites
 - Node.js (tested on 20)
 - MongoDB (currently depends on MongDB Atlas)

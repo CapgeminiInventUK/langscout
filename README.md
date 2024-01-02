@@ -1,5 +1,8 @@
 # LangTrace
 
+> [!CAUTION] 
+> This project is currently is under active development
+
 ## Overview
 
 LangTrace is a tool that allows users to ingest, view, and analyze data sent from Langchain for each run.
@@ -20,11 +23,26 @@ It is built using NextJS, Node.js, Typescript and MongoDB.
 ### Prerequisites
 - Node.js (tested on 20)
 - MongoDB (currently depends on MongDB Atlas)
+- Langchain application (see [Langchain Configuration](#langchain-configuration))
 - Docker & Docker Compose (optional - for running with Docker
 
 ### Configuration
 - In ./ui copy .env.example to .env and set the values
 - In ./server copy .env.example to .env and set the values
+
+#### Langchain Configuration
+
+> Note: LangTrace is currently configured to use the `langsmith` project. This will be configurable in the future.
+
+Lanchain piggybacks of the setup for Langsmith you need to setup the application in a similar way to Langsmith
+
+- Add Langsmith dependency to your Langchain app
+  - `yarn add @langsmith/langsmith`
+- Add the following VARs to your Langchain app
+  - `LANGCHAIN_TRACING_V2` - set to `true`
+  - `LANGCHAIN_ENDPOINTLANGCHAIN_ENDPOINT` - the URL of your LangTrace API
+  - `LANGCHAIN_PROJECT` - the name of your project
+
 
 ### Running Services Individually
 

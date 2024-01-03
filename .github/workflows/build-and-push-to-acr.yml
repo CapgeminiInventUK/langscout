@@ -35,6 +35,13 @@ jobs:
         uses: docker/metadata-action@9dc751fe249ad99385a2583ee0d084c400eee04e # v5
         with:
           images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-ingest
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=semver,pattern={{version}},value=${{ inputs.langtrace-ingest-image-tag }}
+
 
       - name: Build and push Docker image
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
@@ -42,7 +49,7 @@ jobs:
           context: ./server
           file: ./server/Dockerfile.ingest
           push: true
-          tags: ${{ inputs.langtrace-ingest-image-tag }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   
   push_ui_to_acr:
@@ -65,6 +72,12 @@ jobs:
         uses: docker/metadata-action@9dc751fe249ad99385a2583ee0d084c400eee04e # v5
         with:
           images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-ui
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=semver,pattern={{version}},value=${{ inputs.langtrace-ui-image-tag }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
@@ -72,7 +85,7 @@ jobs:
           context: ./ui
           file: ./ui/Dockerfile
           push: true
-          tags: ${{ inputs.langtrace-ui-image-tag }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
   push_api_to_acr:
@@ -95,6 +108,12 @@ jobs:
         uses: docker/metadata-action@9dc751fe249ad99385a2583ee0d084c400eee04e # v5
         with:
           images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-api
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=semver,pattern={{version}},value=${{ inputs.langtrace-api-image-tag }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
@@ -102,5 +121,5 @@ jobs:
           context: ./server
           file: ./server/Dockerfile.langtrace
           push: true
-          tags: ${{ inputs.langtrace-api-image-tag }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

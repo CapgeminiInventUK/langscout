@@ -2,17 +2,14 @@ on:
   workflow_dispatch:
     inputs:
       langtrace-ingest-image-tag:
-        description: 'The Docker image tag to push to the Azure Container Registry for the LangTrace ingress component.'
+        description: 'LangTrace Ingress Docker image tag'
         required: false
-        default: 'unset'
       langtrace-ui-image-tag:
-        description: 'The Docker image tag to push to the Azure Container Registry for the LangTrace UI component.'
+        description: 'LangTrace UI Docker image tag'
         required: false
-        default: 'unset'
       langtrace-api-image-tag:
-        description: 'The Docker image tag to push to the Azure Container Registry for the LangTrace API component.'
+        description: 'LangTrace API Docker image tag'
         required: false
-        default: 'unset'
 
 jobs:
   push_ingest_to_acr:
@@ -56,6 +53,9 @@ jobs:
     if: ${{ !cancelled() && inputs.langtrace-ui-image-tag != 'unset' }}
     name: Build and push LangTrace UI component to Azure ACR
     runs-on: ubuntu-latest
+    env:
+      # This is here to placate the build process and can be overridden at runtime.
+      LANGTRACE_API_URL: http://localhost:1984
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4

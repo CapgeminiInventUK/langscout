@@ -40,7 +40,7 @@ Lanchain piggybacks of the setup for Langsmith you need to setup the application
   - `yarn add @langsmith/langsmith`
 - Add the following VARs to your Langchain app
   - `LANGCHAIN_TRACING_V2` - set to `true`
-  - `LANGCHAIN_ENDPOINTLANGCHAIN_ENDPOINT` - the URL of your LangTrace API
+  - `LANGCHAIN_ENDPOINT` - the URL of your LangTrace API
   - `LANGCHAIN_PROJECT` - the name of your project
 
 

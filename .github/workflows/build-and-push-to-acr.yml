@@ -13,7 +13,7 @@ on:
 
 jobs:
   push_ingest_to_acr:
-    if: ${{ !cancelled() && inputs.langtrace-ingest-image-tag != 'unset' }}
+    if: ${{ !cancelled() && inputs.langtrace-ingest-image-tag != null }}
     name: Build and push LangTrace ingest component to Azure ACR
     runs-on: ubuntu-latest
     steps:
@@ -50,7 +50,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
   
   push_ui_to_acr:
-    if: ${{ !cancelled() && inputs.langtrace-ui-image-tag != 'unset' }}
+    if: ${{ !cancelled() && inputs.langtrace-ui-image-tag != null }}
     name: Build and push LangTrace UI component to Azure ACR
     runs-on: ubuntu-latest
     env:
@@ -89,7 +89,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   push_api_to_acr:
-    if: ${{ !cancelled() && inputs.langtrace-api-image-tag != 'unset' }}
+    if: ${{ !cancelled() && inputs.langtrace-api-image-tag != null }}
     name: Build and push LangTrace API component to Azure ACR
     runs-on: ubuntu-latest
     steps:

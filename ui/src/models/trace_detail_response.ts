@@ -7,6 +7,7 @@ export interface TraceDetailResponse {
   inputs: { [key: string]: any };
   session_name: string;
   run_type: string;
+  latency: number;
   parent_run_id: string;
   children: TraceDetailResponse[];
 }

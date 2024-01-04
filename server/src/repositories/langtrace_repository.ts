@@ -38,7 +38,14 @@ export class LangtraceRepository {
 
   async getTraces(): Promise<TraceDetailResponse[]> {
     const query = { 'parent_run_id': null };
-    const fields = { '_id': 0, 'run_id': 1, 'name': 1, 'start_time': 1, 'end_time': 1 };
+    const fields = {
+      '_id': 0,
+      'run_id': 1,
+      'name': 1,
+      'start_time': 1,
+      'end_time': 1,
+      'latency': 1
+    };
 
     const collection = this.db.collection(this.collectionName);
     return await collection.find<TraceDetailResponse>(query, { projection: fields }).toArray();

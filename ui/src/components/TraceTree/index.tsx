@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Add, Minus } from 'iconic-react';
 import styles from './traceTree.module.scss';
-import {TraceDetailResponse} from "@/models/trace_detail_response";
+import { TraceDetailResponse } from '@/models/trace_detail_response';
 
 interface TraceTreeProps {
   traceData: TraceDetailResponse;
@@ -10,7 +10,12 @@ interface TraceTreeProps {
   onSelectTrace: (trace: TraceDetailResponse) => void;
 }
 
-const TraceTree: React.FC<TraceTreeProps> = ({ traceData, expandedNodes, onNodeToggle, onSelectTrace }) => {
+const TraceTree: React.FC<TraceTreeProps> = ({
+  traceData,
+  expandedNodes,
+  onNodeToggle,
+  onSelectTrace
+}) => {
   const [selectedTraceId, setSelectedTraceId] = useState(traceData?.run_id || null);
 
   useEffect(() => {
@@ -29,7 +34,8 @@ const TraceTree: React.FC<TraceTreeProps> = ({ traceData, expandedNodes, onNodeT
         newSet.add(run_id);
       }
       return newSet;
-    });  };
+    });
+  };
 
   const handleSelectTrace = (trace: TraceDetailResponse) => {
     onSelectTrace(trace);
@@ -50,17 +56,14 @@ const TraceTree: React.FC<TraceTreeProps> = ({ traceData, expandedNodes, onNodeT
             {trace.name}
           </div>
           <div>
-            <span className={styles.traceDuration}>{(trace.latency/ 1000).toFixed(2)}s</span>
+            <span className={styles.traceDuration}>{(trace.latency / 1000).toFixed(2)}s</span>
           </div>
           {trace.children?.length > 0 && (
             <span onClick={(e) => toggleExpand(e, trace.run_id)} className={styles.toggleIcon}>
               {isExpanded ? <Minus/> : <Add/>}
             </span>
           )}
-          {trace.children?.length === 0 && <span className={styles.toggleIcon_hidden}>
-            {/*TODO Make this les shonky and not use an icon.*/}
-            <Minus color={"white"}/>
-          </span> }
+          {trace.children?.length === 0 && <span className={styles.toggleIcon_empty}/>}
         </div>
         {trace.children && isExpanded && (
           <div className={styles.traceChildren}>

@@ -48,22 +48,20 @@
 .toggleIcon {
   display: inline-block;
   margin-left: 8px;
-  //border: c.$border-width solid c.$border-color;
-  //border-radius: c.$border-radius;
 
   &:hover {
     transition: background-color 0.2s ease;
     color: c.$background-color;
   }
 
-  &_hidden {
+  &_empty {
+    width: 24px;
     margin-left: 8px;
-    visibility: hidden;
   }
 }
 
 .traceChildren {
-  margin-left: 16px;
+  margin-left: 8px;
   border-left: 2px solid #ddd;
   padding-left: 10px;
 }

@@ -49,11 +49,18 @@ const TraceTree: React.FC<TraceTreeProps> = ({ traceData, expandedNodes, onNodeT
             <span className={styles.runTypeBox}>{trace.run_type.toUpperCase()}</span>
             {trace.name}
           </div>
+          <div>
+            <span className={styles.traceDuration}>{(trace.latency/ 1000).toFixed(2)}s</span>
+          </div>
           {trace.children?.length > 0 && (
             <span onClick={(e) => toggleExpand(e, trace.run_id)} className={styles.toggleIcon}>
               {isExpanded ? <Minus/> : <Add/>}
             </span>
           )}
+          {trace.children?.length === 0 && <span className={styles.toggleIcon_hidden}>
+            {/*TODO Make this les shonky and not use an icon.*/}
+            <Minus color={"white"}/>
+          </span> }
         </div>
         {trace.children && isExpanded && (
           <div className={styles.traceChildren}>

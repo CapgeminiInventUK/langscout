@@ -10,7 +10,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({items}) => {
       <ol className={styles.breadcrumbList}>
         {items.map((item, index) => (
           <>
-            {index > 0 && <ArrowRight2/>}
+            {index > 0 && <ArrowRight2 size={14}/>}
             <li key={index} className={styles.breadcrumbItem}>
               {item.path ? (
                 <Link href={item.path}>

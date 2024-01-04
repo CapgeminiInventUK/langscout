@@ -31,7 +31,7 @@ describe('TraceService', () => {
       } as TraceDetailResponse];
       mockRepository.getTraces.mockResolvedValue(mockTraces);
 
-      const result = await service.getTraces();
+      const result = await service.getTopLevelTraces();
 
       expect(result).toEqual(expectedResult);
       expect(mockRepository.getTraces).toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe('TraceService', () => {
       } as TraceDetailResponse];
       mockRepository.getTraces.mockResolvedValue(mockTraces);
 
-      const result = await service.getTraces();
+      const result = await service.getTopLevelTraces();
 
       expect(result).toEqual(expectedResult);
       expect(mockRepository.getTraces).toHaveBeenCalled();

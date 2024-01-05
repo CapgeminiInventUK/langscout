@@ -29,7 +29,7 @@ jobs:
 
       - name: Get metadata for Docker build
         id: meta
-        uses: docker/metadata-action@9dc751fe249ad99385a2583ee0d084c400eee04e # v5
+        uses: docker/metadata-action@dbef88086f6cef02e264edb7dbf63250c17cef6c # v5
         with:
           images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-ingest
           tags: |
@@ -66,7 +66,7 @@ jobs:
 
       - name: Get metadata for Docker build
         id: meta
-        uses: docker/metadata-action@9dc751fe249ad99385a2583ee0d084c400eee04e # v5
+        uses: docker/metadata-action@dbef88086f6cef02e264edb7dbf63250c17cef6c # v5
         with:
           images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-ui
           tags: |
@@ -106,7 +106,7 @@ jobs:
 
       - name: Get metadata for Docker build
         id: meta
-        uses: docker/metadata-action@9dc751fe249ad99385a2583ee0d084c400eee04e # v5
+        uses: docker/metadata-action@dbef88086f6cef02e264edb7dbf63250c17cef6c # v5
         with:
           images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-api
           tags: |

@@ -76,6 +76,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
 
   return (
     <div className={styles.traceTree}>
+      <h3>Trace</h3>
       {traceData && renderTrace(traceData)}
     </div>
   );

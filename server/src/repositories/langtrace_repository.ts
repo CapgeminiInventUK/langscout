@@ -6,7 +6,7 @@ import 'dotenv/config';
 export class LangtraceRepository {
   private db!: Db;
 
-  private collectionName = process.env.MONGODB_TRACE_COLLECTION_NAME || '';
+  private collectionName = process.env.MONGODB_TRACE_COLLECTION_NAME!;
 
   constructor() {
     const uri = process.env.MONGODB_ATLAS_CLUSTER_URI || '';

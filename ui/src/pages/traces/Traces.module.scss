@@ -28,7 +28,7 @@
 
   tr:first-child th:first-child {
     border-top-left-radius: c.$border-radius;
-    width: 350px;
+    width: 320px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -36,6 +36,11 @@
 
   tr:first-child th:last-child {
     border-top-right-radius: c.$border-radius;
+  }
+
+  &__columnIcon {
+    width: 24px;
+    text-align: center !important;
   }
 }
 

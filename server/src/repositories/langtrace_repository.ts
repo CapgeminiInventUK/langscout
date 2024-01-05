@@ -30,10 +30,24 @@ export class LangtraceRepository {
 
   async getChildrenForParentRunId(parentRunId: string): Promise<TraceDetailResponse[]> {
     const query = { 'parent_run_id': parentRunId };
-    const fields = { '_id': 0 };
+    const fields = {
+      '_id': 0,
+      'run_id': 1,
+      'parent_run_id': 1,
+      'name': 1,
+      'start_time': 1,
+      'end_time': 1,
+      'run_type': 1,
+      'inputs': 1,
+      'outputs': 1,
+      'error': 1,
+      'latency': 1
+    };
 
     const collection = this.db.collection(this.collectionName);
-    return await collection.find<TraceDetailResponse>(query, { projection: fields }).toArray();
+    return await collection
+      .find<TraceDetailResponse>(query, { projection: fields })
+      .toArray();
   }
 
   async getTraces(): Promise<TraceDetailResponse[]> {
@@ -48,7 +62,10 @@ export class LangtraceRepository {
     };
 
     const collection = this.db.collection(this.collectionName);
-    return await collection.find<TraceDetailResponse>(query, { projection: fields }).toArray();
+    return await collection
+      .find<TraceDetailResponse>(query, { projection: fields })
+      .sort('start_time', -1)
+      .toArray();
   }
 
   async getTraceByRunId(langtraceId: string): Promise<TraceDetailResponse | null> {

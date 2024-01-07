@@ -28,10 +28,16 @@ export class LangtraceRepository {
     return collection.updateOne({ run_id: langtraceId }, { $set: updateData });
   }
 
-  async getTraces(): Promise<TraceDetailResponse[]> {
+  async getTraces(startDate?: Date, endDate?: Date): Promise<TraceDetailResponse[]> {
 
     const pipeline = [
-      { $match: { 'parent_run_id': null } },
+      {
+        $match: {
+          'parent_run_id': null,
+          ...(startDate && { 'start_time': { $gte: startDate } }),
+          ...(endDate && { 'end_time': { $lte: endDate } })
+        }
+      },
       {
         $addFields: {
           latency: {

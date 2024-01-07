@@ -8,7 +8,29 @@ const traceService = new TraceService();
 tracesRouter.get('/', async (req, res) => {
   console.debug('GET /traces');
   try {
-    const topLevelTraces = await traceService.getTopLevelTraces();
+    const { startDate, endDate } = req.query;
+
+    let start, end;
+
+    if (startDate) {
+      start = new Date(startDate as string);
+      if (isNaN(start.getTime())) {
+        throw new Error('Invalid startDate');
+      }
+    }
+
+    if (endDate) {
+      end = new Date(endDate as string);
+      if (isNaN(end.getTime())) {
+        throw new Error('Invalid endDate');
+      }
+
+      if (!startDate) {
+        throw new Error('startDate is required if endDate is provided');
+      }
+    }
+
+    const topLevelTraces = await traceService.getTopLevelTraces(start, end);
     res.json({ 'traces': topLevelTraces });
   } catch (error: unknown) {
     console.error(error);

@@ -53,3 +53,21 @@
     color: c.$background-color;
   }
 }
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+
+  .dateDropdown {
+    padding: 8px;
+    border-radius: c.$border-radius;
+    border: c.$border-width solid c.$border-color;
+    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+  }
+}

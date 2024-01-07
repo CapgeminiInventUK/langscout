@@ -20,11 +20,11 @@ tracesRouter.get('/', async (req, res) => {
   }
 });
 
-tracesRouter.get('/:traceId', async (req, res) => {
-  console.debug(`GET /traces/${req.params.traceId}`);
+tracesRouter.get('/tree/:traceId', async (req, res) => {
+  console.debug(`GET /traces/tree/${req.params.traceId}`);
   const traceId = req.params.traceId;
   try {
-    const trace = await traceService.getTrace(traceId);
+    const trace = await traceService.getTraceTreeByRunId(traceId);
     if (!trace) {
       return res.status(404).json({ message: 'Trace not found' });
     }

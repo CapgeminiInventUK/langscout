@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Add, Minus } from 'iconic-react';
 import styles from './traceTree.module.scss';
-import { TraceDetailResponse } from '@/models/trace_detail_response';
+import {
+  TraceTreeNode,
+} from '@/models/trace_detail_response';
+import { TraceDetailResponseParent } from '@/models/tree/trace_detail_response_tree';
+import { buildTreeFromObject } from '@/utils/buildTreeFromObject';
 
 interface TraceTreeProps {
-  traceData: TraceDetailResponse;
+  traceData: TraceDetailResponseParent;
   expandedNodes: Set<string>;
   onNodeToggle: (expandedNodes: (((prevState: Set<string>) => Set<string>) | Set<string>)) => void;
-  onSelectTrace: (trace: TraceDetailResponse) => void;
+  onSelectTrace: (trace: TraceTreeNode) => void;
 }
 
 const TraceTree: React.FC<TraceTreeProps> = ({
@@ -19,9 +23,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
   const [selectedTraceId, setSelectedTraceId] = useState(traceData?.run_id || null);
 
   useEffect(() => {
-    if (traceData) {
-      onSelectTrace(traceData);
-    }
+    onSelectTrace(buildTreeFromObject(traceData)); //TODO Remove build (as its happens again in renderTrace
   }, [traceData, onSelectTrace]);
 
   const toggleExpand = (event: React.MouseEvent<HTMLSpanElement>, run_id: string) => {
@@ -37,15 +39,14 @@ const TraceTree: React.FC<TraceTreeProps> = ({
     });
   };
 
-  const handleSelectTrace = (trace: TraceDetailResponse) => {
+  const handleSelectTrace = (trace: TraceTreeNode) => {
     onSelectTrace(trace);
     setSelectedTraceId(trace.run_id);
   };
 
-  const renderTrace = (trace: TraceDetailResponse) => {
+  const renderTrace = (trace: TraceTreeNode) => {
     const isExpanded = expandedNodes.has(trace.run_id);
     const isSelected = trace.run_id === selectedTraceId;
-
     const traceHeaderClass = isSelected ? `${styles.traceHeader} ${styles.active}` : styles.traceHeader;
 
     return (
@@ -77,7 +78,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
   return (
     <div className={styles.traceTree}>
       <h3>Trace</h3>
-      {traceData && renderTrace(traceData)}
+      {traceData && renderTrace(buildTreeFromObject(traceData))}
     </div>
   );
 };

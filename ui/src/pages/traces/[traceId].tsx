@@ -1,31 +1,30 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import TraceTree from '../../components/TraceTree';
 import TraceDetailsPanel from '../../components/TraceDetailsPanel';
-import {getTraceData} from '@/services/traceService';
+import { getTraceTree } from '@/services/traceService';
 import styles from './traceDetailsPage.module.scss';
-import Breadcrumb from "@/components/Breadcrumb";
-import {TraceDetailResponse} from "@/models/trace_detail_response";
-import {GetServerSidePropsContext} from "next";
+import Breadcrumb from '@/components/Breadcrumb';
+import { TraceTreeNode } from '@/models/trace_detail_response';
+import { GetServerSidePropsContext } from 'next';
 
 interface TraceDetailsPageProps {
-  traceData: TraceDetailResponse;
+  traceData: TraceTreeNode;
 }
 
-const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({traceData}) => {
+const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({ traceData }) => {
   const [expandedNodes, setExpandedNodes] = useState(new Set<string>());
-  const [selectedTrace, setSelectedTrace] = useState<TraceDetailResponse | null>(null);
+  const [selectedTrace, setSelectedTrace] = useState<TraceTreeNode | null>(null);
 
   useEffect(() => {
-    if (traceData) {
-      setExpandedNodes(new Set([traceData.run_id, ...traceData.children.map(child => child.run_id)]));
-      setSelectedTrace(traceData);
-    }
-  }, [traceData]);
+    const runIdToExpand = traceData.children.filter((child) => child.depth === 0).map((child) => child.run_id);
+    setExpandedNodes(new Set([traceData.run_id, ...runIdToExpand]));
+    setSelectedTrace(traceData);
+  }, [ traceData]);
 
   const breadcrumbItems = [
-    {name: 'Home', path: '/'},
-    {name: 'Traces', path: '/traces'},
-    {name: `${traceData.run_id} @ ${traceData.start_time}`, path: undefined}
+    { name: 'Home', path: '/' },
+    { name: 'Traces', path: '/traces' },
+    { name: `${traceData.run_id} @ ${traceData.start_time}`, path: undefined }
   ];
 
   return (
@@ -47,10 +46,10 @@ const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({traceData}) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const traceId = context.params?.traceId as string;
-    const traceData = await getTraceData(traceId);
-    return {props: {traceData}};
+    const traceData = await getTraceTree(traceId);
+    return { props: { traceData } };
   } catch (error) {
-    return {props: {error: 'Failed to fetch trace data'}};
+    return { props: { error: 'Failed to fetch trace data' } };
   }
 }
 

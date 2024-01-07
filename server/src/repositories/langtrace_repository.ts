@@ -2,7 +2,7 @@ import { Db, MongoClient, UpdateResult } from 'mongodb';
 import { TraceData } from '../models/requests/trace_request';
 import { TraceDetailResponse } from '../models/trace_detail_response';
 import 'dotenv/config';
-import { Document } from 'bson';
+
 export class LangtraceRepository {
   private db!: Db;
 
@@ -58,9 +58,9 @@ export class LangtraceRepository {
       .toArray();
   }
 
-  async getTraceTreeById(run_id: string): Promise<Document[]> {
+  async getTraceTreeById(run_id: string): Promise<TraceDetailResponse[]> {
     const collection = this.db.collection(this.collectionName);
-    return collection.aggregate(
+    return collection.aggregate<TraceDetailResponse>(
       [
         {
           $match: {

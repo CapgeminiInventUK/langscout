@@ -4,11 +4,9 @@ import styles from './traceTree.module.scss';
 import {
   TraceTreeNode,
 } from '@/models/trace_detail_response';
-import { TraceDetailResponseParent } from '@/models/tree/trace_detail_response_tree';
-import { buildTreeFromObject } from '@/utils/buildTreeFromObject';
 
 interface TraceTreeProps {
-  traceData: TraceDetailResponseParent;
+  traceData: TraceTreeNode;
   expandedNodes: Set<string>;
   onNodeToggle: (expandedNodes: (((prevState: Set<string>) => Set<string>) | Set<string>)) => void;
   onSelectTrace: (trace: TraceTreeNode) => void;
@@ -23,7 +21,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
   const [selectedTraceId, setSelectedTraceId] = useState(traceData?.run_id || null);
 
   useEffect(() => {
-    onSelectTrace(buildTreeFromObject(traceData)); //TODO Remove build (as its happens again in renderTrace
+    onSelectTrace(traceData);
   }, [traceData, onSelectTrace]);
 
   const toggleExpand = (event: React.MouseEvent<HTMLSpanElement>, run_id: string) => {
@@ -78,7 +76,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
   return (
     <div className={styles.traceTree}>
       <h3>Trace</h3>
-      {traceData && renderTrace(buildTreeFromObject(traceData))}
+      {traceData && renderTrace(traceData)}
     </div>
   );
 };

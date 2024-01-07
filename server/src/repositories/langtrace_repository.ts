@@ -28,48 +28,156 @@ export class LangtraceRepository {
     return collection.updateOne({ run_id: langtraceId }, { $set: updateData });
   }
 
-  async getChildrenForParentRunId(parentRunId: string): Promise<TraceDetailResponse[]> {
-    const query = { 'parent_run_id': parentRunId };
-    const fields = {
-      '_id': 0,
-      'run_id': 1,
-      'parent_run_id': 1,
-      'name': 1,
-      'start_time': 1,
-      'end_time': 1,
-      'run_type': 1,
-      'inputs': 1,
-      'outputs': 1,
-      'error': 1,
-      'latency': 1
-    };
-
-    const collection = this.db.collection(this.collectionName);
-    return await collection
-      .find<TraceDetailResponse>(query, { projection: fields })
-      .toArray();
-  }
-
   async getTraces(): Promise<TraceDetailResponse[]> {
-    const query = { 'parent_run_id': null };
-    const fields = {
-      '_id': 0,
-      'run_id': 1,
-      'name': 1,
-      'start_time': 1,
-      'end_time': 1,
-      'latency': 1
-    };
+
+    const pipeline = [
+      { $match: { 'parent_run_id': null } },
+      {
+        $addFields: {
+          latency: {
+            $subtract: ['$end_time', '$start_time']
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          run_id: 1,
+          name: 1,
+          start_time: 1,
+          end_time: 1,
+          latency: 1
+        }
+      },
+      { $sort: { start_time: -1 } }
+    ];
 
     const collection = this.db.collection(this.collectionName);
     return await collection
-      .find<TraceDetailResponse>(query, { projection: fields })
-      .sort('start_time', -1)
+      .aggregate<TraceDetailResponse>(pipeline)
       .toArray();
   }
 
-  async getTraceByRunId(langtraceId: string): Promise<TraceDetailResponse | null> {
+  async getTraceTreeById(run_id: string): Promise<TraceDetailResponse[]> {
     const collection = this.db.collection(this.collectionName);
-    return collection.findOne<TraceDetailResponse>({ run_id: langtraceId });
+    return collection.aggregate<TraceDetailResponse>(
+      [
+        {
+          $match: {
+            run_id: run_id,
+          },
+        },
+        {
+          $graphLookup: {
+            from: 'traces',
+            startWith: '$run_id',
+            connectFromField: 'run_id',
+            connectToField: 'parent_run_id',
+            as: 'children',
+            depthField: 'depth',
+            restrictSearchWithMatch: {
+              parent_run_id: {
+                $ne: null,
+              },
+            },
+          },
+        },
+        {
+          $addFields: {
+            latency: {
+              $cond: {
+                if: {
+                  $and: [
+                    '$end_time',
+                    {
+                      $ne: ['$end_time', ''],
+                    },
+                  ],
+                },
+                then: {
+                  $subtract: [
+                    '$end_time',
+                    '$start_time',
+                  ],
+                },
+                else: '$$REMOVE',
+              },
+            },
+            children: {
+              $map: {
+                input: '$children',
+                as: 'record',
+                in: {
+                  $mergeObjects: [
+                    '$$record',
+                    {
+                      latency: {
+                        $cond: {
+                          if: {
+                            $and: [
+                              '$$record.end_time',
+                              {
+                                $ne: [
+                                  '$$record.end_time',
+                                  '',
+                                ],
+                              },
+                            ],
+                          },
+                          then: {
+                            $subtract: [
+                              '$$record.end_time',
+                              '$$record.start_time',
+                            ],
+                          },
+                          else: '$$REMOVE',
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            run_id: 1,
+            parent_run_id: 1,
+            name: 1,
+            start_time: 1,
+            end_time: 1,
+            run_type: 1,
+            session_name: 1,
+            latency: 1,
+            inputs: 1,
+            outputs: 1,
+            error: 1,
+            execution_order: 1,
+            children: {
+              $map: {
+                input: '$children',
+                as: 'item',
+                in: {
+                  name: '$$item.name',
+                  run_id: '$$item.run_id',
+                  parent_run_id: '$$item.parent_run_id',
+                  start_time: '$$item.start_time',
+                  end_time: '$$item.end_time',
+                  run_type: '$$item.run_type',
+                  session_name: '$$item.session_name',
+                  latency: '$$item.latency',
+                  inputs: '$$item.inputs',
+                  outputs: '$$item.outputs',
+                  error: '$$item.error',
+                  execution_order: '$$item.execution_order',
+                  depth: '$$item.depth'
+                },
+              },
+            },
+          },
+        },
+      ]).toArray();
   }
 }

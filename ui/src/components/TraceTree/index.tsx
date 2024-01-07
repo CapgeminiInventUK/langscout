@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Add, Minus } from 'iconic-react';
 import styles from './traceTree.module.scss';
-import { TraceDetailResponse } from '@/models/trace_detail_response';
+import {
+  TraceTreeNode,
+} from '@/models/trace_detail_response';
 
 interface TraceTreeProps {
-  traceData: TraceDetailResponse;
+  traceData: TraceTreeNode;
   expandedNodes: Set<string>;
   onNodeToggle: (expandedNodes: (((prevState: Set<string>) => Set<string>) | Set<string>)) => void;
-  onSelectTrace: (trace: TraceDetailResponse) => void;
+  onSelectTrace: (trace: TraceTreeNode) => void;
 }
 
 const TraceTree: React.FC<TraceTreeProps> = ({
@@ -19,9 +21,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
   const [selectedTraceId, setSelectedTraceId] = useState(traceData?.run_id || null);
 
   useEffect(() => {
-    if (traceData) {
-      onSelectTrace(traceData);
-    }
+    onSelectTrace(traceData);
   }, [traceData, onSelectTrace]);
 
   const toggleExpand = (event: React.MouseEvent<HTMLSpanElement>, run_id: string) => {
@@ -37,15 +37,14 @@ const TraceTree: React.FC<TraceTreeProps> = ({
     });
   };
 
-  const handleSelectTrace = (trace: TraceDetailResponse) => {
+  const handleSelectTrace = (trace: TraceTreeNode) => {
     onSelectTrace(trace);
     setSelectedTraceId(trace.run_id);
   };
 
-  const renderTrace = (trace: TraceDetailResponse) => {
+  const renderTrace = (trace: TraceTreeNode) => {
     const isExpanded = expandedNodes.has(trace.run_id);
     const isSelected = trace.run_id === selectedTraceId;
-
     const traceHeaderClass = isSelected ? `${styles.traceHeader} ${styles.active}` : styles.traceHeader;
 
     return (

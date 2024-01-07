@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './traceDetailsPanel.module.scss';
-import { TraceDetailResponse } from '@/models/trace_detail_response';
+import { TraceTreeNode } from '@/models/trace_detail_response';
 
 interface TraceDetailsPanelProps {
-  selectedTrace: TraceDetailResponse | null;
+  selectedTrace: TraceTreeNode | null;
 }
 
 const TraceDetailsPanel: React.FC<TraceDetailsPanelProps> = ({ selectedTrace }) => {

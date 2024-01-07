@@ -9,8 +9,8 @@ export class TraceService {
     this.repository = new LangtraceRepository();
   }
 
-  async getTopLevelTraces(): Promise<TraceDetailResponse[]> {
-    return await this.repository.getTraces();
+  async getTopLevelTraces(startDate?: Date, endDate?: Date): Promise<TraceDetailResponse[]> {
+    return await this.repository.getTraces(startDate, endDate);
   }
 
   async getTraceTreeByRunId(traceId: string): Promise<Document | null> {

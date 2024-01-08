@@ -1,47 +1,8 @@
 @use '../../styles/constants' as c;
 
-.tableContainer {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.fullWidthTable {
-  width: 100%;
-  border: c.$border-width solid c.$border-color;
-  border-radius: c.$border-radius;
-  border-collapse: separate;
-  border-spacing: 0;
-
-  th {
-    border-bottom: c.$border-width solid c.$border-color;
-    height: 36px;
-    padding: 8px;
-    text-align: left;
-    background-color: #f4f4f4;
-  }
-
-  td {
-    padding: 8px;
-    text-align: left;
-    height: 24px;
-  }
-
-  tr:first-child th:first-child {
-    border-top-left-radius: c.$border-radius;
-    width: 320px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  tr:first-child th:last-child {
-    border-top-right-radius: c.$border-radius;
-  }
-
-  &__columnIcon {
-    width: 24px;
-    text-align: center !important;
-  }
+.tracesContainer {
+  display: flex;
+  gap: 16px;
 }
 
 .clickableRow {
@@ -51,23 +12,5 @@
   &:hover {
     background-color: c.$primary-color;
     color: c.$background-color;
-  }
-}
-
-.headerRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.filterContainer {
-  display: flex;
-  align-items: center;
-
-  .dateDropdown {
-    padding: 8px;
-    border-radius: c.$border-radius;
-    border: c.$border-width solid c.$border-color;
-    font-family: 'Ubuntu', 'Open Sans', sans-serif;
   }
 }

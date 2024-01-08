@@ -1,0 +1,21 @@
+@use '../../styles/constants' as c;
+
+.filterPanel {
+  border-left: c.$border-width solid #ddd;
+  padding-left: 16px;
+  width: 20%;
+  overflow-x: auto;
+}
+
+.percentileChip {
+  font-size: 14px;
+  border: c.$border-width solid c.$border-color;
+  line-height: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: c.$border-radius;
+  min-width: 56px;
+  max-width: 84px;
+  margin-bottom: 8px;
+  text-align: center;
+}

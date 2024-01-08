@@ -31,7 +31,7 @@ tracesRouter.get('/', async (req, res) => {
     }
 
     const topLevelTraces = await traceService.getTopLevelTraces(start, end);
-    res.json({ 'traces': topLevelTraces });
+    res.json(topLevelTraces);
   } catch (error: unknown) {
     console.error(error);
     if (error instanceof Error) {

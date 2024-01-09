@@ -13,6 +13,7 @@ import { GetServerSidePropsContext } from 'next';
 import FilterPanel from '@/components/FilterPanel';
 import TraceTable from '../../components/TraceTable';
 import { TracePercentile } from '@/models/traces_response';
+import LatencyChip from '@/components/LatencyChip';
 
 const breadcrumbItems = [
   { name: 'Home', path: '/' },
@@ -129,7 +130,7 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
               <td className={styles.fullWidthTable__columnIcon}>{getStatusForTrace(trace)}</td>
               <td>{trace.name}</td>
               <td>{runDate.date} @ {runDate.time}</td>
-              <td>{trace.latency ? `${(trace.latency / 1000).toFixed(2)}s` : '-'}</td>
+              <td> <LatencyChip latency={trace.latency}/></td>
             </tr>
           );
         })}/>

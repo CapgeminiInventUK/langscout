@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './FilterPanel.module.scss';
 import { TracePercentile } from '@/models/traces_response';
+import PercentileChip from '../PercentileChip';
 
 interface FilterPanelProps {
   recordsCount: number;
@@ -17,17 +18,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ latencyPercentiles, recordsCo
         <p>{recordsCount}</p>
       </div>
       <h3>Latency</h3>
-      {latencyPercentiles.map((percentile, index) => {
+      {latencyPercentiles.map(({ percentile, latency }, index) => {
         return (
-          <div key={index} className={styles.percentileChip}>
-            <p>P{percentile.percentile * 100}: {(percentile.latency / 1000).toFixed(2)}s</p>
-          </div>
+          <PercentileChip key={index} percentile={percentile} value={latency}/>
         );
       })
       }
     </div>
   );
 };
-
 
 export default FilterPanel;

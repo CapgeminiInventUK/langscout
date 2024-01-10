@@ -10,6 +10,10 @@ import {
 import { IconType } from 'react-icons/lib';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
+import FilterPanel from '@/components/FilterPanel';
+import TraceTable from '../../components/TraceTable';
+import { TracePercentile } from '@/models/traces_response';
+import LatencyChip from '@/components/LatencyChip';
 
 const breadcrumbItems = [
   { name: 'Home', path: '/' },
@@ -27,6 +31,7 @@ interface Trace {
 
 interface TracesProps {
   traces: Trace[];
+  latencyPercentiles: TracePercentile[];
 }
 
 interface DateTime {
@@ -59,18 +64,18 @@ const handleRowClick = (run_id: string) => {
 
 function getStatusForTrace(trace: Trace): ReactElement<IconType> {
   if (trace.error) {
-    return <BsExclamationCircleFill color={'red'}/>;
+    return <div className={styles.error}><BsExclamationCircleFill/></div>;
   } else if (trace.end_time) {
-    return <BsCheckCircleFill color={'green'}/>;
+    return <div className={styles.completed}><BsCheckCircleFill/></div>;
   } else if (trace.end_time === undefined || trace.end_time === null) {
-    return <BsClockFill color={'grey'}/>;
+    return <div className={styles.inprogress}><BsClockFill/></div>;
   } else {
-    return <BsFillQuestionCircleFill color={'orange'}/>
-      ;
+    return <div className={styles.warning}><BsFillQuestionCircleFill color={'orange'}/></div>;
   }
 }
 
-const Traces: React.FC<TracesProps> = ({ traces }) => {
+
+const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
   const [startDate, setStartDateDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const router = useRouter();
@@ -93,6 +98,7 @@ const Traces: React.FC<TracesProps> = ({ traces }) => {
       pathname: router.pathname,
       query: newQuery,
     });
+    //TODO Do i need router in here?
   }, [startDate, endDate]);
 
   const handlePredefinedRange = (range: string) => {
@@ -113,59 +119,34 @@ const Traces: React.FC<TracesProps> = ({ traces }) => {
   return (
     <div>
       <Breadcrumb items={breadcrumbItems}/>
-      <div className={styles.headerRow}>
-        <h1>Traces</h1>
-        <div className={styles.filterContainer}>
-          <select
-
-            onChange={handleDropdownChange}
-            className={styles.dateDropdown}>
-            <option value="">Select Range</option>
-            <option value="24h">Last 24 hours</option>
-            <option value="7d">Last 7 days</option>
-          </select>
-        </div>
-      </div>
-      <div className={styles.tableContainer}>
-        <table className={styles.fullWidthTable}>
-          <thead>
-          <tr>
-            <th>Run ID</th>
-            <th className={styles.fullWidthTable__tableColumnCentre}>Status</th>
-            <th>Name</th>
-            <th>Start Time</th>
-            <th>Latency</th>
-          </tr>
-          </thead>
-          <tbody>
-          {traces.map(trace => {
-            const runDate = convertToDateTime(trace.start_time);
-            return (
-              <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
-                  className={styles.clickableRow}>
-                <td>{trace.run_id}</td>
-                <td className={styles.fullWidthTable__columnIcon}>{getStatusForTrace(trace)}</td>
-                <td>{trace.name}</td>
-                <td>{runDate.date} @ {runDate.time}</td>
-                <td>{trace.latency ? `${(trace.latency / 1000).toFixed(2)}s` : '-'}</td>
-              </tr>
-            );
-          })}
-          </tbody>
-        </table>
+      <div className={styles.tracesContainer}>
+        <TraceTable onChange={handleDropdownChange} elements={traces.map(trace => {
+          const runDate = convertToDateTime(trace.start_time);
+          return (
+            <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
+                className={styles.clickableRow}>
+              <td>{trace.run_id}</td>
+              <td className={styles.fullWidthTable__columnIcon}>{getStatusForTrace(trace)}</td>
+              <td>{trace.name}</td>
+              <td>{runDate.date} @ {runDate.time}</td>
+              <td><LatencyChip latency={trace.latency}/></td>
+            </tr>
+          );
+        })}/>
+        <FilterPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length}/>
       </div>
     </div>
   );
 };
 
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { query } = context;
   const { startDate, endDate } = query;
 
-  // Use these dates to fetch data or pass them to your API call
-  const data = await getTraces(startDate as string, endDate as string); // Adjust this line as per your API's requirements
+  const data = await getTraces(startDate as string, endDate as string);
 
-  return { props: { traces: data.traces } };
+  return { props: { traces: data.traces, latencyPercentiles: data.latency_percentiles } };
 }
 
 export default Traces;

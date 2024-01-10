@@ -2,6 +2,7 @@ import { Db, MongoClient, UpdateResult } from 'mongodb';
 import { TraceData } from '../models/requests/trace_request';
 import { TraceDetailResponse } from '../models/trace_detail_response';
 import 'dotenv/config';
+import { TracePercentile } from '../models/traces_percentiles';
 
 export class LangtraceRepository {
   private db!: Db;
@@ -62,6 +63,59 @@ export class LangtraceRepository {
     return await collection
       .aggregate<TraceDetailResponse>(pipeline)
       .toArray();
+  }
+
+  async getLatencyPercentile(startDate?: Date, endDate?: Date): Promise<TracePercentile[]> {
+    const collection = this.db.collection(this.collectionName);
+
+    const percentiles = [0.5, 0.9, 0.95, 0.99];
+
+    const pipeline = [
+      {
+        $match: {
+          parent_run_id: null,
+          ...(startDate && { 'start_time': { $gte: startDate } }),
+          ...(endDate && { 'end_time': { $lte: endDate } })
+        }
+      },
+      {
+        $addFields: {
+          latency: {
+            $subtract: ['$end_time', '$start_time'],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          latency_percentiles: {
+            $percentile: {
+              input: '$latency',
+              p: percentiles,
+              method: 'approximate',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0
+        }
+      }
+    ];
+
+    interface TracesPercentilesMongoRecord {
+      latency_percentiles: number[]
+    }
+
+    const result = await collection.aggregate<TracesPercentilesMongoRecord>(pipeline).toArray();
+
+    return percentiles.map((percentile, index) => {
+      return {
+        percentile: percentile,
+        latency: result[0].latency_percentiles[index]
+      } as TracePercentile;
+    });
   }
 
   async getTraceTreeById(run_id: string): Promise<TraceDetailResponse[]> {

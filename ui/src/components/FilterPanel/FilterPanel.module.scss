@@ -1,0 +1,12 @@
+@use '../../styles/constants' as c;
+
+.filterPanel {
+  border-left: c.$border-width solid #ddd;
+  padding-left: 16px;
+  width: 20%;
+  overflow-x: auto;
+}
+
+.filterPanelChips{
+  padding-bottom: 8px;
+}

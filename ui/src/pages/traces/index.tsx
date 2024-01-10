@@ -64,14 +64,13 @@ const handleRowClick = (run_id: string) => {
 
 function getStatusForTrace(trace: Trace): ReactElement<IconType> {
   if (trace.error) {
-    return <BsExclamationCircleFill color={'red'}/>;
+    return <div className={styles.error}><BsExclamationCircleFill/></div>;
   } else if (trace.end_time) {
-    return <BsCheckCircleFill color={'green'}/>;
+    return <div className={styles.completed}><BsCheckCircleFill/></div>;
   } else if (trace.end_time === undefined || trace.end_time === null) {
-    return <BsClockFill color={'grey'}/>;
+    return <div className={styles.inprogress}><BsClockFill/></div>;
   } else {
-    return <BsFillQuestionCircleFill color={'orange'}/>
-      ;
+    return <div className={styles.warning}><BsFillQuestionCircleFill color={'orange'}/></div>;
   }
 }
 
@@ -130,7 +129,7 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
               <td className={styles.fullWidthTable__columnIcon}>{getStatusForTrace(trace)}</td>
               <td>{trace.name}</td>
               <td>{runDate.date} @ {runDate.time}</td>
-              <td> <LatencyChip latency={trace.latency}/></td>
+              <td><LatencyChip latency={trace.latency}/></td>
             </tr>
           );
         })}/>

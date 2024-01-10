@@ -2,7 +2,7 @@ import { Db, MongoClient, UpdateResult } from 'mongodb';
 import { TraceData } from '../models/requests/trace_request';
 import { TraceDetailResponse } from '../models/trace_detail_response';
 import 'dotenv/config';
-import { TracePercentile, TracesPercentilesMongo } from '../models/traces_percentiles';
+import { TracePercentile } from '../models/traces_percentiles';
 
 export class LangtraceRepository {
   private db!: Db;
@@ -104,7 +104,11 @@ export class LangtraceRepository {
       }
     ];
 
-    const result = await collection.aggregate<TracesPercentilesMongo>(pipeline).toArray();
+    interface TracesPercentilesMongoRecord {
+      latency_percentiles: number[]
+    }
+
+    const result = await collection.aggregate<TracesPercentilesMongoRecord>(pipeline).toArray();
 
     return percentiles.map((percentile, index) => {
       return {

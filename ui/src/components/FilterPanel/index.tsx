@@ -20,7 +20,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ latencyPercentiles, recordsCo
       <h3>Latency</h3>
       {latencyPercentiles.map(({ percentile, latency }, index) => {
         return (
-          <PercentileChip key={index} percentile={percentile} value={latency}/>
+          <div key={index + "-chip-block"} className={styles.filterPanelChips}>
+            <PercentileChip key={index + "-chip"} percentile={percentile} value={latency}/>
+          </div>
         );
       })
       }

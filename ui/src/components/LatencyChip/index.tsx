@@ -9,7 +9,7 @@ const LatencyChip: React.FC<LatencyChipProps> = ({ latency } ) => {
   function valueToCssColour(value: number) {
     if (value < 3000) {
       return styles.temperature1;
-    } else if (value < 5000) {
+    } else if (value < 7000) {
       return styles.temperature2;
     } else if (value < 10000) {
       return styles.temperature3;

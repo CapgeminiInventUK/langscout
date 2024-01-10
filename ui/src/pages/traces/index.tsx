@@ -64,14 +64,13 @@ const handleRowClick = (run_id: string) => {
 
 function getStatusForTrace(trace: Trace): ReactElement<IconType> {
   if (trace.error) {
-    return <BsExclamationCircleFill color={'red'}/>;
+    return <div className={styles.error}><BsExclamationCircleFill/></div>;
   } else if (trace.end_time) {
-    return <BsCheckCircleFill color={'green'}/>;
+    return <div className={styles.completed}><BsCheckCircleFill/></div>;
   } else if (trace.end_time === undefined || trace.end_time === null) {
-    return <BsClockFill color={'grey'}/>;
+    return <div className={styles.inprogress}><BsClockFill/></div>;
   } else {
-    return <BsFillQuestionCircleFill color={'orange'}/>
-      ;
+    return <div className={styles.warning}><BsFillQuestionCircleFill color={'orange'}/></div>;
   }
 }
 
@@ -104,11 +103,23 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
 
   const handlePredefinedRange = (range: string) => {
     const now = new Date();
-    if (range === '24h') {
+    if (range === '1h') {
+      setStartDateDate(new Date(now.getTime() - 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '3h') {
+      setStartDateDate(new Date(now.getTime() - 3 * 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '12h') {
+      setStartDateDate(new Date(now.getTime() - 12 * 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '24h') {
       setStartDateDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
       setEndDate(null);
     } else if (range === '7d') {
       setStartDateDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '30d') {
+      setStartDateDate(new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000));
       setEndDate(null);
     }
   };
@@ -127,10 +138,10 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
             <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
                 className={styles.clickableRow}>
               <td>{trace.run_id}</td>
-              <td className={styles.fullWidthTable__columnIcon}>{getStatusForTrace(trace)}</td>
+              <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
               <td>{trace.name}</td>
               <td>{runDate.date} @ {runDate.time}</td>
-              <td> <LatencyChip latency={trace.latency}/></td>
+              <td><LatencyChip latency={trace.latency}/></td>
             </tr>
           );
         })}/>

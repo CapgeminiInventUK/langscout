@@ -13,8 +13,12 @@ function TraceTable(props: {
           onChange={props.onChange}
           className={styles.dateDropdown}>
           <option value="">Select Range</option>
+          <option value="1h">Last 1 hour</option>
+          <option value="3h">Last 3 hours</option>
+          <option value="12h">Last 12 hours</option>
           <option value="24h">Last 24 hours</option>
           <option value="7d">Last 7 days</option>
+          <option value="30d">Last 30 days</option>
         </select>
       </div>
     </div>

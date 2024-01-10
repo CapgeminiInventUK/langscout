@@ -1,4 +1,7 @@
-FROM node:20-alpine AS base
+FROM node:20.10.0-alpine3.19 AS base
+
+ARG langtrace_api_url
+ENV LANGTRACE_API_URL=$langtrace_api_url
 
 # Install dependencies only when needed
 FROM base AS deps

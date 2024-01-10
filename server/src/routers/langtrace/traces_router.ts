@@ -8,8 +8,30 @@ const traceService = new TraceService();
 tracesRouter.get('/', async (req, res) => {
   console.debug('GET /traces');
   try {
-    const topLevelTraces = await traceService.getTraces();
-    res.json({ 'traces': topLevelTraces });
+    const { startDate, endDate } = req.query;
+
+    let start, end;
+
+    if (startDate) {
+      start = new Date(startDate as string);
+      if (isNaN(start.getTime())) {
+        throw new Error('Invalid startDate');
+      }
+    }
+
+    if (endDate) {
+      end = new Date(endDate as string);
+      if (isNaN(end.getTime())) {
+        throw new Error('Invalid endDate');
+      }
+
+      if (!startDate) {
+        throw new Error('startDate is required if endDate is provided');
+      }
+    }
+
+    const topLevelTraces = await traceService.getTopLevelTraces(start, end);
+    res.json(topLevelTraces);
   } catch (error: unknown) {
     console.error(error);
     if (error instanceof Error) {
@@ -20,11 +42,11 @@ tracesRouter.get('/', async (req, res) => {
   }
 });
 
-tracesRouter.get('/:traceId', async (req, res) => {
-  console.debug('GET /traces/:traceId');
+tracesRouter.get('/tree/:traceId', async (req, res) => {
+  console.debug(`GET /traces/tree/${req.params.traceId}`);
   const traceId = req.params.traceId;
   try {
-    const trace = await traceService.getTrace(traceId);
+    const trace = await traceService.getTraceTreeByRunId(traceId);
     if (!trace) {
       return res.status(404).json({ message: 'Trace not found' });
     }

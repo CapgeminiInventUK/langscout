@@ -1,0 +1,41 @@
+@use '../../styles/constants' as c;
+
+.percentileChip {
+  font-size: 14px;
+  line-height: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: c.$border-radius;
+  min-width: 56px;
+  max-width: 76px;
+  text-align: center;
+}
+
+.temperature1 {
+  @extend .percentileChip;
+  background-color: c.$temperature-1;
+  color: c.$temperature-1-text;
+  border: c.$border-width solid transparent;
+}
+
+.temperature2 {
+  @extend .percentileChip;
+  background-color: c.$temperature-2;
+  color: c.$temperature-2-text;
+  border: c.$border-width solid transparent;
+}
+
+.temperature3 {
+  @extend .percentileChip;
+  background-color: c.$temperature-3;
+  color: c.$temperature-3-text;
+  border: c.$border-width solid transparent;
+}
+
+
+.temperature4 {
+  @extend .percentileChip;
+  background-color: c.$temperature-4;
+  color: c.$temperature-4-text;
+  border: c.$border-width solid transparent;
+}

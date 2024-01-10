@@ -1,0 +1,126 @@
+on:
+  workflow_dispatch:
+    inputs:
+      langtrace-ingest-image-tag:
+        description: 'LangTrace Ingress Docker image tag'
+        required: false
+      langtrace-ui-image-tag:
+        description: 'LangTrace UI Docker image tag'
+        required: false
+      langtrace-api-image-tag:
+        description: 'LangTrace API Docker image tag'
+        required: false
+
+jobs:
+  push_ingest_to_acr:
+    if: ${{ !cancelled() && inputs.langtrace-ingest-image-tag != null }}
+    name: Build and push LangTrace ingest component to Azure ACR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Log into Azure Container Registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3
+        with:
+          registry: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Get metadata for Docker build
+        id: meta
+        uses: docker/metadata-action@dbef88086f6cef02e264edb7dbf63250c17cef6c # v5
+        with:
+          images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-ingest
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=semver,pattern={{version}},value=${{ inputs.langtrace-ingest-image-tag }}
+
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile.ingest
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  
+  push_ui_to_acr:
+    if: ${{ !cancelled() && inputs.langtrace-ui-image-tag != null }}
+    name: Build and push LangTrace UI component to Azure ACR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Log into Azure Container Registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3
+        with:
+          registry: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Get metadata for Docker build
+        id: meta
+        uses: docker/metadata-action@dbef88086f6cef02e264edb7dbf63250c17cef6c # v5
+        with:
+          images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-ui
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=semver,pattern={{version}},value=${{ inputs.langtrace-ui-image-tag }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
+        with:
+          context: ./ui
+          file: ./ui/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+          # This is here to placate the build process and can be overridden at runtime.
+          build-args: |
+            langtrace_api_url=http://localhost:1984
+
+  push_api_to_acr:
+    if: ${{ !cancelled() && inputs.langtrace-api-image-tag != null }}
+    name: Build and push LangTrace API component to Azure ACR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Log into Azure Container Registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3
+        with:
+          registry: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Get metadata for Docker build
+        id: meta
+        uses: docker/metadata-action@dbef88086f6cef02e264edb7dbf63250c17cef6c # v5
+        with:
+          images: ${{ secrets.DOCKER_AZURE_CONTAINER_REGISTRY_PATH }}/langtrace-api
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=semver,pattern={{version}},value=${{ inputs.langtrace-api-image-tag }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile.langtrace
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

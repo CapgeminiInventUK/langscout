@@ -1,5 +1,6 @@
 import { LangtraceRepository } from '../repositories/langtrace_repository';
-import { TraceDetailResponse } from '../models/trace_detail_response';
+import { Document } from 'bson';
+import { TracesResponse } from '../models/traces_response';
 
 export class TraceService {
   private repository: LangtraceRepository;
@@ -8,35 +9,23 @@ export class TraceService {
     this.repository = new LangtraceRepository();
   }
 
-  async fetchChildren(topLevelTraceId: string): Promise<TraceDetailResponse[]> {
-    const children = await this.repository.getChildrenForParentRunId(topLevelTraceId);
-    for (const child of children) {
-      child.children = await this.fetchChildren(child.run_id);
-    }
-
-    return children;
+  async getTopLevelTraces(startDate?: Date, endDate?: Date): Promise<TracesResponse> {
+    return {
+      latency_percentiles: await this.repository.getLatencyPercentile(startDate, endDate),
+      traces: await this.repository.getTraces(startDate, endDate)
+    };
   }
 
-  async getTraces(): Promise<TraceDetailResponse[]> {
-    const topLevelTraces =  await this.repository.getTraces();
-
-    // TODO Move this to happen on ingestion
-    for (const trace of topLevelTraces) {
-      const startTime = new Date(trace.start_time);
-      const endTime = trace.end_time ? new Date(trace.end_time) : null;
-      trace.latency = endTime ? (endTime.getTime() - startTime.getTime()) : null;
-    }
-    return topLevelTraces;
-  }
-
-  async getTrace(traceId: string): Promise<TraceDetailResponse> {
-    const topLevelRun =  await this.repository.getTrace(traceId);
-    if (!topLevelRun) {
+  async getTraceTreeByRunId(traceId: string): Promise<Document | null> {
+    const array = await this.repository.getTraceTreeById(traceId);
+    if (!array) {
+      return null;
+    } else if (array.length > 1) {
       throw new Error('Trace not found');
+    } else if (array.length == 0) {
+      return null;
+    } else {
+      return array[0];
     }
-    topLevelRun.children = await this.fetchChildren(traceId);
-    return topLevelRun;
   }
-
 }
-

@@ -1,4 +1,4 @@
-export interface TraceDetailResponse {
+export interface TraceTreeNode {
   run_id: string;
   name: string;
   start_time: string;
@@ -7,6 +7,9 @@ export interface TraceDetailResponse {
   inputs: { [key: string]: any };
   session_name: string;
   run_type: string;
+  latency: number;
   parent_run_id: string;
-  children: TraceDetailResponse[];
+  children: TraceTreeNode[];
+  execution_order?: number;
+  depth?: number;
 }

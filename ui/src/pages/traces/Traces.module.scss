@@ -1,42 +1,8 @@
 @use '../../styles/constants' as c;
 
-.tableContainer {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.fullWidthTable {
-  width: 100%;
-  border: c.$border-width solid c.$border-color;
-  border-radius: c.$border-radius;
-  border-collapse: separate;
-  border-spacing: 0;
-
-  th {
-    border-bottom: c.$border-width solid c.$border-color;
-    height: 36px;
-    padding: 8px;
-    text-align: left;
-    background-color: #f4f4f4;
-  }
-
-  td {
-    padding: 8px;
-    text-align: left;
-    height: 24px;
-  }
-
-  tr:first-child th:first-child {
-    border-top-left-radius: c.$border-radius;
-    width: 350px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  tr:first-child th:last-child {
-    border-top-right-radius: c.$border-radius;
-  }
+.tracesContainer {
+  display: flex;
+  gap: 16px;
 }
 
 .clickableRow {
@@ -47,4 +13,41 @@
     background-color: c.$primary-color;
     color: c.$background-color;
   }
+}
+
+.chip{
+  padding: 6px 4px;
+  border: c.$border-width solid transparent;
+  line-height: 0;
+  font-size: 16px;
+  border-radius: c.$border-radius;
+  text-align: center;
+  align-content: center;
+}
+
+.completed {
+  @extend .chip;
+  background-color: c.$temperature-1;
+  color: c.$temperature-1-text;
+}
+.inprogress {
+  @extend .chip;
+  background-color: c.$temperature-2;
+  color: c.$temperature-2-text;
+}
+.warning {
+  @extend .chip;
+  background-color: c.$temperature-3;
+  color: c.$temperature-3-text;
+}
+
+.error {
+  @extend .chip;
+  background-color: c.$temperature-4;
+  color: c.$temperature-4-text;
+}
+
+.columnIcon {
+  width: 24px;
+  text-align: center !important;
 }

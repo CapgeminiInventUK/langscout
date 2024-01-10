@@ -38,11 +38,6 @@
   tr:first-child th:last-child {
     border-top-right-radius: c.$border-radius;
   }
-
-  &__columnIcon {
-    width: 24px;
-    text-align: center !important;
-  }
 }
 
 .headerRow {

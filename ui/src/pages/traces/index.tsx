@@ -103,11 +103,23 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
 
   const handlePredefinedRange = (range: string) => {
     const now = new Date();
-    if (range === '24h') {
+    if (range === '1h') {
+      setStartDateDate(new Date(now.getTime() - 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '3h') {
+      setStartDateDate(new Date(now.getTime() - 3 * 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '12h') {
+      setStartDateDate(new Date(now.getTime() - 12 * 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '24h') {
       setStartDateDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
       setEndDate(null);
     } else if (range === '7d') {
       setStartDateDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
+      setEndDate(null);
+    } else if (range === '30d') {
+      setStartDateDate(new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000));
       setEndDate(null);
     }
   };
@@ -126,7 +138,7 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
             <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
                 className={styles.clickableRow}>
               <td>{trace.run_id}</td>
-              <td className={styles.fullWidthTable__columnIcon}>{getStatusForTrace(trace)}</td>
+              <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
               <td>{trace.name}</td>
               <td>{runDate.date} @ {runDate.time}</td>
               <td><LatencyChip latency={trace.latency}/></td>

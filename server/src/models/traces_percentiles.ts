@@ -1,4 +1,4 @@
 export interface TracePercentile {
   percentile: number;
-  latency: number;
+  latency?: number;
 }

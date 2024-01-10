@@ -113,7 +113,7 @@ export class LangtraceRepository {
     return percentiles.map((percentile, index) => {
       return {
         percentile: percentile,
-        latency: result[0].latency_percentiles[index]
+        latency: result[0]?.latency_percentiles[index]
       } as TracePercentile;
     });
   }

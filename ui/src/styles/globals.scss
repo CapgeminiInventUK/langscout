@@ -7,5 +7,10 @@ html, body {
 }
 
 body {
-  padding: 8px 16px 16px 16px;
+  padding: 16px;
+}
+
+h1, h2 {
+  line-height: 0;
+  padding-bottom: 6px;
 }

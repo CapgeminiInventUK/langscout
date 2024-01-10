@@ -4,11 +4,11 @@ services:
     build:
       context: ./ui
       dockerfile: Dockerfile
+      args:
+        langtrace_api_url: http://langtrace-api:1994
     image: langtrace-ui:local
     ports:
       - "3000:3000"
-    env_file:
-      - ./ui/.env
     depends_on:
       - langtrace-api
 

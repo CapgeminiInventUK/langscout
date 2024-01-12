@@ -15,21 +15,21 @@
   @extend .percentileChip;
   background-color: c.$temperature-1;
   color: c.$temperature-1-text;
-  border: c.$border-width solid transparent;
+  border: 1px solid c.$temperature-1-text;
 }
 
 .temperature2 {
   @extend .percentileChip;
   background-color: c.$temperature-2;
   color: c.$temperature-2-text;
-  border: c.$border-width solid transparent;
+  border: 1px solid c.$temperature-2-text;
 }
 
 .temperature3 {
   @extend .percentileChip;
   background-color: c.$temperature-3;
   color: c.$temperature-3-text;
-  border: c.$border-width solid transparent;
+  border: 1px solid c.$temperature-3-text;
 }
 
 
@@ -37,5 +37,5 @@
   @extend .percentileChip;
   background-color: c.$temperature-4;
   color: c.$temperature-4-text;
-  border: c.$border-width solid transparent;
+  border: 1px solid c.$temperature-4-text;
 }

@@ -1,3 +1,5 @@
+import { CreateFeedback } from './requests/feedback_request';
+
 export interface TraceDetailResponse {
   run_id: string;
   name: string;
@@ -10,4 +12,5 @@ export interface TraceDetailResponse {
   run_type: string;
   parent_run_id: string | null;
   children: TraceDetailResponse[];
+  feedback?: CreateFeedback;
 }

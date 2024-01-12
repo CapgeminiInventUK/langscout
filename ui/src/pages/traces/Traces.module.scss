@@ -29,22 +29,26 @@
   @extend .chip;
   background-color: c.$temperature-1;
   color: c.$temperature-1-text;
+  border: 1px solid c.$temperature-1-text;
 }
 .inprogress {
   @extend .chip;
   background-color: c.$temperature-2;
   color: c.$temperature-2-text;
+  border: 1px solid c.$temperature-2-text;
 }
 .warning {
   @extend .chip;
   background-color: c.$temperature-3;
   color: c.$temperature-3-text;
+  border: 1px solid c.$temperature-3-text;
 }
 
 .error {
   @extend .chip;
   background-color: c.$temperature-4;
   color: c.$temperature-4-text;
+  border: 1px solid c.$temperature-4-text;
 }
 
 .columnIcon {

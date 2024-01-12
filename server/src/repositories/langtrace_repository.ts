@@ -3,6 +3,8 @@ import { TraceData } from '../models/requests/trace_request';
 import { TraceDetailResponse } from '../models/trace_detail_response';
 import 'dotenv/config';
 import { TracePercentile } from '../models/traces_percentiles';
+import { CreateFeedback } from '../models/requests/feedback_request';
+
 
 export class LangtraceRepository {
   private db!: Db;
@@ -53,7 +55,8 @@ export class LangtraceRepository {
           name: 1,
           start_time: 1,
           end_time: 1,
-          latency: 1
+          latency: 1,
+          feedback: 1
         }
       },
       { $sort: { start_time: -1 } }
@@ -105,7 +108,7 @@ export class LangtraceRepository {
     ];
 
     interface TracesPercentilesMongoRecord {
-      latency_percentiles: number[]
+      latency_percentiles: number[];
     }
 
     const result = await collection.aggregate<TracesPercentilesMongoRecord>(pipeline).toArray();
@@ -239,5 +242,17 @@ export class LangtraceRepository {
           },
         },
       ]).toArray();
+  }
+
+
+  async insertFeedbackOnTraceByRunId(runId: string, feedback: CreateFeedback) {
+    const collection = this.db.collection('traces');
+    await collection.updateOne({ run_id: runId }, { $set: { feedback } });
+  }
+
+  async updateFeedbackOnTraceByRunId(feedbackData: CreateFeedback): Promise<UpdateResult> {
+    const collection = this.db.collection('traces');
+    return await collection.updateOne({ 'feedback.feedback_id': feedbackData.feedback_id },
+      { $set: { feedback: feedbackData } });
   }
 }

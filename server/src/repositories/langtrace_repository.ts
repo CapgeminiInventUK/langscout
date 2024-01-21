@@ -59,7 +59,8 @@ export class LangtraceRepository {
           feedback: 1
         }
       },
-      { $sort: { start_time: -1 } }
+      { $sort: { start_time: -1 } },
+      { $limit: 100 }
     ];
 
     const collection = this.db.collection(this.collectionName);

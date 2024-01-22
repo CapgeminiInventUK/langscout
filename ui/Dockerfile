@@ -1,4 +1,4 @@
-FROM node:20.10.0-alpine3.19 AS base
+FROM node:20.11.0-alpine3.19@sha256:8e6a472eb9742f4f486ca9ef13321b7fc2e54f2f60814f339eeda2aff3037573 AS base
 
 ARG langtrace_api_url
 ENV LANGTRACE_API_URL=$langtrace_api_url

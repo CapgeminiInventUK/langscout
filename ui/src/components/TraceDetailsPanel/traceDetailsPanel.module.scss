@@ -2,7 +2,10 @@
 
 .traceDetailsPanel {
   width: 70%;
-  padding-left: 16px;
+  background-color: c.$panel-background-color;
+  border-radius: c.$panel-radius;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
 }
 
 .title {
@@ -11,8 +14,8 @@
 }
 
 .content {
-  background-color: c.$background-color;
-  border: c.$border-width solid c.$border-color;
+  background-color: c.$panel-background-color;
+  border: c.$border-width solid rgba(0, 0, 0, 0.2);
   padding: 8px;
   border-radius: c.$border-radius;
   white-space: pre-wrap;

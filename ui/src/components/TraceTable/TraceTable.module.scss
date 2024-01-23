@@ -1,24 +1,27 @@
 @use '../../styles/constants' as c;
 
-
 .tableContainer {
   width: 80%;
   overflow-x: auto;
+  background-color: c.$panel-background-color;
+  border-radius: c.$panel-radius;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
 }
 
 .fullWidthTable {
   width: 100%;
-  border: c.$border-width solid c.$border-color;
+  border: c.$border-width solid c.$border-color-transparent;
   border-radius: c.$border-radius;
   border-collapse: separate;
   border-spacing: 0;
 
   th {
-    border-bottom: c.$border-width solid c.$border-color;
+    border-bottom: c.$border-width solid c.$border-color-transparent;
     height: 36px;
     padding: 8px;
     text-align: left;
-    background-color: #f4f4f4;
+    background-color: c.$background-color;
   }
 
   td {
@@ -53,7 +56,7 @@
   .dateDropdown {
     padding: 8px;
     border-radius: c.$border-radius;
-    border: c.$border-width solid c.$border-color;
+    border: c.$border-width solid c.$border-color-transparent;
     font-family: 'Ubuntu', 'Open Sans', sans-serif;
   }
 }

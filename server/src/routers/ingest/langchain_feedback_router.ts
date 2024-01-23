@@ -1,5 +1,6 @@
 import { Router, Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import { LangchainToLangtraceService } from '../../services/langchain_to_langtrace_service';
+import { CreateFeedback, UpdateFeedback } from '../../models/requests/feedback_request';
 
 export const langchainFeedbackRouter = Router();
 const langchainService = new LangchainToLangtraceService();
@@ -7,11 +8,13 @@ const langchainService = new LangchainToLangtraceService();
 langchainFeedbackRouter.post('/', async (req: ExpressRequest, res: ExpressResponse) => {
   console.debug('POST /api/feedback');
   try {
-    const runData = req.body;
-    const feedbackId = await langchainService.createFeedback(runData);
-    console.debug(`Created feedback with id ${feedbackId} in run ${runData.run_id}`);
+    const runData = req.body as CreateFeedback;
+    await langchainService.createFeedback(runData);
+
+    console.debug(`Created feedback with id ${runData.id} in run ${runData.run_id}`);
+
     res.status(201).json(
-      { feedback_id: feedbackId }
+      { feedback_id: runData.id }
     );
   } catch (error: unknown) {
     console.error(error);
@@ -26,7 +29,7 @@ langchainFeedbackRouter.post('/', async (req: ExpressRequest, res: ExpressRespon
 langchainFeedbackRouter.patch('/:feedbackId', async (req: ExpressRequest, res: ExpressResponse) => {
   console.debug('PATCH /api/feedback/:feedbackId');
   const feedbackId = req.params.feedbackId;
-  const updateData = req.body;
+  const updateData = req.body as UpdateFeedback;
 
   const success = await langchainService.updateFeedback(feedbackId, updateData);
   if (!success) {

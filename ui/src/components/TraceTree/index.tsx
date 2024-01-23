@@ -48,7 +48,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
     const traceHeaderClass = isSelected ? `${styles.traceHeader} ${styles.active}` : styles.traceHeader;
 
     return (
-      <div key={trace.run_id}>
+      <div key={trace.run_id} >
         <div className={traceHeaderClass}>
           <div onClick={() => handleSelectTrace(trace)} className={styles.traceTitle}>
             <span className={styles.runTypeBox}>{trace.run_type.toUpperCase()}</span>

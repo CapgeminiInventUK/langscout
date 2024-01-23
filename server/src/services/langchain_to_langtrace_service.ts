@@ -1,7 +1,6 @@
 import { LangtraceRepository } from '../repositories/langtrace_repository';
 import { TraceData } from '../models/requests/trace_request';
-import { CreateFeedback } from '../models/requests/feedback_request';
-import { randomUUID } from 'node:crypto';
+import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback_request';
 
 export class LangchainToLangtraceService {
   private langtraceRepository: LangtraceRepository;
@@ -44,24 +43,16 @@ export class LangchainToLangtraceService {
       throw new Error('run_id is required in data');
     }
 
-    if (!feedback.feedback_id) {
-      feedback.feedback_id = randomUUID();
-    }
-
-    const runId = feedback.run_id;
-    delete feedback.run_id;
-
     await this.langtraceRepository.insertFeedbackOnTraceByRunId(
-      runId,
       feedback
     );
-    return feedback.feedback_id;
+    return feedback.id;
   }
 
-  async updateFeedback(feedbackId: string, feedbackData: CreateFeedback): Promise<boolean> {
-    feedbackData.feedback_id = feedbackId;
+  async updateFeedback(feedbackId: string, feedbackData: UpdateFeedback): Promise<boolean> {
     return (
-      await this.langtraceRepository.updateFeedbackOnTraceByRunId(
+      await this.langtraceRepository.updateFeedbackOnTraceByFeedbackId(
+        feedbackId,
         feedbackData
       )
     ).matchedCount > 0;

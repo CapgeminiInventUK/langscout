@@ -3,7 +3,7 @@ import { TraceData } from '../models/requests/trace_request';
 import { TraceDetailResponse } from '../models/trace_detail_response';
 import 'dotenv/config';
 import { TracePercentile } from '../models/traces_percentiles';
-import { CreateFeedback } from '../models/requests/feedback_request';
+import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback_request';
 
 
 export class LangtraceRepository {
@@ -246,14 +246,23 @@ export class LangtraceRepository {
   }
 
 
-  async insertFeedbackOnTraceByRunId(runId: string, feedback: CreateFeedback) {
+  async insertFeedbackOnTraceByRunId(feedback: CreateFeedback) {
     const collection = this.db.collection('traces');
-    await collection.updateOne({ run_id: runId }, { $set: { feedback } });
+    await collection.updateOne({ run_id: feedback.run_id }, { $set: { feedback } });
   }
 
-  async updateFeedbackOnTraceByRunId(feedbackData: CreateFeedback): Promise<UpdateResult> {
+  async updateFeedbackOnTraceByFeedbackId(
+    feedbackId: string,
+    feedbackData: UpdateFeedback):
+    Promise<UpdateResult> {
     const collection = this.db.collection('traces');
-    return await collection.updateOne({ 'feedback.feedback_id': feedbackData.feedback_id },
-      { $set: { feedback: feedbackData } });
+
+    const setOperation: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(feedbackData)) {
+      setOperation[`feedback.${key}`] = value;
+    }
+
+    return await collection.updateOne({ 'feedback.id': feedbackId },
+      { $set: setOperation });
   }
 }

@@ -10,7 +10,7 @@ import {
 import { IconType } from 'react-icons/lib';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
-import FilterPanel from '@/components/FilterPanel';
+import StatsPanel from '@/components/FilterPanel';
 import TraceTable from '../../components/TraceTable';
 import { TracePercentile } from '@/models/traces_response';
 import LatencyChip from '@/components/LatencyChip';
@@ -136,7 +136,7 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
             <td>{ trace.feedback?.key ? trace.feedback?.key + ": " + trace.feedback?.score : ''}</td>
           </tr>;
         })}/>
-        <FilterPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length}/>
+        <StatsPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length}/>
       </div>
     </div>
   );

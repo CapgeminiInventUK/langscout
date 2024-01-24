@@ -30,6 +30,7 @@ function TraceTable(props: {
         <th>Name</th>
         <th>Start Time</th>
         <th>Latency</th>
+        <th>Feedback</th>
       </tr>
       </thead>
       <tbody>

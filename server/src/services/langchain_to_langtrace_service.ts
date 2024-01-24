@@ -1,5 +1,6 @@
 import { LangtraceRepository } from '../repositories/langtrace_repository';
 import { TraceData } from '../models/requests/trace_request';
+import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback_request';
 
 export class LangchainToLangtraceService {
   private langtraceRepository: LangtraceRepository;
@@ -35,5 +36,25 @@ export class LangchainToLangtraceService {
 
     const updateResult = await this.langtraceRepository.updateTrace(trace_id, langchainData);
     return updateResult.matchedCount > 0;
+  }
+
+  async createFeedback(feedback: CreateFeedback) {
+    if (!feedback.run_id) {
+      throw new Error('run_id is required in data');
+    }
+
+    await this.langtraceRepository.insertFeedbackOnTraceByRunId(
+      feedback
+    );
+    return feedback.id;
+  }
+
+  async updateFeedback(feedbackId: string, feedbackData: UpdateFeedback): Promise<boolean> {
+    return (
+      await this.langtraceRepository.updateFeedbackOnTraceByFeedbackId(
+        feedbackId,
+        feedbackData
+      )
+    ).matchedCount > 0;
   }
 }

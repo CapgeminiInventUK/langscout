@@ -10,27 +10,19 @@ import {
 import { IconType } from 'react-icons/lib';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
-import FilterPanel from '@/components/FilterPanel';
+import StatsPanel from '@/components/FilterPanel';
 import TraceTable from '../../components/TraceTable';
 import { TracePercentile } from '@/models/traces_response';
 import LatencyChip from '@/components/LatencyChip';
+import { TraceTreeNode } from '@/models/trace_detail_response';
 
 const breadcrumbItems = [
   { name: 'Home', path: '/' },
   { name: 'Traces', path: undefined },
 ];
 
-interface Trace {
-  run_id: string;
-  name: string;
-  error?: string;
-  start_time: string;
-  end_time?: string;
-  latency: number;
-}
-
 interface TracesProps {
-  traces: Trace[];
+  traces: TraceTreeNode[];
   latencyPercentiles: TracePercentile[];
 }
 
@@ -62,7 +54,7 @@ const handleRowClick = (run_id: string) => {
   window.location.href = `/traces/${run_id}`;
 };
 
-function getStatusForTrace(trace: Trace): ReactElement<IconType> {
+function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
   if (trace.error) {
     return <div className={styles.error}><BsExclamationCircleFill/></div>;
   } else if (trace.end_time) {
@@ -134,18 +126,17 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
       <div className={styles.tracesContainer}>
         <TraceTable onChange={handleDropdownChange} elements={traces.map(trace => {
           const runDate = convertToDateTime(trace.start_time);
-          return (
-            <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
-                className={styles.clickableRow}>
-              <td>{trace.run_id}</td>
-              <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
-              <td>{trace.name}</td>
-              <td>{runDate.date} @ {runDate.time}</td>
-              <td><LatencyChip latency={trace.latency}/></td>
-            </tr>
-          );
+          return <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
+              className={styles.clickableRow}>
+            <td>{trace.run_id}</td>
+            <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
+            <td>{trace.name}</td>
+            <td>{runDate.date} @ {runDate.time}</td>
+            <td><LatencyChip latency={trace.latency}/></td>
+            <td>{ trace.feedback?.key ? trace.feedback?.key + ": " + trace.feedback?.score : ''}</td>
+          </tr>;
         })}/>
-        <FilterPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length}/>
+        <StatsPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length}/>
       </div>
     </div>
   );

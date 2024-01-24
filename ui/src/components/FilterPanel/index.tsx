@@ -3,12 +3,12 @@ import styles from './FilterPanel.module.scss';
 import { TracePercentile } from '@/models/traces_response';
 import PercentileChip from '../PercentileChip';
 
-interface FilterPanelProps {
+interface StatsPanelProps {
   recordsCount: number;
   latencyPercentiles: TracePercentile[];
 }
 
-const FilterPanel: React.FC<FilterPanelProps> = ({ latencyPercentiles, recordsCount }) => {
+const StatsPanel: React.FC<StatsPanelProps> = ({ latencyPercentiles, recordsCount }) => {
 
   return (
     <div className={styles.filterPanel}>
@@ -32,8 +32,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ latencyPercentiles, recordsCo
         <p>No latency data available</p>
       </div>
       }
+      <h3>Feedback</h3>
     </div>
   );
 };
 
-export default FilterPanel;
+export default StatsPanel;

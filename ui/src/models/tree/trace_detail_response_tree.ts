@@ -1,6 +1,7 @@
 export interface TraceDetailResponseParent {
   run_id: string;
   name: string;
+  error: string | null;
   start_time: string;
   end_time: string;
   execution_order: number;
@@ -17,6 +18,7 @@ export interface TraceDetailResponseChild {
   depth: number;
   run_id: string;
   execution_order: number;
+  error: string | null;
   name: string;
   start_time: string;
   end_time: string;

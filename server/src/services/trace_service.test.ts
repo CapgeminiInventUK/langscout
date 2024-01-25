@@ -1,19 +1,34 @@
 import { TraceService } from './trace_service';
-import { LangtraceRepository } from '../repositories/langtrace_repository';
 import { TraceDetailResponse } from '../models/trace_detail_response';
+import { ApiRepository } from '../repositories/api_repository';
+import { TracesResponse } from '../models/traces_response';
+import { TracePercentile } from '../models/traces_percentiles';
 
-jest.mock('../repositories/langtrace_repository');
+jest.mock('../repositories/api_repository');
 
 describe('TraceService', () => {
   let service: TraceService;
-  let mockRepository: jest.Mocked<LangtraceRepository>;
+  let mockRepository: jest.Mocked<ApiRepository>;
 
   beforeEach(() => {
-    mockRepository = new LangtraceRepository() as any;
+    mockRepository = new ApiRepository() as any;
     service = new TraceService();
     (service as any).repository = mockRepository;
   });
   const mockTraceId = 'traceId';
+  const mockTraceDocument: TraceDetailResponse = {
+    children: [],
+    end_time: '',
+    input: new Map<string, unknown>(),
+    latency: null,
+    output: new Map<string, unknown>(),
+    parent_run_id: null,
+    run_type: '',
+    session_name: '',
+    start_time: '',
+    'run_id': mockTraceId, name: 'Test Trace'
+  };
+
 
   describe('getTraces', () => {
     it('should get all traces when both start and end date are populated', async () => {
@@ -22,12 +37,21 @@ describe('TraceService', () => {
         latency: 7418,
         start_time: '2023-12-29T20:06:43.539+00:00',
         end_time: '2023-12-29T20:06:50.957+00:00'
-      } as TraceDetailResponse];
+      } as TraceDetailResponse
+      ];
       mockRepository.getTraces.mockResolvedValue(expectedResult);
+
+      mockRepository.getLatencyPercentile.mockResolvedValue( [
+          { percentile: 0, latency: 0 } as TracePercentile,
+      ]
+      );
 
       const result = await service.getTopLevelTraces();
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual({
+        latency_percentiles: [{ percentile: 0, latency: 0 }],
+        traces: expectedResult
+      } satisfies TracesResponse);
       expect(mockRepository.getTraces).toHaveBeenCalled();
     });
   });
@@ -45,14 +69,14 @@ describe('TraceService', () => {
     });
 
     it('should throw an error if multiple traces are found', async () => {
-      mockRepository.getTraceTreeById.mockResolvedValue([{}, {}]);
+      mockRepository.getTraceTreeById.mockResolvedValue([mockTraceDocument, mockTraceDocument]);
 
       await expect(service.getTraceTreeByRunId(mockTraceId)).rejects.toThrow('Trace not found');
       expect(mockRepository.getTraceTreeById).toHaveBeenCalledWith(mockTraceId);
     });
 
     it('should return a trace document if exactly one trace is found', async () => {
-      const mockTraceDocument = { id: mockTraceId, name: 'Test Trace' };
+
       mockRepository.getTraceTreeById.mockResolvedValue([mockTraceDocument]);
 
       const result = await service.getTraceTreeByRunId(mockTraceId);
@@ -63,4 +87,5 @@ describe('TraceService', () => {
   });
 
 
-});
+})
+;

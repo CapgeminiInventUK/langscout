@@ -1,12 +1,12 @@
-import { LangtraceRepository } from '../repositories/langtrace_repository';
 import { TraceData } from '../models/requests/trace_request';
 import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback_request';
+import { IngestRepository } from '../repositories/ingest_repository';
 
 export class LangchainToLangtraceService {
-  private langtraceRepository: LangtraceRepository;
+  private repository: IngestRepository;
 
   constructor() {
-    this.langtraceRepository = new LangtraceRepository();
+    this.repository = new IngestRepository();
   }
 
   private convertToDates(data: TraceData): void {
@@ -27,14 +27,14 @@ export class LangchainToLangtraceService {
 
     this.convertToDates(langchainData);
 
-    await this.langtraceRepository.insertTrace(langchainData);
+    await this.repository.insertTrace(langchainData);
     return langchainData.run_id;
   }
 
   async updateTrace(trace_id: string, langchainData: TraceData): Promise<boolean> {
     this.convertToDates(langchainData);
 
-    const updateResult = await this.langtraceRepository.updateTrace(trace_id, langchainData);
+    const updateResult = await this.repository.updateTrace(trace_id, langchainData);
     return updateResult.matchedCount > 0;
   }
 
@@ -43,7 +43,7 @@ export class LangchainToLangtraceService {
       throw new Error('run_id is required in data');
     }
 
-    await this.langtraceRepository.insertFeedbackOnTraceByRunId(
+    await this.repository.insertFeedbackOnTraceByRunId(
       feedback
     );
     return feedback.id;
@@ -51,7 +51,7 @@ export class LangchainToLangtraceService {
 
   async updateFeedback(feedbackId: string, feedbackData: UpdateFeedback): Promise<boolean> {
     return (
-      await this.langtraceRepository.updateFeedbackOnTraceByFeedbackId(
+      await this.repository.updateFeedbackOnTraceByFeedbackId(
         feedbackId,
         feedbackData
       )

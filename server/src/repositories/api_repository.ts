@@ -2,6 +2,7 @@ import { Db, MongoClient } from 'mongodb';
 import { TraceDetailResponse } from '../models/trace_detail_response';
 import 'dotenv/config';
 import { TracePercentile } from '../models/traces_percentiles';
+import { FeedbackCountResponse } from '../models/feedback_count_response';
 
 export class ApiRepository {
   private db!: Db;
@@ -47,7 +48,7 @@ export class ApiRepository {
         }
       },
       { $sort: { start_time: -1 } },
-      { $limit: 100 }
+      // { $limit: 100 }
     ];
 
     const collection = this.db.collection(this.collectionName);
@@ -231,6 +232,90 @@ export class ApiRepository {
         },
       ]).toArray();
   }
+
+
+
+  async getFeedbackCounts(startDate?: Date, endDate?: Date): Promise<FeedbackCountResponse[]> {
+    const collection = this.db.collection(this.collectionName);
+    return collection.aggregate<FeedbackCountResponse>(
+      [
+        {
+          $match: {
+            parent_run_id: null,
+            ...(startDate && { 'start_time': { $gte: startDate } }),
+            ...(endDate && { 'end_time': { $lte: endDate } }),
+            feedback: {
+              $exists: true,
+            },
+          },
+        },
+        {
+          $project: {
+            feedbackKey: '$feedback.key',
+            feedbackValue: {
+              $cond: [
+                {
+                  $or: [
+                    {
+                      $eq: ['$feedback.score', true],
+                    },
+                    {
+                      $eq: ['$feedback.score', false],
+                    },
+                  ],
+                },
+                {
+                  $cond: [
+                    {
+                      $eq: ['$feedback.score', true],
+                    },
+                    'true',
+                    'false',
+                  ],
+                },
+                {
+                  $ifNull: ['$feedback.value', 'None'],
+                },
+              ],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: {
+              key: '$feedbackKey',
+              value: '$feedbackValue',
+            },
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: '$_id.key',
+            feedbackCounts: {
+              $push: {
+                k: '$_id.value',
+                v: '$count',
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            key: '$_id',
+            counts: {
+              $arrayToObject: '$feedbackCounts',
+            },
+          },
+        },
+      ]).toArray();
+  }
+
+
+
 
 
 }

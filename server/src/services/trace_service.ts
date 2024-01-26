@@ -11,6 +11,7 @@ export class TraceService {
 
   async getTopLevelTraces(startDate?: Date, endDate?: Date): Promise<TracesResponse> {
     return {
+      feedback_counts: await this.repository.getFeedbackCounts(startDate, endDate),
       latency_percentiles: await this.repository.getLatencyPercentile(startDate, endDate),
       traces: await this.repository.getTraces(startDate, endDate)
     };

@@ -1,14 +1,19 @@
 import React from 'react';
 import styles from './FilterPanel.module.scss';
-import { TracePercentile } from '@/models/traces_response';
+import { FeedbackCount, TracePercentile } from '@/models/traces_response';
 import PercentileChip from '../PercentileChip';
 
 interface StatsPanelProps {
   recordsCount: number;
   latencyPercentiles: TracePercentile[];
+  feedbackCounts: FeedbackCount[];
 }
 
-const StatsPanel: React.FC<StatsPanelProps> = ({ latencyPercentiles, recordsCount }) => {
+const StatsPanel: React.FC<StatsPanelProps> = ({
+  latencyPercentiles,
+  recordsCount,
+  feedbackCounts
+}) => {
 
   return (
     <div className={styles.filterPanel}>
@@ -33,6 +38,16 @@ const StatsPanel: React.FC<StatsPanelProps> = ({ latencyPercentiles, recordsCoun
       </div>
       }
       <h3>Feedback</h3>
+      {feedbackCounts.length > 0 && feedbackCounts.map(({ key, counts }, index) => {
+        return (
+          <div key={index + "-feedback-key"}>
+            <p><strong>{key}</strong></p>
+            {counts && Object.entries(counts).map(([feedbackKey, feedbackValue], feedbackIndex) => (
+              <p key={feedbackIndex}>{`${feedbackKey}: ${feedbackValue}`}</p>
+            ))}
+          </div>
+        );
+      })}
     </div>
   );
 };

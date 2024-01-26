@@ -41,6 +41,9 @@ describe('TraceService', () => {
       ];
       mockRepository.getTraces.mockResolvedValue(expectedResult);
 
+      mockRepository.getFeedbackCounts.mockResolvedValue(
+        [{ key: 'useful', counts: { 'true': 0, 'false': 0 } }]);
+
       mockRepository.getLatencyPercentile.mockResolvedValue( [
           { percentile: 0, latency: 0 } as TracePercentile,
       ]
@@ -49,6 +52,7 @@ describe('TraceService', () => {
       const result = await service.getTopLevelTraces();
 
       expect(result).toEqual({
+        feedback_counts: [{ key: 'useful', counts: { 'true': 0, 'false': 0 } }],
         latency_percentiles: [{ percentile: 0, latency: 0 }],
         traces: expectedResult
       } satisfies TracesResponse);

@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import StatsPanel from '@/components/FilterPanel';
 import TraceTable from '../../components/TraceTable';
-import { TracePercentile } from '@/models/traces_response';
+import { FeedbackCount, TracePercentile } from '@/models/traces_response';
 import LatencyChip from '@/components/LatencyChip';
 import { TraceTreeNode } from '@/models/trace_detail_response';
 
@@ -24,6 +24,7 @@ const breadcrumbItems = [
 interface TracesProps {
   traces: TraceTreeNode[];
   latencyPercentiles: TracePercentile[];
+  feedbackCounts: FeedbackCount[];
 }
 
 interface DateTime {
@@ -67,7 +68,7 @@ function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
 }
 
 
-const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
+const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles, feedbackCounts }) => {
   const [startDate, setStartDateDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const router = useRouter();
@@ -136,7 +137,7 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles }) => {
             <td>{ trace.feedback?.key ? trace.feedback?.key + ": " + trace.feedback?.score : ''}</td>
           </tr>;
         })}/>
-        <StatsPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length}/>
+        <StatsPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length} feedbackCounts={feedbackCounts}/>
       </div>
     </div>
   );
@@ -149,7 +150,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const data = await getTraces(startDate as string, endDate as string);
 
-  return { props: { traces: data.traces, latencyPercentiles: data.latency_percentiles } };
+  return { props: { traces: data.traces, latencyPercentiles: data.latency_percentiles, feedbackCounts: data.feedback_counts } };
 }
 
 export default Traces;

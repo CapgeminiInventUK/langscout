@@ -5,7 +5,14 @@ export interface TracePercentile {
   latency: number;
 }
 
+export interface FeedbackCount {
+  key: string;
+  counts: { [key: string]: number };
+}
+
+
 export interface TracesResponse {
   traces: TraceTreeNode[];
   latency_percentiles: TracePercentile[];
+  feedback_counts: FeedbackCount[];
 }

@@ -1,16 +1,17 @@
-import { LangtraceRepository } from '../repositories/langtrace_repository';
 import { Document } from 'bson';
 import { TracesResponse } from '../models/traces_response';
+import { ApiRepository } from '../repositories/api_repository';
 
 export class TraceService {
-  private repository: LangtraceRepository;
+  private repository: ApiRepository;
 
   constructor() {
-    this.repository = new LangtraceRepository();
+    this.repository = new ApiRepository();
   }
 
   async getTopLevelTraces(startDate?: Date, endDate?: Date): Promise<TracesResponse> {
     return {
+      feedback_counts: await this.repository.getFeedbackCounts(startDate, endDate),
       latency_percentiles: await this.repository.getLatencyPercentile(startDate, endDate),
       traces: await this.repository.getTraces(startDate, endDate)
     };

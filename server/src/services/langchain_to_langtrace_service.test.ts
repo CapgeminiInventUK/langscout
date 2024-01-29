@@ -1,15 +1,15 @@
 import { LangchainToLangtraceService } from './langchain_to_langtrace_service';
-import { LangtraceRepository } from '../repositories/langtrace_repository';
 import { TraceData } from '../models/requests/trace_request';
+import { IngestRepository } from '../repositories/ingest_repository';
 
-jest.mock('../repositories/langtrace_repository');
+jest.mock('../repositories/ingest_repository');
 
 describe('LangchainToLangtraceService', () => {
   let service: LangchainToLangtraceService;
-  let mockRepository: jest.Mocked<LangtraceRepository>;
+  let mockRepository: jest.Mocked<IngestRepository>;
 
   beforeEach(() => {
-    mockRepository = new LangtraceRepository() as any;
+    mockRepository = new IngestRepository() as any;
     service = new LangchainToLangtraceService();
     (service as any).langtraceRepository = mockRepository;
   });

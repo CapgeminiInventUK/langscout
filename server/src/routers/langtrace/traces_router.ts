@@ -5,12 +5,16 @@ export const tracesRouter = Router();
 
 const traceService = new TraceService();
 
+export interface FeedbackFilters {
+  [key: string]: string[];
+}
+
 tracesRouter.get('/', async (req, res) => {
   console.debug('GET /traces');
   try {
-    const { startDate, endDate } = req.query;
+    const { startDate, endDate,  feedbackFilter } = req.query;
 
-    let start, end;
+    let start, end, filters;
 
     if (startDate) {
       start = new Date(startDate as string);
@@ -30,7 +34,16 @@ tracesRouter.get('/', async (req, res) => {
       }
     }
 
-    const topLevelTraces = await traceService.getTopLevelTraces(start, end);
+    if (feedbackFilter) {
+      try {
+        console.log(feedbackFilter);
+        filters = feedbackFilter as FeedbackFilters;
+      } catch (error) {
+        console.error('Failed to parse feedbackFilters', error);
+      }
+    }
+
+    const topLevelTraces = await traceService.getTopLevelTraces(start, end, filters);
     res.json(topLevelTraces);
   } catch (error: unknown) {
     console.error(error);

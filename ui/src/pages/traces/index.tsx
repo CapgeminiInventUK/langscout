@@ -1,19 +1,12 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import styles from './Traces.module.scss';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getTraces } from '@/services/traceService';
-import {
-  BsCheckCircleFill, BsClockFill,
-  BsExclamationCircleFill,
-  BsFillQuestionCircleFill
-} from 'react-icons/bs';
-import { IconType } from 'react-icons/lib';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import StatsPanel from '@/components/FilterPanel';
 import TraceTable from '../../components/TraceTable';
 import { FeedbackCount, TracePercentile } from '@/models/traces_response';
-import LatencyChip from '@/components/LatencyChip';
 import { TraceTreeNode } from '@/models/trace_detail_response';
 
 const breadcrumbItems = [
@@ -27,117 +20,144 @@ interface TracesProps {
   feedbackCounts: FeedbackCount[];
 }
 
-interface DateTime {
-  date: string;
-  time: string;
-}
-
-function convertToDateTime(timestamp: string): DateTime {
-  const dateObj = new Date(timestamp);
-
-  const date = dateObj.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-  const time = dateObj.toLocaleTimeString('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
-  });
-
-  return { date, time };
-}
-
-
-const handleRowClick = (run_id: string) => {
-  window.location.href = `/traces/${run_id}`;
-};
-
-function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
-  if (trace.error) {
-    return <div className={styles.error}><BsExclamationCircleFill/></div>;
-  } else if (trace.end_time) {
-    return <div className={styles.completed}><BsCheckCircleFill/></div>;
-  } else if (trace.end_time === undefined || trace.end_time === null) {
-    return <div className={styles.inprogress}><BsClockFill/></div>;
-  } else {
-    return <div className={styles.warning}><BsFillQuestionCircleFill color={'orange'}/></div>;
-  }
+export interface FeedbackFilters {
+  [key: string]: string[];
 }
 
 
 const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles, feedbackCounts }) => {
-  const [startDate, setStartDateDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const router = useRouter();
 
+  const parseFeedbackFilters = (filters: string | string[] | undefined): FeedbackFilters => {
+    if (typeof filters === 'string') {
+      try {
+        const feedbackFilters: FeedbackFilters = JSON.parse(filters);
+        Object.keys(feedbackFilters).forEach(key => {
+          feedbackFilters[key].sort();
+        });
+        return feedbackFilters;
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  };
+
+
+  const initialStartDate = router.query.startDate ? new Date(router.query.startDate as string) : null;
+  const initialEndDate = router.query.endDate ? new Date(router.query.endDate as string) : null;
+  const initialFeedbackFilters = parseFeedbackFilters(router.query.feedbackFilters);
+
+  const [startDate, setStartDate] = useState<Date | null>(initialStartDate);
+  const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
+  const [feedbackFilters, setFeedbackFilters] = useState<FeedbackFilters>(initialFeedbackFilters);
+  const [inLast, setInLast] = useState<string | null>(null);
+
+
   useEffect(() => {
-    const formattedStart = startDate?.toISOString();
-    const formattedEnd = endDate?.toISOString();
+    if (
+      startDate !== initialStartDate ||
+      endDate !== initialEndDate ||
+      JSON.stringify(feedbackFilters) !== JSON.stringify(initialFeedbackFilters)
+    ) {
+      const formattedStart = startDate?.toISOString();
 
-    const newQuery = { ...router.query };
+      const formattedEnd = endDate?.toISOString();
 
-    if (formattedStart) {
-      newQuery.startDate = formattedStart;
+      const newQuery = { ...router.query };
+
+      if (formattedStart) {
+        newQuery.startDate = formattedStart;
+      } else {
+        delete newQuery.startDate;
+      }
+
+      if (formattedEnd) {
+        newQuery.endDate = formattedEnd;
+      } else {
+        delete newQuery.endDate;
+      }
+
+      if (inLast) {
+        newQuery.inLast = inLast;
+      } else {
+        delete newQuery.inLast;
+      }
+
+      if (Object.keys(feedbackFilters).length > 0) {
+        newQuery.feedbackFilters = JSON.stringify(feedbackFilters);
+      } else {
+        delete newQuery.feedbackFilters;
+      }
+
+      router.push({
+        pathname: router.pathname,
+        query: newQuery,
+      });
     }
-
-    if (formattedEnd) {
-      newQuery.endDate = formattedEnd;
-    }
-
-    router.push({
-      pathname: router.pathname,
-      query: newQuery,
-    });
-    //TODO Do i need router in here?
-  }, [startDate, endDate]);
+  }, [startDate, endDate, feedbackFilters, inLast]);
 
   const handlePredefinedRange = (range: string) => {
     const now = new Date();
     if (range === '1h') {
-      setStartDateDate(new Date(now.getTime() - 60 * 60 * 1000));
+      setStartDate(new Date(now.getTime() - 60 * 60 * 1000));
       setEndDate(null);
     } else if (range === '3h') {
-      setStartDateDate(new Date(now.getTime() - 3 * 60 * 60 * 1000));
+      setStartDate(new Date(now.getTime() - 3 * 60 * 60 * 1000));
       setEndDate(null);
     } else if (range === '12h') {
-      setStartDateDate(new Date(now.getTime() - 12 * 60 * 60 * 1000));
+      setStartDate(new Date(now.getTime() - 12 * 60 * 60 * 1000));
       setEndDate(null);
     } else if (range === '24h') {
-      setStartDateDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+      setStartDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
       setEndDate(null);
     } else if (range === '7d') {
-      setStartDateDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
+      setStartDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
       setEndDate(null);
     } else if (range === '30d') {
-      setStartDateDate(new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000));
+      setStartDate(new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000));
       setEndDate(null);
     }
   };
 
   const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     handlePredefinedRange(event.target.value);
+    setInLast(event.target.value);
+  };
+
+  const handleFeedbackSelect = (key: string, value: string, isSelected: boolean) => {
+    setFeedbackFilters(prevFilters => {
+      const newFilters = { ...prevFilters };
+
+      if (isSelected) {
+        if (!newFilters[key]) {
+          newFilters[key] = [];
+        }
+        if (!newFilters[key].includes(value)) {
+          newFilters[key].push(value);
+        }
+      } else {
+        newFilters[key] = (newFilters[key] ?? []).filter(v => v !== value);
+        if (newFilters[key].length === 0) {
+          delete newFilters[key];
+        }
+      }
+
+      return newFilters;
+    });
   };
 
   return (
     <div>
       <Breadcrumb items={breadcrumbItems}/>
       <div className={styles.tracesContainer}>
-        <TraceTable onChange={handleDropdownChange} elements={traces.map(trace => {
-          const runDate = convertToDateTime(trace.start_time);
-          return <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
-              className={styles.clickableRow}>
-            <td>{trace.run_id}</td>
-            <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
-            <td>{trace.name}</td>
-            <td>{runDate.date} @ {runDate.time}</td>
-            <td><LatencyChip latency={trace.latency}/></td>
-            <td>{ trace.feedback?.key ? trace.feedback?.key + ": " + trace.feedback?.score : ''}</td>
-          </tr>;
-        })}/>
-        <StatsPanel latencyPercentiles={latencyPercentiles} recordsCount={traces.length} feedbackCounts={feedbackCounts}/>
+        <TraceTable onChange={handleDropdownChange} traces={traces}/>
+        <StatsPanel latencyPercentiles={latencyPercentiles}
+                    recordsCount={traces.length}
+                    feedbackCounts={feedbackCounts}
+                    feedbackFilters={feedbackFilters}
+                    onFeedbackSelect={handleFeedbackSelect}
+        />
       </div>
     </div>
   );
@@ -146,11 +166,19 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles, feedbackCou
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { query } = context;
-  const { startDate, endDate } = query;
+  const { startDate, endDate, feedbackFilters, inLast } = query;
 
-  const data = await getTraces(startDate as string, endDate as string);
+  // Get start and end dates from query params inLast
 
-  return { props: { traces: data.traces, latencyPercentiles: data.latency_percentiles, feedbackCounts: data.feedback_counts } };
+  const data = await getTraces(startDate as string, endDate as string, feedbackFilters as string);
+
+  return {
+    props: {
+      traces: data.traces,
+      latencyPercentiles: data.latency_percentiles,
+      feedbackCounts: data.feedback_counts
+    }
+  };
 }
 
 export default Traces;

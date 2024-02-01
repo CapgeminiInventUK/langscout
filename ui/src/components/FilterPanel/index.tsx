@@ -2,17 +2,22 @@ import React from 'react';
 import styles from './FilterPanel.module.scss';
 import { FeedbackCount, TracePercentile } from '@/models/traces_response';
 import PercentileChip from '../PercentileChip';
+import { FeedbackFilters } from '@/pages/traces';
 
 interface StatsPanelProps {
   recordsCount: number;
   latencyPercentiles: TracePercentile[];
   feedbackCounts: FeedbackCount[];
+  feedbackFilters: FeedbackFilters;
+  onFeedbackSelect: (key: string, value: string, isSelected: boolean) => void;
 }
 
 const StatsPanel: React.FC<StatsPanelProps> = ({
   latencyPercentiles,
   recordsCount,
-  feedbackCounts
+  feedbackCounts,
+  feedbackFilters,
+  onFeedbackSelect,
 }) => {
 
   return (
@@ -40,10 +45,17 @@ const StatsPanel: React.FC<StatsPanelProps> = ({
       <h3>Feedback</h3>
       {feedbackCounts.length > 0 && feedbackCounts.map(({ key, counts }, index) => {
         return (
-          <div key={index + "-feedback-key"}>
+          <div key={index + '-feedback-key'}>
             <p><strong>{key}</strong></p>
             {counts && Object.entries(counts).map(([feedbackKey, feedbackValue], feedbackIndex) => (
-              <p key={feedbackIndex}>{`${feedbackKey}: ${feedbackValue}`}</p>
+              <p key={feedbackIndex}>
+                <input
+                  type="checkbox"
+                  value={feedbackKey}
+                  checked={feedbackFilters[key]?.includes(feedbackKey)}
+                  onChange={(e) => onFeedbackSelect(key, feedbackKey, e.target.checked)}
+                />{`${feedbackKey}: ${feedbackValue}`}
+              </p>
             ))}
           </div>
         );

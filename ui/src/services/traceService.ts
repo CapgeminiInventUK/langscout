@@ -1,10 +1,13 @@
 import { TracesResponse } from '@/models/traces_response';
-import config from '@/utils/config';
+import config from '@/lib/utils/config';
 import { TraceDetailResponseParent } from '@/models/tree/trace_detail_response_tree';
-import { buildTreeFromObject } from '@/utils/buildTreeFromObject';
+import { buildTreeFromObject } from '@/lib/utils/buildTreeFromObject';
 import { TraceTreeNode } from '@/models/trace_detail_response';
 
-export async function getTraces(startDate?: string, endDate?: string): Promise<TracesResponse> {
+export async function getTraces(startDate?: string,
+  endDate?: string,
+  feedbackFilters?: string
+): Promise<TracesResponse> {
   let url = `${config.langtraceApiUrl}/langtrace/api/traces`;
   const queryParams = new URLSearchParams();
   if (startDate && startDate.trim() !== '') {
@@ -13,9 +16,31 @@ export async function getTraces(startDate?: string, endDate?: string): Promise<T
   if (endDate && endDate.trim() !== '') {
     queryParams.append('endDate', endDate);
   }
+
+  if (feedbackFilters) {
+    try {
+      const filters = JSON.parse(feedbackFilters);
+      if (typeof filters === 'object' && filters !== null) {
+        Object.entries(filters).forEach(([key, values]) => {
+          if (Array.isArray(values)) {
+            values.forEach(value => {
+              if (typeof value === 'string') {
+                queryParams.append(`feedbackFilter[${key}][]`, value);
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Failed to parse feedbackFilters', error);
+    }
+  }
+
+
   if (queryParams.toString()) {
     url += `?${queryParams.toString()}`;
   }
+
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error('Network response was not ok');

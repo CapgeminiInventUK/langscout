@@ -1,32 +1,86 @@
-import { Db, MongoClient } from 'mongodb';
+import { Collection, Db, MongoClient } from 'mongodb';
 import { TraceDetailResponse } from '../models/trace_detail_response';
 import 'dotenv/config';
 import { TracePercentile } from '../models/traces_percentiles';
 import { FeedbackCountResponse } from '../models/feedback_count_response';
+import { FeedbackFilters } from '../routers/langtrace/traces_router';
 
 export class ApiRepository {
-  private db!: Db;
-
+  private db: Db | undefined;
   private collectionName = process.env.LANGTRACE_TRACES_MONGODB_COLLECTION_NAME!;
+  private client: MongoClient;
 
   constructor() {
-    const api = process.env.LANGTRACE_API_MONGODB_URI!;
-    const client = new MongoClient(api);
-
-    client.connect().then(() => {
-      this.db = client.db(process.env.LANGTRACE_MONGODB_DB_NAME);
-    }).catch(error => {
-      console.error('Failed to connect to MongoDB', error);
-    });
+    const connectionString = process.env.LANGTRACE_API_MONGODB_URI!;
+    this.client = new MongoClient(connectionString);
   }
 
-  async getTraces(startDate?: Date, endDate?: Date): Promise<TraceDetailResponse[]> {
+  async init(): Promise<void> {
+    await this.client.connect();
+    const dbName = process.env.LANGTRACE_MONGODB_DB_NAME;
+    this.db = this.client.db(dbName);
+  }
+
+  private async getCollection(): Promise<Collection> {
+    if (!this.db) {
+      console.warn('MongoDB connection is not initialized');
+      await this.init();
+    }
+    return this.db!.collection(this.collectionName);
+  }
+
+  private createMatchForFilters(feedbackFilters?: FeedbackFilters) {
+    const feedbackFilter = {};
+    if (feedbackFilters) {
+      const orConditions = [];
+      for (const key of Object.keys(feedbackFilters)) {
+        const rawValues = feedbackFilters[key];
+        const typedValues = [];
+
+        for (const value of rawValues) {
+          typedValues.push(value);
+
+          if (value.toLowerCase() === 'true') {
+            typedValues.push(true);
+          } else if (value.toLowerCase() === 'false') {
+            typedValues.push(false);
+          }
+
+          const num = parseFloat(value);
+          if (!isNaN(num)) {
+            typedValues.push(num);
+          }
+        }
+
+        orConditions.push(
+          { 'feedback.key': key, 'feedback.value': { $in: typedValues } },
+          { 'feedback.key': key, 'feedback.score': { $in: typedValues } }
+        );
+      }
+
+      if (orConditions.length > 0) {
+        // @ts-expect-error
+        feedbackFilter['$or'] = orConditions;
+      }
+    }
+    return feedbackFilter;
+  }
+
+  async getTraces(
+    startDate?: Date,
+    endDate?: Date,
+    feedbackFilters?: FeedbackFilters): Promise<TraceDetailResponse[]> {
+
+    const feedbackFilter = this.createMatchForFilters(feedbackFilters);
+
     const pipeline = [
       {
         $match: {
           'parent_run_id': null,
+          'session_name': 'capgpt-production',
           ...(startDate && { 'start_time': { $gte: startDate } }),
-          ...(endDate && { 'end_time': { $lte: endDate } })
+          ...(endDate && { 'end_time': { $lte: endDate } }),
+          ...feedbackFilter
         }
       },
       {
@@ -51,23 +105,29 @@ export class ApiRepository {
       // { $limit: 100 }
     ];
 
-    const collection = this.db.collection(this.collectionName);
+    const collection = await this.getCollection();
     return await collection
       .aggregate<TraceDetailResponse>(pipeline)
       .toArray();
   }
 
-  async getLatencyPercentile(startDate?: Date, endDate?: Date): Promise<TracePercentile[]> {
-    const collection = this.db.collection(this.collectionName);
+  async getLatencyPercentile(
+    startDate?: Date,
+    endDate?: Date,
+    feedbackFilters?: FeedbackFilters): Promise<TracePercentile[]> {
+    const collection = await this.getCollection();
 
     const percentiles = [0.5, 0.9, 0.95, 0.99];
+    const feedbackFilter = this.createMatchForFilters(feedbackFilters);
 
     const pipeline = [
       {
         $match: {
           parent_run_id: null,
+          'session_name': 'capgpt-production',
           ...(startDate && { 'start_time': { $gte: startDate } }),
-          ...(endDate && { 'end_time': { $lte: endDate } })
+          ...(endDate && { 'end_time': { $lte: endDate } }),
+          ...feedbackFilter
         }
       },
       {
@@ -111,7 +171,7 @@ export class ApiRepository {
   }
 
   async getTraceTreeById(run_id: string): Promise<TraceDetailResponse[]> {
-    const collection = this.db.collection(this.collectionName);
+    const collection = await this.getCollection();
     return collection.aggregate<TraceDetailResponse>(
       [
         {
@@ -234,9 +294,8 @@ export class ApiRepository {
   }
 
 
-
   async getFeedbackCounts(startDate?: Date, endDate?: Date): Promise<FeedbackCountResponse[]> {
-    const collection = this.db.collection(this.collectionName);
+    const collection = await this.getCollection();
     return collection.aggregate<FeedbackCountResponse>(
       [
         {
@@ -247,35 +306,40 @@ export class ApiRepository {
             feedback: {
               $exists: true,
             },
+            'session_name': 'capgpt-production',
           },
         },
         {
           $project: {
             feedbackKey: '$feedback.key',
+            feedbackType: {
+              $cond: {
+                if: {
+                  $or: [
+                    { $eq: ['$feedback.score', true] },
+                    { $eq: ['$feedback.score', false] },
+                  ],
+                },
+                then: 'score',
+                else: 'value',
+              },
+            },
             feedbackValue: {
               $cond: [
                 {
                   $or: [
-                    {
-                      $eq: ['$feedback.score', true],
-                    },
-                    {
-                      $eq: ['$feedback.score', false],
-                    },
+                    { $eq: ['$feedback.score', true] },
+                    { $eq: ['$feedback.score', false] },
                   ],
                 },
                 {
                   $cond: [
-                    {
-                      $eq: ['$feedback.score', true],
-                    },
+                    { $eq: ['$feedback.score', true] },
                     'true',
                     'false',
                   ],
                 },
-                {
-                  $ifNull: ['$feedback.value', 'None'],
-                },
+                { $ifNull: ['$feedback.value', 'None'] },
               ],
             },
           },
@@ -284,16 +348,25 @@ export class ApiRepository {
           $group: {
             _id: {
               key: '$feedbackKey',
+              type: '$feedbackType',
               value: '$feedbackValue',
             },
-            count: {
-              $sum: 1,
-            },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: {
+            '_id.key': 1,
+            '_id.type': 1,
+            '_id.value': 1,
           },
         },
         {
           $group: {
-            _id: '$_id.key',
+            _id: {
+              key: '$_id.key',
+              type: '$_id.type',
+            },
             feedbackCounts: {
               $push: {
                 k: '$_id.value',
@@ -305,17 +378,24 @@ export class ApiRepository {
         {
           $project: {
             _id: 0,
-            key: '$_id',
+            key: '$_id.key',
+            type: '$_id.type',
             counts: {
-              $arrayToObject: '$feedbackCounts',
+              $arrayToObject: {
+                $map: {
+                  input: {
+                    $sortArray: {
+                      input: '$feedbackCounts',
+                      sortBy: { k: 1 },
+                    },
+                  },
+                  as: 'item',
+                  in: { k: '$$item.k', v: '$$item.v' },
+                },
+              },
             },
           },
         },
       ]).toArray();
   }
-
-
-
-
-
 }

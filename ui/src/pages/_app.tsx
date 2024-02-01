@@ -1,15 +1,19 @@
 import '../styles/globals.scss';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { SessionProvider } from 'next-auth/react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <><Head>
+    <>
+      <Head>
         <title>LangTrace</title>
-    </Head>
-    <Component {...pageProps} />
+      </Head>
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
     </>
-  )
+  );
 }
 
 export default MyApp;

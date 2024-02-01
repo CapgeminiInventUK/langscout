@@ -40,7 +40,6 @@ export async function getTraces(startDate?: string,
   if (queryParams.toString()) {
     url += `?${queryParams.toString()}`;
   }
-  console.log('url', url)
 
   const response = await fetch(url);
   if (!response.ok) {

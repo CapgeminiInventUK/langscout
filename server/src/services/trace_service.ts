@@ -14,11 +14,20 @@ export class TraceService {
     startDate?: Date,
     endDate?: Date,
     feedbackFilters?: FeedbackFilters): Promise<TracesResponse> {
-    console.debug('feedbackFilters', feedbackFilters);
     return {
-      feedback_counts: await this.repository.getFeedbackCounts(startDate, endDate),
-      latency_percentiles: await this.repository.getLatencyPercentile(startDate, endDate, feedbackFilters),
-      traces: await this.repository.getTraces(startDate, endDate, feedbackFilters)
+      feedback_counts: await this.repository.getFeedbackCounts(
+        startDate,
+        endDate
+      ),
+      latency_percentiles: await this.repository.getLatencyPercentile(startDate,
+        endDate,
+        feedbackFilters
+      ),
+      traces: await this.repository.getTraces(
+        startDate,
+        endDate,
+        feedbackFilters
+      )
     };
   }
 

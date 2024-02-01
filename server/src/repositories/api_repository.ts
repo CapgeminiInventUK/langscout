@@ -30,7 +30,6 @@ export class ApiRepository {
   }
 
   private createMatchForFilters(feedbackFilters?: FeedbackFilters) {
-    // Building dynamic feedback filter
     const feedbackFilter = {};
     if (feedbackFilters) {
       const orConditions = [];
@@ -39,17 +38,14 @@ export class ApiRepository {
         const typedValues = [];
 
         for (const value of rawValues) {
-          // Add the original string value
           typedValues.push(value);
 
-          // Try to parse as a boolean
           if (value.toLowerCase() === 'true') {
             typedValues.push(true);
           } else if (value.toLowerCase() === 'false') {
             typedValues.push(false);
           }
 
-          // Try to parse as a number
           const num = parseFloat(value);
           if (!isNaN(num)) {
             typedValues.push(num);
@@ -63,7 +59,7 @@ export class ApiRepository {
       }
 
       if (orConditions.length > 0) {
-        // @ts-ignore
+        // @ts-expect-error
         feedbackFilter['$or'] = orConditions;
       }
     }
@@ -81,7 +77,7 @@ export class ApiRepository {
       {
         $match: {
           'parent_run_id': null,
-          // 'session_name': 'capgpt-production',
+          'session_name': 'capgpt-production',
           ...(startDate && { 'start_time': { $gte: startDate } }),
           ...(endDate && { 'end_time': { $lte: endDate } }),
           ...feedbackFilter
@@ -115,7 +111,10 @@ export class ApiRepository {
       .toArray();
   }
 
-  async getLatencyPercentile(startDate?: Date, endDate?: Date, feedbackFilters?: FeedbackFilters): Promise<TracePercentile[]> {
+  async getLatencyPercentile(
+    startDate?: Date,
+    endDate?: Date,
+    feedbackFilters?: FeedbackFilters): Promise<TracePercentile[]> {
     const collection = await this.getCollection();
 
     const percentiles = [0.5, 0.9, 0.95, 0.99];
@@ -125,6 +124,7 @@ export class ApiRepository {
       {
         $match: {
           parent_run_id: null,
+          'session_name': 'capgpt-production',
           ...(startDate && { 'start_time': { $gte: startDate } }),
           ...(endDate && { 'end_time': { $lte: endDate } }),
           ...feedbackFilter
@@ -306,6 +306,7 @@ export class ApiRepository {
             feedback: {
               $exists: true,
             },
+            'session_name': 'capgpt-production',
           },
         },
         {

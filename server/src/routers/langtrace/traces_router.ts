@@ -36,7 +36,6 @@ tracesRouter.get('/', async (req, res) => {
 
     if (feedbackFilter) {
       try {
-        console.log(feedbackFilter);
         filters = feedbackFilter as FeedbackFilters;
       } catch (error) {
         console.error('Failed to parse feedbackFilters', error);

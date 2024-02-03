@@ -1,4 +1,4 @@
-import {TraceTreeNode} from "@/models/trace_detail_response";
+import { TraceTreeNode } from '@/models/trace_detail_response';
 
 export interface TracePercentile {
   percentile: number;

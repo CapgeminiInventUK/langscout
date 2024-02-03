@@ -5,10 +5,10 @@ interface PanelProps {
   children: ReactNode;
 }
 
-const Panel: React.FC<PanelProps> = ({  children } ) => {
-    return <div className={styles.panel}>
-        {children}
-    </div>;
+const Panel: React.FC<PanelProps> = ({ children }) => {
+  return <div className={styles.panel}>
+    {children}
+  </div>;
 
 };
 

@@ -10,7 +10,7 @@ import { FeedbackCount, TracePercentile } from '@/models/traces_response';
 import { TraceTreeNode } from '@/models/trace_detail_response';
 
 interface TracesProps {
-  projectId: string
+  projectId: string;
   traces: TraceTreeNode[];
   latencyPercentiles: TracePercentile[];
   feedbackCounts: FeedbackCount[];
@@ -21,13 +21,18 @@ export interface FeedbackFilters {
 }
 
 
-const Traces: React.FC<TracesProps> = ({ projectId, traces, latencyPercentiles, feedbackCounts }) => {
+const Traces: React.FC<TracesProps> = ({
+  projectId,
+  traces,
+  latencyPercentiles,
+  feedbackCounts
+}) => {
   const router = useRouter();
 
   const breadcrumbItems = [
     { name: 'Home', path: '/' },
-    { name: 'Projects', path: '/projects'},
-    { name: `${projectId}`, path: `/projects/${projectId}`},
+    { name: 'Projects', path: '/projects' },
+    { name: `${projectId}`, path: `/projects/${projectId}` },
     { name: 'Traces', path: undefined },
   ];
 
@@ -47,14 +52,22 @@ const Traces: React.FC<TracesProps> = ({ projectId, traces, latencyPercentiles, 
   };
 
 
-  const initialStartDate = router.query.startDate ? new Date(router.query.startDate as string) : null;
-  const initialEndDate = router.query.endDate ? new Date(router.query.endDate as string) : null;
+  const initialStartDate = router.query.startDate
+    ? new Date(router.query.startDate as string)
+    : null;
+  const initialEndDate = router.query.endDate
+    ? new Date(router.query.endDate as string)
+    : null;
   const initialFeedbackFilters = parseFeedbackFilters(router.query.feedbackFilters);
 
-  const [startDate, setStartDate] = useState<Date | null>(initialStartDate);
-  const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
-  const [feedbackFilters, setFeedbackFilters] = useState<FeedbackFilters>(initialFeedbackFilters);
-  const [inLast, setInLast] = useState<string | null>(null);
+  const [startDate, setStartDate] =
+    useState<Date | null>(initialStartDate);
+  const [endDate, setEndDate] =
+    useState<Date | null>(initialEndDate);
+  const [feedbackFilters, setFeedbackFilters] =
+    useState<FeedbackFilters>(initialFeedbackFilters);
+  const [inLast, setInLast] =
+    useState<string | null>(null);
 
 
   useEffect(() => {
@@ -160,10 +173,10 @@ const Traces: React.FC<TracesProps> = ({ projectId, traces, latencyPercentiles, 
           traces={traces}
         />
         <StatsPanel latencyPercentiles={latencyPercentiles}
-                    recordsCount={traces.length}
-                    feedbackCounts={feedbackCounts}
-                    feedbackFilters={feedbackFilters}
-                    onFeedbackSelect={handleFeedbackSelect}
+          recordsCount={traces.length}
+          feedbackCounts={feedbackCounts}
+          feedbackFilters={feedbackFilters}
+          onFeedbackSelect={handleFeedbackSelect}
         />
       </div>
     </div>
@@ -179,7 +192,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   //TODO Get start and end dates from query params inLast
 
-  const data = await getTraces(projectId, startDate as string, endDate as string, feedbackFilters as string);
+  const data = await getTraces(
+    projectId,
+    startDate as string,
+    endDate as string,
+    feedbackFilters as string
+  );
 
   return {
     props: {

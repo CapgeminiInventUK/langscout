@@ -8,9 +8,11 @@
   "plugins": [
     "@typescript-eslint",
     "import",
-    "deprecation"
+    "deprecation",
+    "unicorn"
   ],
   "rules": {
+    "unicorn/filename-case": "error",
     "indent": [
       2,
       2,

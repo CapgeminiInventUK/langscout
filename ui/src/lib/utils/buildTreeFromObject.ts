@@ -9,7 +9,7 @@ export function buildTreeFromObject(aggregatedObject: TraceTreeNode): TraceTreeN
       // Handle Records that were for when we had execution_order (old format)
       if (a.depth === b.depth) {
         if (a.dotted_order !== undefined && b.dotted_order !== undefined) {
-          console.debug('Using Dotted Order to sort')
+          console.debug('Using Dotted Order to sort');
 
           const aDottedOrder = a.dotted_order.split('.');
           const bDottedOrder = b.dotted_order.split('.');
@@ -17,14 +17,16 @@ export function buildTreeFromObject(aggregatedObject: TraceTreeNode): TraceTreeN
           const aLastElement = aDottedOrder.pop();
           const bLastElement = bDottedOrder.pop();
 
-          const aDate = aLastElement!.substring(0,22).replace(  /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(\d{3})(\d{3})Z$/,
-            '$1-$2-$3T$4:$5:$6.$7$8Z');
-          const bDate = bLastElement!.substring(0,22).replace(  /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(\d{3})(\d{3})Z$/,
-            '$1-$2-$3T$4:$5:$6.$7$8Z');
+          const aDate = aLastElement!.substring(0, 22)
+            .replace(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(\d{3})(\d{3})Z$/,
+              '$1-$2-$3T$4:$5:$6.$7$8Z');
+          const bDate = bLastElement!.substring(0, 22)
+            .replace(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(\d{3})(\d{3})Z$/,
+              '$1-$2-$3T$4:$5:$6.$7$8Z');
 
-         return compareTimestamps(aDate, bDate);
+          return compareTimestamps(aDate, bDate);
         } else if (a.execution_order !== undefined && b.execution_order !== undefined) {
-          console.debug('Using Execution Order to sort')
+          console.debug('Using Execution Order to sort');
           console.log(a.execution_order, b.execution_order);
           return a.execution_order - b.execution_order;
         }

@@ -17,21 +17,21 @@ const options = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile}) {
-      if (account?.provider === 'github' && (process.env.NEXTAUTH_GITHUB_ORGANISATION ?? '').trim() !== '') {
+    async signIn({ account, profile }) {
+      if (account?.provider === 'github' &&
+        (process.env.NEXTAUTH_GITHUB_ORGANISATION ?? '').trim() !== '') {
 
-
-          const orgName = process.env.NEXTAUTH_GITHUB_ORGANISATION;
-          const token = account.access_token;
-
-          const response = await fetch(`https://api.github.com/orgs/${orgName}/members/${profile?.login}`, {
-            headers: {
-              Authorization: `token ${token}`,
-            },
-          });
-          console.log('response', response);
-          return response.ok;
-        }
+        const orgName = process.env.NEXTAUTH_GITHUB_ORGANISATION;
+        const token = account.access_token;
+        const url = `https://api.github.com/orgs/${orgName}/members/${profile?.login}`;
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        });
+        console.log('response', response);
+        return response.ok;
+      }
       // If not GitHub, continue the sign-in process
       return true;
     },

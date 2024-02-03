@@ -52,8 +52,11 @@ export async function getTraces(
 }
 
 
-export async function getTraceTree(projectId:string, traceId: string): Promise<TraceTreeNode> {
-  const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/projects/${projectId}/traces/tree/${traceId}`);
+export async function getTraceTree(projectId: string, traceId: string): Promise<TraceTreeNode> {
+  const response = await fetch(
+    `${config.langtraceApiUrl}/langtrace/api/projects/${projectId}/traces/tree/${traceId}`
+  );
+
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }

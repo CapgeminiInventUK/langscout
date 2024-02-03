@@ -19,15 +19,19 @@ const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({ projectId, traceDat
   const [selectedTrace, setSelectedTrace] = useState<TraceTreeNode | null>(null);
 
   useEffect(() => {
-    const runIdToExpand = traceData.children.filter((child) => child.depth === 0).map((child) => child.run_id);
+    const runIdToExpand = traceData
+      .children.filter((child) => {
+        return child.depth === 0;
+      })
+      .map((child) => child.run_id);
     setExpandedNodes(new Set([traceData.run_id, ...runIdToExpand]));
     setSelectedTrace(traceData);
-  }, [ traceData]);
+  }, [traceData]);
 
   const breadcrumbItems = [
     { name: 'Home', path: '/' },
-    { name: 'Projects', path: '/projects'},
-    { name: `${projectId}`, path: `/projects/${projectId}`},
+    { name: 'Projects', path: '/projects' },
+    { name: `${projectId}`, path: `/projects/${projectId}` },
     { name: 'Traces', path: getParentPageFromUrlPath(usePathname()) },
     { name: `${traceData.run_id} @ ${traceData.start_time}`, path: undefined }
   ];

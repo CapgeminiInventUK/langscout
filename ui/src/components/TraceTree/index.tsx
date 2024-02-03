@@ -45,7 +45,9 @@ const TraceTree: React.FC<TraceTreeProps> = ({
   const renderTrace = (trace: TraceTreeNode) => {
     const isExpanded = expandedNodes.has(trace.run_id);
     const isSelected = trace.run_id === selectedTraceId;
-    const traceHeaderClass = isSelected ? `${styles.traceHeader} ${styles.active}` : styles.traceHeader;
+    const traceHeaderClass = isSelected
+      ? `${styles.traceHeader} ${styles.active}`
+      : styles.traceHeader;
 
     return (
       <div key={trace.run_id} >

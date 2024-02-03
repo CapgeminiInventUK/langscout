@@ -9,9 +9,10 @@ export interface FeedbackFilters {
   [key: string]: string[];
 }
 
-tracesRouter.get('/', async (req, res) => {
+tracesRouter.get('/:projectId/traces', async (req, res) => {
   console.debug('GET /traces');
   try {
+    const productId = req.params.projectId;
     const { startDate, endDate,  feedbackFilter } = req.query;
 
     let start, end, filters;
@@ -42,7 +43,7 @@ tracesRouter.get('/', async (req, res) => {
       }
     }
 
-    const topLevelTraces = await traceService.getTopLevelTraces(start, end, filters);
+    const topLevelTraces = await traceService.getTopLevelTraces(productId, start, end, filters);
     res.json(topLevelTraces);
   } catch (error: unknown) {
     console.error(error);
@@ -54,11 +55,12 @@ tracesRouter.get('/', async (req, res) => {
   }
 });
 
-tracesRouter.get('/tree/:traceId', async (req, res) => {
+tracesRouter.get('/:projectId/traces/tree/:traceId', async (req, res) => {
   console.debug(`GET /traces/tree/${req.params.traceId}`);
   const traceId = req.params.traceId;
+  const projectId = req.params.projectId;
   try {
-    const trace = await traceService.getTraceTreeByRunId(traceId);
+    const trace = await traceService.getTraceTreeByRunId(projectId, traceId);
     if (!trace) {
       return res.status(404).json({ message: 'Trace not found' });
     }

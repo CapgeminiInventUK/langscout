@@ -1,14 +1,15 @@
 import { TracesResponse } from '@/models/traces_response';
 import config from '@/lib/utils/config';
-import { TraceDetailResponseParent } from '@/models/tree/trace_detail_response_tree';
 import { buildTreeFromObject } from '@/lib/utils/buildTreeFromObject';
 import { TraceTreeNode } from '@/models/trace_detail_response';
 
-export async function getTraces(startDate?: string,
+export async function getTraces(
+  projectId: string,
+  startDate?: string,
   endDate?: string,
   feedbackFilters?: string
 ): Promise<TracesResponse> {
-  let url = `${config.langtraceApiUrl}/langtrace/api/traces`;
+  let url = `${config.langtraceApiUrl}/langtrace/api/projects/${projectId}/traces`;
   const queryParams = new URLSearchParams();
   if (startDate && startDate.trim() !== '') {
     queryParams.append('startDate', startDate);
@@ -51,12 +52,12 @@ export async function getTraces(startDate?: string,
 }
 
 
-export async function getTraceTree(traceId: string): Promise<TraceTreeNode> {
-  const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/traces/tree/${traceId}`);
+export async function getTraceTree(projectId:string, traceId: string): Promise<TraceTreeNode> {
+  const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/projects/${projectId}/traces/tree/${traceId}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
   const data = await response.json();
 
-  return buildTreeFromObject(data as TraceDetailResponseParent);
+  return buildTreeFromObject(data as TraceTreeNode);
 }

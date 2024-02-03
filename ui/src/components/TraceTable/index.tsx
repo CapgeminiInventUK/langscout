@@ -23,18 +23,19 @@ function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
   }
 }
 
-const handleRowClick = (run_id: string) => {
-  window.location.href = `/traces/${run_id}`;
+const handleRowClick = (project_id:string, run_id: string) => {
+  window.location.href = `/projects/${project_id}/traces/${run_id}`;
 };
 
 interface TraceTableParams {
+  projectId: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   traces: TraceTreeNode[];
   //TODO Add in filter for feedback
 }
 
-const TraceTable: React.FC<TraceTableParams> = ({ onChange, traces }) => {
-  const [feedbackKeyFilter, setFeedbackKeyFilter] = useState<string | null>(null);
+const TraceTable: React.FC<TraceTableParams> = ({ projectId, onChange, traces }) => {
+  const [feedbackKeyFilter, _] = useState<string | null>(null);
   const [filteredTraces, setFilteredTraces] = useState<TraceTreeNode[]>(traces);
 
 
@@ -67,9 +68,8 @@ const TraceTable: React.FC<TraceTableParams> = ({ onChange, traces }) => {
     <table className={styles.fullWidthTable}>
       <thead>
       <tr>
-        <th>Run ID</th>
-        <th className={styles.fullWidthTable__tableColumnCentre}>Status</th>
         <th>Name</th>
+        <th className={styles.fullWidthTable__tableColumnCentre}>Status</th>
         <th>Start Time</th>
         <th>Latency</th>
         <th>Feedback</th>
@@ -78,11 +78,10 @@ const TraceTable: React.FC<TraceTableParams> = ({ onChange, traces }) => {
       <tbody>
       {filteredTraces.map(trace => {
         const runDate = convertTimestampToDateTime(trace.start_time);
-        return <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
+        return <tr key={trace.run_id} onClick={() => handleRowClick(projectId, trace.run_id)}
                    className={styles.clickableRow}>
-          <td>{trace.run_id}</td>
-          <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
           <td>{trace.name}</td>
+          <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
           <td>{runDate.date} @ {runDate.time}</td>
           <td><LatencyChip latency={trace.latency}/></td>
           <td>{trace.feedback?.key ? trace.feedback?.key + ': ' + (trace.feedback?.score !== undefined ? trace.feedback?.score : trace.feedback.value) : ''}</td>

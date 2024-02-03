@@ -3,21 +3,37 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: start;
+  justify-content: start;
   height: 100vh;
 }
+.appBar{
+  @extend .row;
+  margin-bottom: 16px;
+}
 
-.homePanel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-    padding: 32px;
-    border-radius: c.$panel-radius;
-    background-color: c.$panel-background-color;
-    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mainContent {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mainPanel {
+  width: 70%;
+}
+
+.quickLaunchPanel {
+  width: 30%;
 }
 
 .button {
@@ -25,7 +41,6 @@
   align-items: center;
   justify-content: center;
   padding: 8px;
-  margin-top: 32px;
   border-radius: c.$border-radius;
   border: c.$border-width * 2 solid c.$border-color-bold;
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
@@ -40,6 +55,7 @@
     color: c.$background-color;
     text-decoration: none;
   }
+
   &:focus {
     text-decoration: none;
   }

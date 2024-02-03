@@ -5,16 +5,12 @@ import { getTraces } from '@/services/traceService';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import StatsPanel from '@/components/FilterPanel';
-import TraceTable from '../../components/TraceTable';
+import TraceTable from '../../../../components/TraceTable';
 import { FeedbackCount, TracePercentile } from '@/models/traces_response';
 import { TraceTreeNode } from '@/models/trace_detail_response';
 
-const breadcrumbItems = [
-  { name: 'Home', path: '/' },
-  { name: 'Traces', path: undefined },
-];
-
 interface TracesProps {
+  projectId: string
   traces: TraceTreeNode[];
   latencyPercentiles: TracePercentile[];
   feedbackCounts: FeedbackCount[];
@@ -25,8 +21,15 @@ export interface FeedbackFilters {
 }
 
 
-const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles, feedbackCounts }) => {
+const Traces: React.FC<TracesProps> = ({ projectId, traces, latencyPercentiles, feedbackCounts }) => {
   const router = useRouter();
+
+  const breadcrumbItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Projects', path: '/projects'},
+    { name: `${projectId}`, path: `/projects/${projectId}`},
+    { name: 'Traces', path: undefined },
+  ];
 
   const parseFeedbackFilters = (filters: string | string[] | undefined): FeedbackFilters => {
     if (typeof filters === 'string') {
@@ -151,7 +154,11 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles, feedbackCou
     <div>
       <Breadcrumb items={breadcrumbItems}/>
       <div className={styles.tracesContainer}>
-        <TraceTable onChange={handleDropdownChange} traces={traces}/>
+        <TraceTable
+          projectId={projectId}
+          onChange={handleDropdownChange}
+          traces={traces}
+        />
         <StatsPanel latencyPercentiles={latencyPercentiles}
                     recordsCount={traces.length}
                     feedbackCounts={feedbackCounts}
@@ -165,15 +172,18 @@ const Traces: React.FC<TracesProps> = ({ traces, latencyPercentiles, feedbackCou
 
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const projectId = context.params?.projectId as string;
+
   const { query } = context;
   const { startDate, endDate, feedbackFilters, inLast } = query;
 
   //TODO Get start and end dates from query params inLast
 
-  const data = await getTraces(startDate as string, endDate as string, feedbackFilters as string);
+  const data = await getTraces(projectId, startDate as string, endDate as string, feedbackFilters as string);
 
   return {
     props: {
+      projectId: projectId,
       traces: data.traces,
       latencyPercentiles: data.latency_percentiles,
       feedbackCounts: data.feedback_counts

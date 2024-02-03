@@ -9,7 +9,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({items}) => {
     <nav aria-label="breadcrumb">
       <ol className={styles.breadcrumbList}>
         {items.map((item, index) => (
-          <>
+          <React.Fragment key={index}>
             {index > 0 && <BsChevronRight size={14}/>}
             <li key={index} className={styles.breadcrumbItem}>
               {item.path ? (
@@ -20,7 +20,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({items}) => {
                 <span key={"end-breadcrumb-" + index}>{item.name}</span>
               )}
             </li>
-          </>
+          </React.Fragment>
         ))}
       </ol>
     </nav>

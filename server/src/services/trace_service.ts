@@ -11,19 +11,24 @@ export class TraceService {
   }
 
   async getTopLevelTraces(
+    projectId: string,
     startDate?: Date,
     endDate?: Date,
     feedbackFilters?: FeedbackFilters): Promise<TracesResponse> {
     return {
       feedback_counts: await this.repository.getFeedbackCounts(
+        projectId,
         startDate,
         endDate
       ),
-      latency_percentiles: await this.repository.getLatencyPercentile(startDate,
+      latency_percentiles: await this.repository.getLatencyPercentile(
+        projectId,
+        startDate,
         endDate,
         feedbackFilters
       ),
       traces: await this.repository.getTraces(
+        projectId,
         startDate,
         endDate,
         feedbackFilters
@@ -31,8 +36,8 @@ export class TraceService {
     };
   }
 
-  async getTraceTreeByRunId(traceId: string): Promise<Document | null> {
-    const array = await this.repository.getTraceTreeById(traceId);
+  async getTraceTreeByRunId(projectId: string, traceId: string): Promise<Document | null> {
+    const array = await this.repository.getTraceTreeById(projectId, traceId);
     if (!array) {
       return null;
     } else if (array.length > 1) {

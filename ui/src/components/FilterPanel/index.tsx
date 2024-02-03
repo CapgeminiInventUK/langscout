@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './FilterPanel.module.scss';
 import { FeedbackCount, TracePercentile } from '@/models/traces_response';
 import PercentileChip from '../PercentileChip';
-import { FeedbackFilters } from '@/pages/traces';
+import { FeedbackFilters } from '@/pages/projects/[projectId]/traces';
 
 interface StatsPanelProps {
   recordsCount: number;

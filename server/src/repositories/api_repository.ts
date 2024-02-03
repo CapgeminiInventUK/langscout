@@ -66,7 +66,13 @@ export class ApiRepository {
     return feedbackFilter;
   }
 
+  async getProjects(): Promise<string[]> {
+    const collection = await this.getCollection();
+    return await collection.distinct('session_name');
+  }
+
   async getTraces(
+    projectId: string,
     startDate?: Date,
     endDate?: Date,
     feedbackFilters?: FeedbackFilters): Promise<TraceDetailResponse[]> {
@@ -77,7 +83,7 @@ export class ApiRepository {
       {
         $match: {
           'parent_run_id': null,
-          'session_name': 'capgpt-production',
+          'session_name': projectId,
           ...(startDate && { 'start_time': { $gte: startDate } }),
           ...(endDate && { 'end_time': { $lte: endDate } }),
           ...feedbackFilter
@@ -102,7 +108,6 @@ export class ApiRepository {
         }
       },
       { $sort: { start_time: -1 } },
-      // { $limit: 100 }
     ];
 
     const collection = await this.getCollection();
@@ -112,6 +117,7 @@ export class ApiRepository {
   }
 
   async getLatencyPercentile(
+    projectId: string,
     startDate?: Date,
     endDate?: Date,
     feedbackFilters?: FeedbackFilters): Promise<TracePercentile[]> {
@@ -124,7 +130,7 @@ export class ApiRepository {
       {
         $match: {
           parent_run_id: null,
-          'session_name': 'capgpt-production',
+          'session_name': projectId,
           ...(startDate && { 'start_time': { $gte: startDate } }),
           ...(endDate && { 'end_time': { $lte: endDate } }),
           ...feedbackFilter
@@ -170,13 +176,14 @@ export class ApiRepository {
     });
   }
 
-  async getTraceTreeById(run_id: string): Promise<TraceDetailResponse[]> {
+  async getTraceTreeById(projectId: string, run_id: string): Promise<TraceDetailResponse[]> {
     const collection = await this.getCollection();
     return collection.aggregate<TraceDetailResponse>(
       [
         {
           $match: {
             run_id: run_id,
+            session_name: projectId,
           },
         },
         {
@@ -267,6 +274,8 @@ export class ApiRepository {
             outputs: 1,
             error: 1,
             execution_order: 1,
+            trace_id: 1,
+            dotted_order: 1,
             children: {
               $map: {
                 input: '$children',
@@ -284,6 +293,8 @@ export class ApiRepository {
                   outputs: '$$item.outputs',
                   error: '$$item.error',
                   execution_order: '$$item.execution_order',
+                  trace_id: '$$item.trace_id',
+                  dotted_order: '$$item.dotted_order',
                   depth: '$$item.depth'
                 },
               },
@@ -294,7 +305,10 @@ export class ApiRepository {
   }
 
 
-  async getFeedbackCounts(startDate?: Date, endDate?: Date): Promise<FeedbackCountResponse[]> {
+  async getFeedbackCounts(
+    projectId: string,
+    startDate?: Date,
+    endDate?: Date): Promise<FeedbackCountResponse[]> {
     const collection = await this.getCollection();
     return collection.aggregate<FeedbackCountResponse>(
       [
@@ -306,7 +320,7 @@ export class ApiRepository {
             feedback: {
               $exists: true,
             },
-            'session_name': 'capgpt-production',
+            'session_name': projectId
           },
         },
         {

@@ -10,6 +10,9 @@ export interface TraceDetailResponse {
   input: Map<string, unknown>;
   session_name: string;
   run_type: string;
+  execution_order: number | null;
+  trace_id: string | null;
+  dotted_order: string | null;
   parent_run_id: string | null;
   children: TraceDetailResponse[];
   feedback?: CreateFeedback;

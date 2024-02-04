@@ -10,6 +10,8 @@ describe('TraceService', () => {
   let service: TraceService;
   let mockRepository: jest.Mocked<ApiRepository>;
 
+  const mockProjectId = 'projectId';
+
   beforeEach(() => {
     mockRepository = new ApiRepository() as any;
     service = new TraceService();
@@ -26,7 +28,12 @@ describe('TraceService', () => {
     run_type: '',
     session_name: '',
     start_time: '',
-    'run_id': mockTraceId, name: 'Test Trace'
+    'run_id': mockTraceId,
+    name: 'Test Trace',
+    execution_order: 0,
+    trace_id: null,
+    dotted_order: null,
+
   };
 
 
@@ -42,17 +49,26 @@ describe('TraceService', () => {
       mockRepository.getTraces.mockResolvedValue(expectedResult);
 
       mockRepository.getFeedbackCounts.mockResolvedValue(
-        [{ key: 'useful', counts: { 'true': 0, 'false': 0 } }]);
+        [{
+          key: 'useful',
+          feedbackType: 'value',
+          counts: { 'true': 0, 'false': 0 }
+        }]
+      );
 
-      mockRepository.getLatencyPercentile.mockResolvedValue( [
+      mockRepository.getLatencyPercentile.mockResolvedValue([
           { percentile: 0, latency: 0 } as TracePercentile,
       ]
       );
 
-      const result = await service.getTopLevelTraces();
+      const result = await service.getTopLevelTraces(mockProjectId);
 
       expect(result).toEqual({
-        feedback_counts: [{ key: 'useful', counts: { 'true': 0, 'false': 0 } }],
+        feedback_counts: [{
+          key: 'useful',
+          feedbackType: 'value',
+          counts: { 'true': 0, 'false': 0 }
+        }],
         latency_percentiles: [{ percentile: 0, latency: 0 }],
         traces: expectedResult
       } satisfies TracesResponse);
@@ -66,30 +82,28 @@ describe('TraceService', () => {
     it('should return null if no trace is found', async () => {
       mockRepository.getTraceTreeById.mockResolvedValue([]);
 
-      const result = await service.getTraceTreeByRunId(mockTraceId);
+      const result = await service.getTraceTreeByRunId(mockProjectId, mockTraceId);
 
       expect(result).toBeNull();
-      expect(mockRepository.getTraceTreeById).toHaveBeenCalledWith(mockTraceId);
+      expect(mockRepository.getTraceTreeById).toHaveBeenCalledWith(mockProjectId, mockTraceId);
     });
 
     it('should throw an error if multiple traces are found', async () => {
       mockRepository.getTraceTreeById.mockResolvedValue([mockTraceDocument, mockTraceDocument]);
 
-      await expect(service.getTraceTreeByRunId(mockTraceId)).rejects.toThrow('Trace not found');
-      expect(mockRepository.getTraceTreeById).toHaveBeenCalledWith(mockTraceId);
+      await expect(service.getTraceTreeByRunId(mockProjectId, mockTraceId))
+        .rejects.toThrow('Trace not found');
+      expect(mockRepository.getTraceTreeById).toHaveBeenCalledWith(mockProjectId, mockTraceId);
     });
 
     it('should return a trace document if exactly one trace is found', async () => {
 
       mockRepository.getTraceTreeById.mockResolvedValue([mockTraceDocument]);
 
-      const result = await service.getTraceTreeByRunId(mockTraceId);
+      const result = await service.getTraceTreeByRunId(mockProjectId, mockTraceId);
 
       expect(result).toEqual(mockTraceDocument);
-      expect(mockRepository.getTraceTreeById).toHaveBeenCalledWith(mockTraceId);
+      expect(mockRepository.getTraceTreeById).toHaveBeenCalledWith(mockProjectId, mockTraceId);
     });
   });
-
-
-})
-;
+});

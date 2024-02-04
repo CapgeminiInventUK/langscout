@@ -31,10 +31,10 @@ export class LangchainToLangtraceService {
     return langchainData.run_id;
   }
 
-  async updateTrace(trace_id: string, langchainData: TraceData): Promise<boolean> {
+  async updateTrace(traceId: string, langchainData: TraceData): Promise<boolean> {
     this.convertToDates(langchainData);
 
-    const updateResult = await this.repository.updateTrace(trace_id, langchainData);
+    const updateResult = await this.repository.updateTrace(traceId, langchainData);
     return updateResult.matchedCount > 0;
   }
 

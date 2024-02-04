@@ -1,14 +1,19 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
+import NextAuth, { NextAuthOptions, Profile } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const enableAuth = process.env.NEXTAUTH_ENABLE === 'true';
 
+interface GitHubProfile extends Profile {
+  login: string;
+
+}
+
 const options = {
   providers: [
     GithubProvider({
-      clientId: process.env.NEXTAUTH_GITHUB_ID,
-      clientSecret: process.env.NEXTAUTH_GITHUB_SECRET,
+      clientId: process.env.NEXTAUTH_GITHUB_ID!,
+      clientSecret: process.env.NEXTAUTH_GITHUB_SECRET!,
       authorization: {
         params: {
           scope: 'read:user,user:email,read:org',
@@ -20,10 +25,10 @@ const options = {
     async signIn({ account, profile }) {
       if (account?.provider === 'github' &&
         (process.env.NEXTAUTH_GITHUB_ORGANISATION ?? '').trim() !== '') {
-
         const orgName = process.env.NEXTAUTH_GITHUB_ORGANISATION;
         const token = account.access_token;
-        const url = `https://api.github.com/orgs/${orgName}/members/${profile?.login}`;
+        const url =
+          `https://api.github.com/orgs/${orgName}/members/${(profile as GitHubProfile).login}`;
         const response = await fetch(url, {
           headers: {
             Authorization: `token ${token}`,

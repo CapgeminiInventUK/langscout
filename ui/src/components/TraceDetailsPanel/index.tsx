@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './traceDetailsPanel.module.scss';
-import { TraceTreeNode } from '@/models/trace_detail_response';
+import styles from './trace-details-panel.module.scss';
+import { TraceTreeNode } from '@/models/trace-detail-response';
 
 interface TraceDetailsPanelProps {
   selectedTrace: TraceTreeNode | null;

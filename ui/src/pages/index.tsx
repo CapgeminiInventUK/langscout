@@ -1,44 +1,79 @@
-import Link from 'next/link';
-import styles from './Home.module.scss';
-import { Login, Hierarchy } from 'iconic-react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import styles from './home.module.scss';
+import { RiLoginBoxLine, RiSettings3Line, RiNodeTree, RiStackLine } from 'react-icons/ri';
+import { signIn, useSession } from 'next-auth/react';
+import Panel from '@/components/Panel';
+import OutlineButton from '@/components/OutlineButton';
+import AppBar from '@/components/AppBar';
 
 const Home = () => {
-  const { data: session, status } = useSession();
-  // const userEmail = session?.user?.email;
+  const { status } = useSession();
+  const breadcrumbItems = [
+    { name: '', path: undefined },
+  ];
 
   if (status === 'loading') {
     return <p>Hang on there...</p>;
   }
   if (status === 'authenticated') {
     return (
-      <div className={styles.container}>
-        <div className={styles.homePanel}>
 
-          {session?.user !== undefined &&
-            <button className={styles.button} onClick={() => signOut()}>Sign out</button>}
-          <h1>LangTrace</h1>
-          <pre>View your Langchain data</pre>
-          <Link href="/traces" className={styles.button}>
-            <span className={styles.icon}><Hierarchy/></span>
-            Traces
-          </Link>
+      <div>
+        <AppBar breadcrumbItems={breadcrumbItems}/>
+        <h1>Home</h1>
+
+        <div className={styles.mainContent}>
+          <div className={styles.mainPanel}>
+            <Panel>
+              <div className={styles.row_centre}>
+                <OutlineButton href="/projects">
+                  <span className={styles.icon}><RiStackLine/></span>
+                  Projects
+                </OutlineButton>
+                <br/>
+                <OutlineButton href="/settings">
+                  <span className={styles.icon}><RiSettings3Line/></span>
+                  Settings
+                </OutlineButton>
+              </div>
+            </Panel>
+          </div>
+
+          <div className={styles.quickLaunchPanel}>
+            <Panel>
+              <h3> Quick links</h3>
+              <OutlineButton href="/projects/capgpt-production/traces">
+                <span className={styles.icon}><RiNodeTree/></span>
+                CapGPT Prod Traces
+              </OutlineButton>
+              <br/>
+              <OutlineButton href="/projects/capgpt-local/traces">
+                <span className={styles.icon}><RiNodeTree/></span>
+                CapGPT Local Traces
+              </OutlineButton>
+              <br/>
+              <OutlineButton href="/projects/capgpt-dev/traces">
+                <span className={styles.icon}><RiNodeTree/></span>
+                CapGPT Dev Traces
+              </OutlineButton>
+            </Panel>
+          </div>
         </div>
       </div>
+
     );
   }
 
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.homePanel}>
+        <Panel>
           <h1>LangTrace</h1>
           <pre>View your Langchain data</pre>
-          <button className={styles.button} onClick={() => signIn('github')}>
+          <OutlineButton onClick={() => signIn('github')}>
             <span
-              className={styles.icon}><Login/></span>Sign in
-          </button>
-        </div>
+              className={styles.icon}><RiLoginBoxLine/></span>Sign in
+          </OutlineButton>
+        </Panel>
       </div>
     </>
   );

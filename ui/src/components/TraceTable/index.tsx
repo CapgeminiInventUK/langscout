@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import styles from '@/components/TraceTable/TraceTable.module.scss';
-import { TraceTreeNode } from '@/models/trace_detail_response';
+import styles from '@/components/TraceTable/trace-table.module.scss';
+import { TraceTreeNode } from '@/models/trace-detail-response';
 import LatencyChip from '@/components/LatencyChip';
 import { IconType } from 'react-icons/lib';
 import {
@@ -9,7 +9,7 @@ import {
   BsExclamationCircleFill,
   BsFillQuestionCircleFill
 } from 'react-icons/bs';
-import { convertTimestampToDateTime } from '@/lib/utils/convertTimestampToDateTime';
+import { convertTimestampToDatetime } from '@/lib/utils/convert-timestamp-to-datetime';
 
 function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
   if (trace.error) {
@@ -23,18 +23,19 @@ function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
   }
 }
 
-const handleRowClick = (run_id: string) => {
-  window.location.href = `/traces/${run_id}`;
+const handleRowClick = (project_id: string, run_id: string) => {
+  window.location.href = `/projects/${project_id}/traces/${run_id}`;
 };
 
 interface TraceTableParams {
+  projectId: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   traces: TraceTreeNode[];
   //TODO Add in filter for feedback
 }
 
-const TraceTable: React.FC<TraceTableParams> = ({ onChange, traces }) => {
-  const [feedbackKeyFilter, setFeedbackKeyFilter] = useState<string | null>(null);
+const TraceTable: React.FC<TraceTableParams> = ({ projectId, onChange, traces }) => {
+  const [feedbackKeyFilter, _] = useState<string | null>(null);
   const [filteredTraces, setFilteredTraces] = useState<TraceTreeNode[]>(traces);
 
 
@@ -49,7 +50,6 @@ const TraceTable: React.FC<TraceTableParams> = ({ onChange, traces }) => {
 
   return <div className={styles.tableContainer}>
     <div className={styles.headerRow}>
-      <h1>Traces</h1>
       <div className={styles.filterContainer}>
         <select
           onChange={onChange}
@@ -66,28 +66,30 @@ const TraceTable: React.FC<TraceTableParams> = ({ onChange, traces }) => {
     </div>
     <table className={styles.fullWidthTable}>
       <thead>
-      <tr>
-        <th>Run ID</th>
-        <th className={styles.fullWidthTable__tableColumnCentre}>Status</th>
-        <th>Name</th>
-        <th>Start Time</th>
-        <th>Latency</th>
-        <th>Feedback</th>
-      </tr>
+        <tr>
+          <th>Name</th>
+          <th className={styles.fullWidthTable__tableColumnCentre}>Status</th>
+          <th>Start Time</th>
+          <th>Latency</th>
+          <th>Feedback</th>
+        </tr>
       </thead>
       <tbody>
-      {filteredTraces.map(trace => {
-        const runDate = convertTimestampToDateTime(trace.start_time);
-        return <tr key={trace.run_id} onClick={() => handleRowClick(trace.run_id)}
-                   className={styles.clickableRow}>
-          <td>{trace.run_id}</td>
-          <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
-          <td>{trace.name}</td>
-          <td>{runDate.date} @ {runDate.time}</td>
-          <td><LatencyChip latency={trace.latency}/></td>
-          <td>{trace.feedback?.key ? trace.feedback?.key + ': ' + (trace.feedback?.score !== undefined ? trace.feedback?.score : trace.feedback.value) : ''}</td>
-        </tr>;
-      })}
+        {filteredTraces.map(trace => {
+          const runDate = convertTimestampToDatetime(trace.start_time);
+          return <tr key={trace.run_id} onClick={() => handleRowClick(projectId, trace.run_id)}
+            className={styles.clickableRow}>
+            <td>{trace.name}</td>
+            <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
+            <td>{runDate.date} @ {runDate.time}</td>
+            <td><LatencyChip latency={trace.latency}/></td>
+            <td>  {trace.feedback?.key
+              ? `${trace.feedback.key}: ${
+                trace.feedback.score !== undefined ? trace.feedback.score : trace.feedback.value
+              }`
+              : ''}</td>
+          </tr>;
+        })}
       </tbody>
     </table>
   </div>;

@@ -1,6 +1,5 @@
 import React from 'react';
-import styles from '@/components/PercentileChip/PercentileChip.module.scss';
-import { TracePercentile } from '@/models/traces_response';
+import styles from '@/components/PercentileChip/percentile-chip.module.scss';
 
 interface PercentileChipProps {
   value: number;
@@ -9,11 +8,11 @@ interface PercentileChipProps {
 
 const PercentileChip: React.FC<PercentileChipProps> = ({ value, percentile } ) => {
   function valueToCssColour(value: number) {
-    if (value < 3000) {
+    if (value < 5000) {
       return styles.temperature1;
-    } else if (value < 7000) {
-      return styles.temperature2;
     } else if (value < 10000) {
+      return styles.temperature2;
+    } else if (value < 15000) {
       return styles.temperature3;
     } else {
       return styles.temperature4;

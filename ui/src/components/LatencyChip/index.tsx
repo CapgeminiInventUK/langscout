@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/components/LatencyChip/LatencyChip.module.scss';
+import styles from '@/components/LatencyChip/latency-chip.module.scss';
 
 interface LatencyChipProps {
   latency: number;

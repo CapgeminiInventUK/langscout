@@ -1,5 +1,5 @@
 import styles from './home.module.scss';
-import { MdLogin, MdSettings, MdAccountTree, MdAssignment } from 'react-icons/md';
+import { RiLoginBoxLine, RiSettings3Line, RiNodeTree, RiStackLine } from 'react-icons/ri';
 import { signIn, useSession } from 'next-auth/react';
 import Panel from '@/components/Panel';
 import OutlineButton from '@/components/OutlineButton';
@@ -26,12 +26,12 @@ const Home = () => {
             <Panel>
               <div className={styles.row_centre}>
                 <OutlineButton href="/projects">
-                  <span className={styles.icon}><MdAssignment/></span>
+                  <span className={styles.icon}><RiStackLine/></span>
                   Projects
                 </OutlineButton>
                 <br/>
                 <OutlineButton href="/settings">
-                  <span className={styles.icon}><MdSettings/></span>
+                  <span className={styles.icon}><RiSettings3Line/></span>
                   Settings
                 </OutlineButton>
               </div>
@@ -42,17 +42,17 @@ const Home = () => {
             <Panel>
               <h3> Quick links</h3>
               <OutlineButton href="/projects/capgpt-production/traces">
-                <span className={styles.icon}><MdAccountTree/></span>
+                <span className={styles.icon}><RiNodeTree/></span>
                 CapGPT Prod Traces
               </OutlineButton>
               <br/>
               <OutlineButton href="/projects/capgpt-local/traces">
-                <span className={styles.icon}><MdAccountTree/></span>
+                <span className={styles.icon}><RiNodeTree/></span>
                 CapGPT Local Traces
               </OutlineButton>
               <br/>
               <OutlineButton href="/projects/capgpt-dev/traces">
-                <span className={styles.icon}><MdAccountTree/></span>
+                <span className={styles.icon}><RiNodeTree/></span>
                 CapGPT Dev Traces
               </OutlineButton>
             </Panel>
@@ -71,7 +71,7 @@ const Home = () => {
           <pre>View your Langchain data</pre>
           <OutlineButton onClick={() => signIn('github')}>
             <span
-              className={styles.icon}><MdLogin/></span>Sign in
+              className={styles.icon}><RiLoginBoxLine/></span>Sign in
           </OutlineButton>
         </Panel>
       </div>

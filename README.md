@@ -3,6 +3,9 @@
 > [!CAUTION] 
 > This project is currently is under active development
 
+![#](./images/banner-light.png#gh-light-mode-only)
+![#](./images/banner-dark.png#gh-dark-mode-only)
+
 ## Overview
 
 LangTrace is a tool that allows users to ingest, view, and analyze data sent from Langchain for each run.

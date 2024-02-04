@@ -31,7 +31,7 @@ export class ApiRepository {
 
   private createMatchForFilters(feedbackFilters?: FeedbackFilters) {
     interface MongoDBQuery {
-      $or?: { [key: string]: any }[];
+      $or?: { [key: string]: unknown }[];
     }
 
     const feedbackFilter: MongoDBQuery = {};

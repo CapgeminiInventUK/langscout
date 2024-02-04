@@ -48,6 +48,4 @@ export class IngestRepository {
     return await collection.updateOne({ 'feedback.id': feedbackId },
       { $set: setOperation });
   }
-
-
 }

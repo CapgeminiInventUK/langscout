@@ -11,6 +11,10 @@
     "deprecation",
     "unicorn"
   ],
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/"
+  ],
   "rules": {
     "unicorn/filename-case": "error",
     "indent": [

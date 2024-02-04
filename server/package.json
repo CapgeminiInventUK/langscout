@@ -1,7 +1,7 @@
 {
-  "name": "langtrace-ingest",
+  "name": "langtrace-server",
   "version": "1.0.0",
-  "main": "src/ingestor_server.ts",
+  "main": "src/ingestor-server.ts",
   "scripts": {
     "start:langtrace": "ts-node src/langtrace-server.ts",
     "start:ingestor": "ts-node src/ingest-server.ts",

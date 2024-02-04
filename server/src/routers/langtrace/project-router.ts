@@ -1,6 +1,6 @@
 import { Request as ExpressRequest, Response as ExpressResponse, Router } from 'express';
-import { ProjectsService } from '../../services/projects_service';
-import { tracesRouter } from './traces_router';
+import { ProjectsService } from '../../services/projects-service';
+import { tracesRouter } from './traces-router';
 
 export const projectsRouter = Router();
 

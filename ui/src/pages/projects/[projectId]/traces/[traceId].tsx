@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import TraceTree from '../../../../components/TraceTree';
 import TraceDetailsPanel from '../../../../components/TraceDetailsPanel';
-import { getTraceTree } from '@/services/traceService';
-import styles from './traceDetailsPage.module.scss';
+import { getTraceTree } from '@/services/trace-service';
+import styles from './trace-details-page.module.scss';
 import Breadcrumb from '@/components/Breadcrumb';
-import { TraceTreeNode } from '@/models/trace_detail_response';
+import { TraceTreeNode } from '@/models/trace-detail-response';
 import { GetServerSidePropsContext } from 'next';
 import { usePathname } from 'next/navigation';
-import { getParentPageFromUrlPath } from '@/lib/utils/getParentPageFromUrlPath';
+import { getParentPageFromUrlPath } from '@/lib/utils/get-parent-page-from-url-path';
+import AppBar from '@/components/AppBar';
 
 interface TraceDetailsPageProps {
   projectId: string;
@@ -33,12 +34,12 @@ const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({ projectId, traceDat
     { name: 'Projects', path: '/projects' },
     { name: `${projectId}`, path: `/projects/${projectId}` },
     { name: 'Traces', path: getParentPageFromUrlPath(usePathname()) },
-    { name: `${traceData.run_id} @ ${traceData.start_time}`, path: undefined }
+    { name: `${traceData.name} @ ${traceData.start_time}`, path: undefined }
   ];
 
   return (
     <div>
-      <Breadcrumb items={breadcrumbItems}/>
+      <AppBar breadcrumbItems={breadcrumbItems}/>
       <div className={styles.traceDetailsContainer}>
         <TraceTree
           traceData={traceData}

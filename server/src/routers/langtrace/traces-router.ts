@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { TraceService } from '../../services/trace_service';
+import { TraceService } from '../../services/trace-service';
 
 export const tracesRouter = Router();
 

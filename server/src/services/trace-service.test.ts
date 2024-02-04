@@ -1,10 +1,10 @@
-import { TraceService } from './trace_service';
-import { TraceDetailResponse } from '../models/trace_detail_response';
-import { ApiRepository } from '../repositories/api_repository';
-import { TracesResponse } from '../models/traces_response';
-import { TracePercentile } from '../models/traces_percentiles';
+import { TraceService } from './trace-service';
+import { TraceDetailResponse } from '../models/trace-detail-response';
+import { ApiRepository } from '../repositories/api-repository';
+import { TracesResponse } from '../models/traces-response';
+import { TracePercentile } from '../models/traces-percentiles';
 
-jest.mock('../repositories/api_repository');
+jest.mock('../repositories/api-repository');
 
 describe('TraceService', () => {
   let service: TraceService;

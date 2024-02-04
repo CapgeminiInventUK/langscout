@@ -1,6 +1,6 @@
-import { TraceData } from '../models/requests/trace_request';
-import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback_request';
-import { IngestRepository } from '../repositories/ingest_repository';
+import { TraceData } from '../models/requests/trace-request';
+import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback-request';
+import { IngestRepository } from '../repositories/ingest-repository';
 
 export class LangchainToLangtraceService {
   private repository: IngestRepository;

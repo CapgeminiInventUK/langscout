@@ -1,40 +1,4 @@
-@use '../styles/constants' as c;
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: start;
-  height: 100vh;
-}
-.appBar{
-  @extend .row;
-  margin-bottom: 16px;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.mainContent {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.mainPanel {
-  width: 70%;
-}
-
-.quickLaunchPanel {
-  width: 30%;
-}
+@use '../../styles/constants' as c;
 
 .button {
   display: flex;
@@ -59,8 +23,4 @@
   &:focus {
     text-decoration: none;
   }
-}
-
-.icon {
-  margin-right: 8px;
 }

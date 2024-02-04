@@ -1,14 +1,14 @@
-import Link from 'next/link';
-import styles from './Home.module.scss';
-import { Login, Setting, Clipboard, Hierarchy } from 'iconic-react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import styles from './home.module.scss';
+import { MdLogin, MdSettings, MdAccountTree, MdAssignment } from 'react-icons/md';
+import { signIn, useSession } from 'next-auth/react';
 import Panel from '@/components/Panel';
-import Breadcrumb from '@/components/Breadcrumb';
+import OutlineButton from '@/components/OutlineButton';
+import AppBar from '@/components/AppBar';
 
 const Home = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const breadcrumbItems = [
-    { name: 'Home', path: '/' },
+    { name: '', path: undefined },
   ];
 
   if (status === 'loading') {
@@ -17,26 +17,23 @@ const Home = () => {
   if (status === 'authenticated') {
     return (
 
-      <div className={styles.container}>
-        <div className={styles.appBar}>
-          <Breadcrumb items={breadcrumbItems}/>
-          LangTrace
-          {session?.user !== undefined &&
-            <button className={styles.button} onClick={() => signOut()}>Sign out</button>}
-        </div>
+      <div>
+        <AppBar breadcrumbItems={breadcrumbItems}/>
+        <h1>Home</h1>
+
         <div className={styles.mainContent}>
           <div className={styles.mainPanel}>
             <Panel>
               <div className={styles.row_centre}>
-                <Link href="/projects" className={styles.button}>
-                  <span className={styles.icon}><Clipboard/></span>
+                <OutlineButton href="/projects">
+                  <span className={styles.icon}><MdAssignment/></span>
                   Projects
-                </Link>
+                </OutlineButton>
                 <br/>
-                <Link href="/settings" className={styles.button}>
-                  <span className={styles.icon}><Setting/></span>
+                <OutlineButton href="/settings">
+                  <span className={styles.icon}><MdSettings/></span>
                   Settings
-                </Link>
+                </OutlineButton>
               </div>
             </Panel>
           </div>
@@ -44,20 +41,20 @@ const Home = () => {
           <div className={styles.quickLaunchPanel}>
             <Panel>
               <h3> Quick links</h3>
-              <Link href="/projects/capgpt-production/traces" className={styles.button}>
-                <span className={styles.icon}><Hierarchy/></span>
+              <OutlineButton href="/projects/capgpt-production/traces">
+                <span className={styles.icon}><MdAccountTree/></span>
                 CapGPT Prod Traces
-              </Link>
+              </OutlineButton>
               <br/>
-              <Link href="/projects/capgpt-local/traces" className={styles.button}>
-                <span className={styles.icon}><Hierarchy/></span>
+              <OutlineButton href="/projects/capgpt-local/traces">
+                <span className={styles.icon}><MdAccountTree/></span>
                 CapGPT Local Traces
-              </Link>
+              </OutlineButton>
               <br/>
-              <Link href="/projects/capgpt-dev/traces" className={styles.button}>
-                <span className={styles.icon}><Hierarchy/></span>
+              <OutlineButton href="/projects/capgpt-dev/traces">
+                <span className={styles.icon}><MdAccountTree/></span>
                 CapGPT Dev Traces
-              </Link>
+              </OutlineButton>
             </Panel>
           </div>
         </div>
@@ -72,10 +69,10 @@ const Home = () => {
         <Panel>
           <h1>LangTrace</h1>
           <pre>View your Langchain data</pre>
-          <button className={styles.button} onClick={() => signIn('github')}>
+          <OutlineButton onClick={() => signIn('github')}>
             <span
-              className={styles.icon}><Login/></span>Sign in
-          </button>
+              className={styles.icon}><MdLogin/></span>Sign in
+          </OutlineButton>
         </Panel>
       </div>
     </>

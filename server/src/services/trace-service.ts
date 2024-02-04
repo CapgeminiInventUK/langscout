@@ -1,7 +1,7 @@
 import { Document } from 'bson';
-import { TracesResponse } from '../models/traces_response';
-import { ApiRepository } from '../repositories/api_repository';
-import { FeedbackFilters } from '../routers/langtrace/traces_router';
+import { TracesResponse } from '../models/traces-response';
+import { ApiRepository } from '../repositories/api-repository';
+import { FeedbackFilters } from '../routers/langtrace/traces-router';
 
 export class TraceService {
   private repository: ApiRepository;

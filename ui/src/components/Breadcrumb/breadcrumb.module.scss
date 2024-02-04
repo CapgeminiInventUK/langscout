@@ -7,12 +7,16 @@
   padding-left: 0;
   display: flex;
   align-items: center;
-  font-size: small;
-  padding-bottom: 16px;
+  font-size: 14px;
+  font-weight: lighter;
 }
 
 .breadcrumbItem {
   margin: 0 4px;
+
+  &:first-child {
+    margin-left: 0;
+  }
 
   &:last-child {
     margin-right: 0;

@@ -1,4 +1,4 @@
-import { ApiRepository } from '../repositories/api_repository';
+import { ApiRepository } from '../repositories/api-repository';
 
 export class ProjectsService {
   private repository: ApiRepository;

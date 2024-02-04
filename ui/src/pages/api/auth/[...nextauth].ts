@@ -29,7 +29,6 @@ const options = {
             Authorization: `token ${token}`,
           },
         });
-        console.log('response', response);
         return response.ok;
       }
       // If not GitHub, continue the sign-in process

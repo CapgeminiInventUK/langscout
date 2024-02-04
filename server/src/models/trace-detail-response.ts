@@ -1,4 +1,4 @@
-import { CreateFeedback } from './requests/feedback_request';
+import { CreateFeedback } from './requests/feedback-request';
 
 export interface TraceDetailResponse {
   run_id: string;

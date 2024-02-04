@@ -1,5 +1,5 @@
-import { TraceTreeNode } from '@/models/trace_detail_response';
-import { compareTimestamps } from '@/lib/utils/compareTimestampsToNano';
+import { TraceTreeNode } from '@/models/trace-detail-response';
+import { compareTimestamps } from '@/lib/utils/compare-timestamps-to-nano';
 
 export function buildTreeFromObject(aggregatedObject: TraceTreeNode): TraceTreeNode {
   const rootNode = { ...aggregatedObject, children: [] };
@@ -27,7 +27,6 @@ export function buildTreeFromObject(aggregatedObject: TraceTreeNode): TraceTreeN
           return compareTimestamps(aDate, bDate);
         } else if (a.execution_order !== undefined && b.execution_order !== undefined) {
           console.debug('Using Execution Order to sort');
-          console.log(a.execution_order, b.execution_order);
           return a.execution_order - b.execution_order;
         }
       }

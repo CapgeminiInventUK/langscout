@@ -1,7 +1,7 @@
 import { Db, MongoClient, UpdateResult } from 'mongodb';
-import { TraceData } from '../models/requests/trace_request';
+import { TraceData } from '../models/requests/trace-request';
 import 'dotenv/config';
-import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback_request';
+import { CreateFeedback, UpdateFeedback } from '../models/requests/feedback-request';
 
 export class IngestRepository {
   private db!: Db;

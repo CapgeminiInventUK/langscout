@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Add, Minus } from 'iconic-react';
-import styles from './traceTree.module.scss';
+import { MdAdd, MdRemove } from 'react-icons/md';
+import styles from './trace-tree.module.scss';
 import {
   TraceTreeNode,
-} from '@/models/trace_detail_response';
+} from '@/models/trace-detail-response';
 
 interface TraceTreeProps {
   traceData: TraceTreeNode;
@@ -61,7 +61,7 @@ const TraceTree: React.FC<TraceTreeProps> = ({
           </div>
           {trace.children?.length > 0 && (
             <span onClick={(e) => toggleExpand(e, trace.run_id)} className={styles.toggleIcon}>
-              {isExpanded ? <Minus/> : <Add/>}
+              {isExpanded ? <MdRemove/> : <MdAdd/>}
             </span>
           )}
           {trace.children?.length === 0 && <span className={styles.toggleIcon_empty}/>}

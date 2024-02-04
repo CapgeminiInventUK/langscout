@@ -1,10 +1,12 @@
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import Link from 'next/link';
-import { getParentPageFromUrlPath } from '@/lib/utils/getParentPageFromUrlPath';
+import { getParentPageFromUrlPath } from '@/lib/utils/get-parent-page-from-url-path';
 import { usePathname } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import Panel from '@/components/Panel';
+import OutlineButton from '@/components/OutlineButton';
+import AppBar from '@/components/AppBar';
 
 interface ProjectDetailsPageProps {
   projectId: string;
@@ -18,11 +20,11 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({ projectId }) =>
   ];
 
   return <>
-    <Breadcrumb items={breadcrumbItems}/>
+    <AppBar breadcrumbItems={breadcrumbItems}/>
     <div>
       <h1>{projectId}</h1>
       <Panel>
-        <Link href={`/projects/${projectId}/traces`}>Traces</Link>
+        <OutlineButton href={`/projects/${projectId}/traces`}>Traces</OutlineButton>
       </Panel>
     </div>
   </>;

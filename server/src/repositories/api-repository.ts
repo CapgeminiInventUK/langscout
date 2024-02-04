@@ -1,9 +1,9 @@
 import { Collection, Db, MongoClient } from 'mongodb';
-import { TraceDetailResponse } from '../models/trace_detail_response';
+import { TraceDetailResponse } from '../models/trace-detail-response';
 import 'dotenv/config';
-import { TracePercentile } from '../models/traces_percentiles';
-import { FeedbackCountResponse } from '../models/feedback_count_response';
-import { FeedbackFilters } from '../routers/langtrace/traces_router';
+import { TracePercentile } from '../models/traces-percentiles';
+import { FeedbackCountResponse } from '../models/feedback-count-response';
+import { FeedbackFilters } from '../routers/langtrace/traces-router';
 
 export class ApiRepository {
   private db: Db | undefined;
@@ -30,7 +30,11 @@ export class ApiRepository {
   }
 
   private createMatchForFilters(feedbackFilters?: FeedbackFilters) {
-    const feedbackFilter = {};
+    interface MongoDBQuery {
+      $or?: { [key: string]: any }[];
+    }
+
+    const feedbackFilter: MongoDBQuery = {};
     if (feedbackFilters) {
       const orConditions = [];
       for (const key of Object.keys(feedbackFilters)) {
@@ -59,8 +63,7 @@ export class ApiRepository {
       }
 
       if (orConditions.length > 0) {
-        // @ts-expect-error
-        feedbackFilter['$or'] = orConditions;
+        feedbackFilter.$or = orConditions;
       }
     }
     return feedbackFilter;

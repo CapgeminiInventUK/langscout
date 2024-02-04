@@ -1,8 +1,8 @@
-import { LangchainToLangtraceService } from './langchain_to_langtrace_service';
-import { TraceData } from '../models/requests/trace_request';
-import { IngestRepository } from '../repositories/ingest_repository';
+import { LangchainToLangtraceService } from './langchain-to-langtrace-service';
+import { TraceData } from '../models/requests/trace-request';
+import { IngestRepository } from '../repositories/ingest-repository';
 
-jest.mock('../repositories/ingest_repository');
+jest.mock('../repositories/ingest-repository');
 
 describe('LangchainToLangtraceService', () => {
   let service: LangchainToLangtraceService;

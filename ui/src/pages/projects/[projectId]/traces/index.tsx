@@ -1,13 +1,14 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import styles from './Traces.module.scss';
+import styles from './traces.module.scss';
 import React, { useEffect, useState } from 'react';
-import { getTraces } from '@/services/traceService';
+import { getTraces } from '@/services/trace-service';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import StatsPanel from '@/components/FilterPanel';
 import TraceTable from '../../../../components/TraceTable';
-import { FeedbackCount, TracePercentile } from '@/models/traces_response';
-import { TraceTreeNode } from '@/models/trace_detail_response';
+import { FeedbackCount, TracePercentile } from '@/models/traces-response';
+import { TraceTreeNode } from '@/models/trace-detail-response';
+import AppBar from '@/components/AppBar';
 
 interface TracesProps {
   projectId: string;
@@ -165,7 +166,8 @@ const Traces: React.FC<TracesProps> = ({
 
   return (
     <div>
-      <Breadcrumb items={breadcrumbItems}/>
+      <AppBar breadcrumbItems={breadcrumbItems}/>
+      <h1>Traces</h1>
       <div className={styles.tracesContainer}>
         <TraceTable
           projectId={projectId}

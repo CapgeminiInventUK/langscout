@@ -1,0 +1,9 @@
+@use '../../styles/constants' as c;
+
+.appBar {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding-bottom: 8px;
+}

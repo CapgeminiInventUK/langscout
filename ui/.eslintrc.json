@@ -4,7 +4,15 @@
     "unicorn"
   ],
   "rules": {
-      "unicorn/filename-case": "error",
+      "unicorn/filename-case": [
+        "error",
+        {
+          "case": "kebabCase",
+          "ignore": [
+            "^\\[.*\\]\\.tsx$" // Next.js dynamic routes
+          ]
+        }
+      ],
       "indent": [
         2,
         2,

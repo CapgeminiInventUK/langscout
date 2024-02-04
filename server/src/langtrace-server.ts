@@ -1,7 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import qs from 'qs';
-import { projectsRouter } from './routers/langtrace/project_router';
+import { projectsRouter } from './routers/langtrace/project-router';
 
 const ingest_server = express();
 ingest_server.use(express.json());

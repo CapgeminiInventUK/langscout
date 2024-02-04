@@ -4,7 +4,7 @@ interface DateTime {
   time: string;
 }
 
-export function convertTimestampToDateTime(timestamp: string): DateTime {
+export function convertTimestampToDatetime(timestamp: string): DateTime {
   const dateObj = new Date(timestamp);
 
   const date = dateObj.toLocaleDateString('en-GB', {

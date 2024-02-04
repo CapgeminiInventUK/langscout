@@ -1,7 +1,7 @@
-import { TracesResponse } from '@/models/traces_response';
+import { TracesResponse } from '@/models/traces-response';
 import config from '@/lib/utils/config';
-import { buildTreeFromObject } from '@/lib/utils/buildTreeFromObject';
-import { TraceTreeNode } from '@/models/trace_detail_response';
+import { buildTreeFromObject } from '@/lib/utils/build-tree-from-object';
+import { TraceTreeNode } from '@/models/trace-detail-response';
 
 export async function getTraces(
   projectId: string,

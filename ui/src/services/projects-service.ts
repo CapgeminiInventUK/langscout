@@ -3,7 +3,6 @@ import config from '@/lib/utils/config';
 
 export async function getProjects(): Promise<string[]> {
   try {
-    console.log('getProjects');
     const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/projects`);
 
     if (!response.ok) {

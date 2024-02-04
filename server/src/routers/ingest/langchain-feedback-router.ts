@@ -1,6 +1,6 @@
 import { Router, Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import { LangchainToLangtraceService } from '../../services/langchain_to_langtrace_service';
-import { CreateFeedback, UpdateFeedback } from '../../models/requests/feedback_request';
+import { LangchainToLangtraceService } from '../../services/langchain-to-langtrace-service';
+import { CreateFeedback, UpdateFeedback } from '../../models/requests/feedback-request';
 
 export const langchainFeedbackRouter = Router();
 const langchainService = new LangchainToLangtraceService();

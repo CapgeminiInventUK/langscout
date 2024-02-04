@@ -1,6 +1,6 @@
 import { Router, Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import { LangchainToLangtraceService } from '../../services/langchain_to_langtrace_service';
-import { sleepBeforeRetry } from '../../utils/sleepBeforeRetry';
+import { LangchainToLangtraceService } from '../../services/langchain-to-langtrace-service';
+import { sleepBeforeRetry } from '../../utils/sleep-before-retry';
 
 export const langchainIngestRouter = Router();
 const langchainService = new LangchainToLangtraceService();

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+//TODO Add in missing environment variables for Auth
 const configSchema = z.object({
   langtraceApiUrl: z.string().url(),
 });

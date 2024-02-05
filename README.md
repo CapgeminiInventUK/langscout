@@ -3,8 +3,8 @@
 > [!CAUTION] 
 > This project is currently is under active development
 
-![#](./images/banner-light.png#gh-light-mode-only)
-![#](./images/banner-dark.png#gh-dark-mode-only)
+![](./images/banner-light.png#gh-light-mode-only)
+![](./images/banner-dark.png#gh-dark-mode-only)
 
 ## Overview
 

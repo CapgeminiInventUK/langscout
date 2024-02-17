@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:20-alpine AS build
+FROM node:20-alpine@sha256:c0a3badbd8a0a760de903e00cedbca94588e609299820557e72cba2a53dbaa2c AS build
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY . .
 # RUN npm run build
 
 # Stage 2: Final Image
-FROM node:20-alpine
+FROM node:20-alpine@sha256:c0a3badbd8a0a760de903e00cedbca94588e609299820557e72cba2a53dbaa2c
 
 WORKDIR /app
 

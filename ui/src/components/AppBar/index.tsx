@@ -10,7 +10,7 @@ interface AppBarProps {
 }
 
 const AppBar: React.FC<AppBarProps> = ({ breadcrumbItems }) => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   return (
     <div className={styles.appBar}>

@@ -1,4 +1,3 @@
-import Breadcrumb from '@/components/Breadcrumb';
 import styles from './traces.module.scss';
 import React, { useEffect, useState } from 'react';
 import { getTraces } from '@/services/trace-service';
@@ -9,6 +8,50 @@ import TraceTable from '../../../../components/TraceTable';
 import { FeedbackCount, TracePercentile } from '@/models/traces-response';
 import { TraceTreeNode } from '@/models/trace-detail-response';
 import AppBar from '@/components/AppBar';
+
+interface DateRangeInt {
+  startDate: Date;
+  endDate: Date | null;
+
+}
+
+const handlePredefinedRange = (range: string): DateRangeInt => {
+  const now = new Date();
+  if (range === '1h') {
+    return {
+      startDate: new Date(now.getTime() - 60 * 60 * 1000),
+      endDate: null,
+    };
+
+  } else if (range === '3h') {
+    return {
+      startDate: new Date(now.getTime() - 3 * 60 * 60 * 1000),
+      endDate: null,
+    };
+  } else if (range === '12h') {
+    return {
+      startDate: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      endDate: null,
+    };
+  } else if (range === '24h') {
+    return {
+      startDate: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+      endDate: null,
+    };
+  } else if (range === '7d') {
+    return {
+      startDate: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+      endDate: null,
+    };
+  } else if (range === '30d') {
+    return {
+      startDate: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+      endDate: null,
+    };
+  }
+  throw new Error('Invalid range');
+};
+
 
 interface TracesProps {
   projectId: string;
@@ -60,6 +103,7 @@ const Traces: React.FC<TracesProps> = ({
     ? new Date(router.query.endDate as string)
     : null;
   const initialFeedbackFilters = parseFeedbackFilters(router.query.feedbackFilters);
+  const initialInLast = router.query.inLast as string | null;
 
   const [startDate, setStartDate] =
     useState<Date | null>(initialStartDate);
@@ -68,14 +112,15 @@ const Traces: React.FC<TracesProps> = ({
   const [feedbackFilters, setFeedbackFilters] =
     useState<FeedbackFilters>(initialFeedbackFilters);
   const [inLast, setInLast] =
-    useState<string | null>(null);
+    useState<string | null>(initialInLast);
 
 
   useEffect(() => {
     if (
       startDate !== initialStartDate ||
       endDate !== initialEndDate ||
-      JSON.stringify(feedbackFilters) !== JSON.stringify(initialFeedbackFilters)
+      JSON.stringify(feedbackFilters) !== JSON.stringify(initialFeedbackFilters) ||
+      initialInLast !== inLast
     ) {
       const formattedStart = startDate?.toISOString();
 
@@ -97,6 +142,9 @@ const Traces: React.FC<TracesProps> = ({
 
       if (inLast) {
         newQuery.inLast = inLast;
+        const dates = handlePredefinedRange(inLast as string);
+        newQuery.startDate = dates.startDate.toISOString();
+        newQuery.endDate = dates?.endDate?.toISOString();
       } else {
         delete newQuery.inLast;
       }
@@ -110,35 +158,13 @@ const Traces: React.FC<TracesProps> = ({
       router.push({
         pathname: router.pathname,
         query: newQuery,
-      });
+      }).then(() => undefined);
     }
   }, [startDate, endDate, feedbackFilters, inLast]);
 
-  const handlePredefinedRange = (range: string) => {
-    const now = new Date();
-    if (range === '1h') {
-      setStartDate(new Date(now.getTime() - 60 * 60 * 1000));
-      setEndDate(null);
-    } else if (range === '3h') {
-      setStartDate(new Date(now.getTime() - 3 * 60 * 60 * 1000));
-      setEndDate(null);
-    } else if (range === '12h') {
-      setStartDate(new Date(now.getTime() - 12 * 60 * 60 * 1000));
-      setEndDate(null);
-    } else if (range === '24h') {
-      setStartDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
-      setEndDate(null);
-    } else if (range === '7d') {
-      setStartDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
-      setEndDate(null);
-    } else if (range === '30d') {
-      setStartDate(new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000));
-      setEndDate(null);
-    }
-  };
 
   const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    handlePredefinedRange(event.target.value);
+    // handlePredefinedRange(event.target.value);
     setInLast(event.target.value);
   };
 
@@ -190,9 +216,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const projectId = context.params?.projectId as string;
 
   const { query } = context;
-  const { startDate, endDate, feedbackFilters, inLast } = query;
+  let { startDate, endDate } = query;
+  const { feedbackFilters, inLast } = query;
 
-  //TODO Get start and end dates from query params inLast
+  if (inLast) {
+    const dates = handlePredefinedRange(inLast as string);
+    startDate = dates.startDate.toISOString();
+    endDate = dates?.endDate?.toISOString();
+  }
 
   const data = await getTraces(
     projectId,

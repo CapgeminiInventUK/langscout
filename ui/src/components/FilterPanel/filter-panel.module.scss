@@ -5,7 +5,7 @@
   overflow-x: auto;
   background-color: c.$panel-background-color;
   border-radius: c.$panel-radius;
-  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+  border: c.$border-width solid c.$border-color-transparent;
   padding: 16px;
 }
 

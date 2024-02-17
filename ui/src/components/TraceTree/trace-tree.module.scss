@@ -6,14 +6,14 @@
   height: calc(100vh - #{c.$breadcrumb-height} - 34px);
   background-color: c.$panel-background-color;
   border-radius: c.$panel-radius;
-  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+  border: c.$border-width solid c.$border-color-transparent;
 }
 
 .runTypeBox {
   font-size: 12px;
-  color: #666;
+  color: rgba(c.$text-color, 0.9);
   display: inline-block;
-  border: c.$border-width solid c.$border-color-transparent;
+  border: c.$border-width solid c.$border-color-bold;
   border-radius: c.$border-radius;
   padding: 2px 4px;
   margin-right: 8px;
@@ -57,21 +57,21 @@
   }
 
   &_empty {
-    width: 24px;
+    width: 16px;
     margin-left: 8px;
   }
 }
 
 .traceChildren {
   margin-left: 8px;
-  border-left: 2px solid c.$border-color-bold;
+  border-left: 2px solid c.$border-color-transparent;
   padding-left: 10px;
 }
 
 .traceDuration {
   margin-left: 8px;
   font-size: 12px;
-  color: #666;
+  color: c.$text-color;
 }
 
 .active {

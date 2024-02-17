@@ -10,6 +10,8 @@ import {
   BsFillQuestionCircleFill
 } from 'react-icons/bs';
 import { convertTimestampToDatetime } from '@/lib/utils/convert-timestamp-to-datetime';
+import SimpleTable from '@/components/SimpleTable/index';
+import Tooltip from '@/components/Tooltip';
 
 function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
   if (trace.error) {
@@ -17,7 +19,7 @@ function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
   } else if (trace.end_time) {
     return <div className={styles.completed}><BsCheckCircleFill/></div>;
   } else if (trace.end_time === undefined || trace.end_time === null) {
-    return <div className={styles.inprogress}><BsClockFill/></div>;
+    return <div className={styles.inProgress}><BsClockFill/></div>;
   } else {
     return <div className={styles.warning}><BsFillQuestionCircleFill color={'orange'}/></div>;
   }
@@ -64,26 +66,47 @@ const TraceTable: React.FC<TraceTableParams> = ({ projectId, onChange, traces })
         </select>
       </div>
     </div>
-    <table className={styles.fullWidthTable}>
+    <SimpleTable>
       <thead>
         <tr>
           <th>Name</th>
-          <th className={styles.fullWidthTable__tableColumnCentre}>Status</th>
+          <th>Status</th>
           <th>Start Time</th>
           <th>Latency</th>
+          <th>Tokens</th>
+          {/*<th>Cost (input)</th>*/}
+          {/*<th>Cost (output)</th>*/}
+          <th>Cost</th>
           <th>Feedback</th>
         </tr>
       </thead>
       <tbody>
         {filteredTraces.map(trace => {
           const runDate = convertTimestampToDatetime(trace.start_time);
-          return <tr key={trace.run_id} onClick={() => handleRowClick(projectId, trace.run_id)}
-            className={styles.clickableRow}>
+          return <tr
+            key={trace.run_id}
+            onClick={() => handleRowClick(projectId, trace.run_id)}>
             <td>{trace.name}</td>
             <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
             <td>{runDate.date} @ {runDate.time}</td>
             <td><LatencyChip latency={trace.latency}/></td>
-            <td>  {trace.feedback?.key
+            <td>
+              <Tooltip
+                text={`Input:  ${trace.totalInputTokenCount}
+Output: ${trace.totalOutputTokenCount}
+Total:  ${trace.totalTokens}`}>
+                {trace.totalTokens}
+              </Tooltip>
+            </td>
+            <td>
+              <Tooltip
+                text={`Input:  $${trace.totalInputCost?.toPrecision(2)}
+Output: $${trace.totalOutputCost?.toPrecision(2)}
+Total:  $${trace.totalCost?.toPrecision(2)}`}>
+              ${trace.totalCost?.toPrecision(2)}
+              </Tooltip>
+            </td>
+            <td>{trace.feedback?.key
               ? `${trace.feedback.key}: ${
                 trace.feedback.score !== undefined ? trace.feedback.score : trace.feedback.value
               }`
@@ -91,7 +114,7 @@ const TraceTable: React.FC<TraceTableParams> = ({ projectId, onChange, traces })
           </tr>;
         })}
       </tbody>
-    </table>
+    </SimpleTable>
   </div>;
 };
 

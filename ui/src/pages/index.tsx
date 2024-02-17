@@ -40,7 +40,7 @@ const Home = () => {
 
           <div className={styles.quickLaunchPanel}>
             <Panel>
-              <h3> Quick links</h3>
+              <h3>Quick links</h3>
               <OutlineButton href="/projects/capgpt-production/traces">
                 <span className={styles.icon}><RiNodeTree/></span>
                 CapGPT Prod Traces

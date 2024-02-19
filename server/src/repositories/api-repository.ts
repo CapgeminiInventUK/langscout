@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { TracePercentile } from '../models/traces-percentiles';
 import { FeedbackCountResponse } from '../models/feedback-count-response';
 import { FeedbackFilters } from '../routers/langtrace/traces-router';
+import { Document } from 'bson';
 
 export class ApiRepository {
   private db: Db | undefined;
@@ -69,9 +70,58 @@ export class ApiRepository {
     return feedbackFilter;
   }
 
-  async getProjects(): Promise<string[]> {
+  async getProjects(): Promise<Document[]> {
+    const now: Date = new Date();
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
     const collection = await this.getCollection();
-    return await collection.distinct('session_name');
+
+    const aggregation =
+      [
+        {
+          $match: {
+            parent_run_id: null,
+            start_time: { $gt: thirtyDaysAgo }
+          }
+        },
+        {
+          $group: {
+            _id: '$session_name',
+            tracesLast24Hours: {
+              $sum: {
+                $cond: [{ $gt: ['$start_time', oneDayAgo] }, 1, 0]
+              }
+            },
+            tracesLast7Days: {
+              $sum: {
+                $cond: [{ $gt: ['$start_time', sevenDaysAgo] }, 1, 0]
+              }
+            },
+            tracesLast30Days: {
+              $sum: 1
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            project_name: '$_id',
+            tracesLast24Hours: 1,
+            tracesLast7Days: 1,
+            tracesLast30Days: 1
+          }
+        },
+        {
+          $sort: {
+            project_name: 1
+          }
+        }
+      ];
+
+
+    return await collection.aggregate(aggregation).toArray();
   }
 
   async getTraces(
@@ -93,22 +143,176 @@ export class ApiRepository {
         }
       },
       {
-        $addFields: {
-          latency: {
-            $subtract: ['$end_time', '$start_time']
-          }
-        }
+        $graphLookup: {
+          from: 'traces',
+          startWith: '$run_id',
+          connectFromField: 'run_id',
+          connectToField: 'parent_run_id',
+          as: 'children',
+          depthField: 'depth',
+          restrictSearchWithMatch: {
+            parent_run_id: {
+              $ne: null,
+            },
+          },
+        },
       },
       {
         $project: {
           _id: 0,
           run_id: 1,
+          trace_id: 1,
           name: 1,
           start_time: 1,
           end_time: 1,
-          latency: 1,
-          feedback: 1
-        }
+          feedback: 1,
+          latency: {
+            $subtract: ['$end_time', '$start_time'],
+          },
+          totalInputCost: {
+            $reduce: {
+              input: '$children',
+              initialValue: 0,
+              in: {
+                $add: [
+                  '$$value',
+                  {
+                    $cond: {
+                      if: {
+                        $gt: [
+                          '$$this.extra.tokens.input.cost',
+                          null,
+                        ],
+                      },
+                      then: '$$this.extra.tokens.input.cost',
+                      else: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          totalInputTokenCount: {
+            $reduce: {
+              input: '$children',
+              initialValue: 0,
+              in: {
+                $add: [
+                  '$$value',
+                  {
+                    $cond: {
+                      if: {
+                        $gt: [
+                          '$$this.extra.tokens.input.tokens',
+                          null,
+                        ],
+                      },
+                      then: '$$this.extra.tokens.input.tokens',
+                      else: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          totalOutputCost: {
+            $reduce: {
+              input: '$children',
+              initialValue: 0,
+              in: {
+                $add: [
+                  '$$value',
+                  {
+                    $cond: {
+                      if: {
+                        $gt: [
+                          '$$this.extra.tokens.output.cost',
+                          null,
+                        ],
+                      },
+                      then: '$$this.extra.tokens.output.cost',
+                      else: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          totalOutputTokenCount: {
+            $reduce: {
+              input: '$children',
+              initialValue: 0,
+              in: {
+                $add: [
+                  '$$value',
+                  {
+                    $cond: {
+                      if: {
+                        $gt: [
+                          '$$this.extra.tokens.output.tokens',
+                          null,
+                        ],
+                      },
+                      then: '$$this.extra.tokens.output.tokens',
+                      else: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          totalCost: {
+            $reduce: {
+              input: '$children',
+              initialValue: 0,
+              in: {
+                $add: [
+                  '$$value',
+                  {
+                    $cond: {
+                      if: {
+                        $gt: [
+                          '$$this.extra.tokens.total.cost',
+                          null,
+                        ],
+                      },
+                      then: '$$this.extra.tokens.total.cost',
+                      else: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          totalTokens: {
+            $reduce: {
+              input: '$children',
+              initialValue: 0,
+              in: {
+                $add: [
+                  '$$value',
+                  {
+                    $cond: {
+                      if: {
+                        $gt: [
+                          '$$this.extra.tokens.total.tokens',
+                          null,
+                        ],
+                      },
+                      then: '$$this.extra.tokens.total.tokens',
+                      else: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          }
+        },
+      },
+      {
+        $project: {
+          children: 0,
+        },
       },
       { $sort: { start_time: -1 } },
     ];

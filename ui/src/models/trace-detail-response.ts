@@ -11,6 +11,12 @@ export interface TraceTreeNode {
   latency: number;
   parent_run_id: string;
   children: TraceTreeNode[];
+  totalInputTokenCount?: number;
+  totalInputCost?: number;
+  totalOutputCost?: number;
+  totalOutputTokenCount?: number;
+  totalCost?: number;
+  totalTokens?: number;
   depth?: number;
   feedback?: { [key: string]: any }; //TODO Make this a proper type
 

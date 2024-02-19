@@ -42,7 +42,7 @@ const StatsPanel: React.FC<StatsPanelProps> = ({
         <p>No latency data available</p>
       </div>
       }
-      <h3>Feedback</h3>
+      {feedbackCounts.length > 0 && <h3>Feedback</h3>}
       {feedbackCounts.length > 0 && feedbackCounts.map(({ key, counts }, index) => {
         return (
           <div key={index + '-feedback-key'}>

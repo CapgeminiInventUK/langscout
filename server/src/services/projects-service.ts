@@ -1,4 +1,5 @@
 import { ApiRepository } from '../repositories/api-repository';
+import { Document } from 'bson';
 
 export class ProjectsService {
   private repository: ApiRepository;
@@ -7,7 +8,7 @@ export class ProjectsService {
     this.repository = new ApiRepository();
   }
 
-  async getProjects(): Promise<string[]> {
+  async getProjects(): Promise<Document[]> {
     return await this.repository.getProjects();
   }
 }

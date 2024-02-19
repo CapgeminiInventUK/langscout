@@ -1,7 +1,7 @@
 import config from '@/lib/utils/config';
+import { ProjectResponse } from '@/models/projects-response';
 
-
-export async function getProjects(): Promise<string[]> {
+export async function getProjects(): Promise<ProjectResponse[]> {
   try {
     const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/projects`);
 
@@ -10,7 +10,7 @@ export async function getProjects(): Promise<string[]> {
     }
     const data = await response.json();
 
-    return data as string[];
+    return data as ProjectResponse[];
   } catch (error) {
     console.error('Error:', error);
     throw error;

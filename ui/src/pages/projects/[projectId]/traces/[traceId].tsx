@@ -3,7 +3,6 @@ import TraceTree from '../../../../components/TraceTree';
 import TraceDetailsPanel from '../../../../components/TraceDetailsPanel';
 import { getTraceTree } from '@/services/trace-service';
 import styles from './trace-details-page.module.scss';
-import Breadcrumb from '@/components/Breadcrumb';
 import { TraceTreeNode } from '@/models/trace-detail-response';
 import { GetServerSidePropsContext } from 'next';
 import { usePathname } from 'next/navigation';

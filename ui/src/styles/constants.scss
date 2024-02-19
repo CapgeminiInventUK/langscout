@@ -1,25 +1,51 @@
-$black: #000;
+//$black: #000;
+//$white: #fff;
+//
+//$background-color: #F3F5F5;
+//$panel-background-color: $white;
+//$primary-color: $black;
+//
+//$border-radius: 8px;
+//$panel-radius: 12px;
+//$border-width: 1px;
+//$border-color-bold: $black;
+//$border-color-transparent: rgba($border-color-bold, 0.2);
+//$text-color: $black;
+//
+//$breadcrumb-height: 24px;
+//
+//$temperature-4: #ffe2e5;
+//$temperature-4-text: #791725;
+//$temperature-3: #fbe1c7;
+//$temperature-3-text: #874024;
+//$temperature-2: #fbefb9;
+//$temperature-2-text: #8B4800;
+//$temperature-1: #e1f3e7;
+//$temperature-1-text: #2c502e;
+
+
+// Dark theme
+$black: #121212;
 $white: #fff;
 
-$background-color: #eee;
-$panel-background-color: $white;
-$primary-color: $black;
+$background-color: #303030;
+$panel-background-color: #303030;
+$primary-color: $white;
 
 $border-radius: 8px;
 $panel-radius: 12px;
 $border-width: 1px;
-$border-color-bold: rgba(0, 0, 0);
-$border-color-transparent: rgba($border-color-bold, 0.2);
-$text-color: $black;
-
+$border-color-bold: $white;
+$border-color-transparent: rgba($border-color-bold, 0.4);
+$text-color: $white;
 
 $breadcrumb-height: 24px;
 
-$temperature-4: #ffe2e5;
+$temperature-4: #d7c0c3;
 $temperature-4-text: #791725;
-$temperature-3: #fbe1c7;
+$temperature-3: #d0bfaf;
 $temperature-3-text: #874024;
 $temperature-2: #fbefb9;
 $temperature-2-text: #8B4800;
-$temperature-1: #e1f3e7;
+$temperature-1: #afc5b6;
 $temperature-1-text: #2c502e;

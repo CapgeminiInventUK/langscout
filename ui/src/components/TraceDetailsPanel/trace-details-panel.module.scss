@@ -4,7 +4,7 @@
   width: 70%;
   background-color: c.$panel-background-color;
   border-radius: c.$panel-radius;
-  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+  border: c.$border-width solid c.$border-color-transparent;
   padding: 16px;
 }
 
@@ -15,7 +15,7 @@
 
 .content {
   background-color: c.$panel-background-color;
-  border: c.$border-width solid rgba(0, 0, 0, 0.2);
+  border: c.$border-width solid c.$border-color-transparent;
   padding: 8px;
   border-radius: c.$border-radius;
   white-space: pre-wrap;

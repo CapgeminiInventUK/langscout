@@ -1,27 +1,59 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import styles from '@/components/TraceTable/trace-table.module.scss';
 import { TraceTreeNode } from '@/models/trace-detail-response';
-import LatencyChip from '@/components/LatencyChip';
 import { IconType } from 'react-icons/lib';
-import {
-  BsCheckCircleFill,
-  BsClockFill,
-  BsExclamationCircleFill,
-  BsFillQuestionCircleFill
-} from 'react-icons/bs';
 import { convertTimestampToDatetime } from '@/lib/utils/convert-timestamp-to-datetime';
-import SimpleTable from '@/components/SimpleTable/index';
-import Tooltip from '@/components/Tooltip';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import {
+  CheckIcon, ClockIcon, ExclamationTriangleIcon,
+  InfoCircledIcon
+} from '@radix-ui/react-icons';
 
 function getStatusForTrace(trace: TraceTreeNode): ReactElement<IconType> {
   if (trace.error) {
-    return <div className={styles.error}><BsExclamationCircleFill/></div>;
+    return <HoverCard openDelay={300}>
+      <HoverCardContent className="text-start w-full max-h-36 overflow-auto">
+        <div className="whitespace-pre">
+          {trace.error}
+        </div>
+      </HoverCardContent>
+      <HoverCardTrigger>
+        <Badge className="px-3 py-1">
+          <ExclamationTriangleIcon className="antialiased"/>
+        </Badge>
+      </HoverCardTrigger>
+    </HoverCard>;
   } else if (trace.end_time) {
-    return <div className={styles.completed}><BsCheckCircleFill/></div>;
+    return <Badge variant="outline" className="px-3 py-1">
+      <CheckIcon className="antialiased"/>
+    </Badge>;
   } else if (trace.end_time === undefined || trace.end_time === null) {
-    return <div className={styles.inProgress}><BsClockFill/></div>;
+    return <Badge variant="secondary" className="px-3 py-1">
+      <ClockIcon className="antialiased"/></Badge>;
   } else {
-    return <div className={styles.warning}><BsFillQuestionCircleFill color={'orange'}/></div>;
+    return <Badge variant="outline" className="px-3 py-1">
+      <InfoCircledIcon className="antialiased"/>
+    </Badge>;
   }
 }
 
@@ -31,7 +63,7 @@ const handleRowClick = (project_id: string, run_id: string) => {
 
 interface TraceTableParams {
   projectId: string;
-  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (value: string) => void;
   traces: TraceTreeNode[];
   //TODO Add in filter for feedback
 }
@@ -50,71 +82,113 @@ const TraceTable: React.FC<TraceTableParams> = ({ projectId, onChange, traces })
   }, [feedbackKeyFilter, traces]);
 
 
-  return <div className={styles.tableContainer}>
-    <div className={styles.headerRow}>
-      <div className={styles.filterContainer}>
-        <select
-          onChange={onChange}
-          className={styles.dateDropdown}>
-          <option value="">Select Range</option>
-          <option value="1h">Last 1 hour</option>
-          <option value="3h">Last 3 hours</option>
-          <option value="12h">Last 12 hours</option>
-          <option value="24h">Last 24 hours</option>
-          <option value="7d">Last 7 days</option>
-          <option value="30d">Last 30 days</option>
-        </select>
+  return <div>
+    <div className="flex items-center pb-2 justify-end">
+      <div className="flex items-center">
+        <Select onValueChange={(value) => onChange(value)}>
+          <SelectTrigger><SelectValue placeholder="Select range"/></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1h">Last 1 hour</SelectItem>
+            <SelectItem value="3h">Last 3 hours</SelectItem>
+            <SelectItem value="12h">Last 12 hours</SelectItem>
+            <SelectItem value="24h">Last 24 hours</SelectItem>
+            <SelectItem value="7d">Last 7 days</SelectItem>
+            <SelectItem value="30d">Last 30 days</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
-    <SimpleTable>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Status</th>
-          <th>Start Time</th>
-          <th>Latency</th>
-          <th>Tokens</th>
-          {/*<th>Cost (input)</th>*/}
-          {/*<th>Cost (output)</th>*/}
-          <th>Cost</th>
-          <th>Feedback</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredTraces.map(trace => {
-          const runDate = convertTimestampToDatetime(trace.start_time);
-          return <tr
-            key={trace.run_id}
-            onClick={() => handleRowClick(projectId, trace.run_id)}>
-            <td>{trace.name}</td>
-            <td className={styles.columnIcon}>{getStatusForTrace(trace)}</td>
-            <td>{runDate.date} @ {runDate.time}</td>
-            <td><LatencyChip latency={trace.latency}/></td>
-            <td>
-              <Tooltip
-                text={`Input:  ${trace.totalInputTokenCount}
-Output: ${trace.totalOutputTokenCount}
-Total:  ${trace.totalTokens}`}>
-                {trace.totalTokens}
-              </Tooltip>
-            </td>
-            <td>
-              <Tooltip
-                text={`Input:  $${trace.totalInputCost?.toPrecision(2)}
-Output: $${trace.totalOutputCost?.toPrecision(2)}
-Total:  $${trace.totalCost?.toPrecision(2)}`}>
-              ${trace.totalCost?.toPrecision(2)}
-              </Tooltip>
-            </td>
-            <td>{trace.feedback?.key
-              ? `${trace.feedback.key}: ${
-                trace.feedback.score !== undefined ? trace.feedback.score : trace.feedback.value
-              }`
-              : ''}</td>
-          </tr>;
-        })}
-      </tbody>
-    </SimpleTable>
+    <Card>
+      <CardContent className="px-0 pb-0">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Start Time</TableHead>
+              <TableHead>Latency</TableHead>
+              <TableHead>Tokens</TableHead>
+              <TableHead>Cost</TableHead>
+              <TableHead>Feedback</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredTraces.map(trace => {
+              const runDate = convertTimestampToDatetime(trace.start_time);
+              const endDate = trace.end_time ? convertTimestampToDatetime(trace.end_time) : null;
+              return <TableRow
+                key={trace.run_id}
+                onClick={() => handleRowClick(projectId, trace.run_id)}>
+                <TableCell>{trace.name}</TableCell>
+                <TableCell className="w-6 text-center">
+                  {getStatusForTrace(trace)}
+                </TableCell>
+                <TableCell>{runDate.date} @ {runDate.time}</TableCell>
+                <TableCell>
+                  {trace.latency && <HoverCard openDelay={300}>
+                    <HoverCardContent>
+                      <div>
+                        <p>Start: {runDate.date} @ {runDate.time}</p>
+                        {endDate && <p>End: {endDate.date} @ {endDate.time}</p>}
+                      </div>
+                    </HoverCardContent>
+                    <HoverCardTrigger>
+                      <Badge variant="secondary" className="px-2 py-1">
+                        {trace.latency?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}ms
+                      </Badge>
+                    </HoverCardTrigger>
+                  </HoverCard>}
+                </TableCell>
+                <TableCell>
+                  <HoverCard openDelay={300}>
+                    <HoverCardContent>
+                      <div>
+                        <p>Input: {trace.totalInputTokenCount}</p>
+                        <p>Output: {trace.totalOutputTokenCount}</p>
+                        <p>Total: {trace.totalTokens}</p>
+                      </div>
+                    </HoverCardContent>
+                    <HoverCardTrigger>
+                      {trace.totalTokens}
+                    </HoverCardTrigger>
+                  </HoverCard>
+                </TableCell>
+                <TableCell>
+                  <HoverCard openDelay={300}>
+                    <HoverCardContent>
+                      <div>
+                        <p>Input: ${trace.totalInputCost?.toPrecision(2)}</p>
+                        <p>Output: ${trace.totalOutputCost?.toPrecision(2)}</p>
+                        <p>Total: ${trace.totalCost?.toPrecision(2)}</p>
+                      </div>
+                    </HoverCardContent>
+                    <HoverCardTrigger>
+                      ${trace.totalCost?.toPrecision(2)}
+                    </HoverCardTrigger>
+                  </HoverCard>
+                </TableCell>
+                <TableCell>{trace.feedback?.key
+                  ? <HoverCard openDelay={300}>
+                    <HoverCardContent>
+                      <div>
+                        <p>{trace.feedback.comment ?? 'No comment left'}</p>
+                      </div>
+                    </HoverCardContent>
+                    <HoverCardTrigger>
+                      {`${trace.feedback.key}: ${
+                        trace.feedback.score !== undefined ?
+                          trace.feedback.score :
+                          trace.feedback.value
+                      }`}
+                    </HoverCardTrigger>
+                  </HoverCard>
+                  : ''}</TableCell>
+              </TableRow>;
+            })}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   </div>;
 };
 

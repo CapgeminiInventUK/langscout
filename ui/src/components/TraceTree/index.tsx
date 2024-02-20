@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { MdAdd, MdRemove } from 'react-icons/md';
-import styles from './trace-tree.module.scss';
 import {
   TraceTreeNode,
 } from '@/models/trace-detail-response';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Badge } from '@/components/ui/badge';
 
 interface TraceTreeProps {
   traceData: TraceTreeNode;
@@ -45,41 +47,60 @@ const TraceTree: React.FC<TraceTreeProps> = ({
   const renderTrace = (trace: TraceTreeNode) => {
     const isExpanded = expandedNodes.has(trace.run_id);
     const isSelected = trace.run_id === selectedTraceId;
-    const traceHeaderClass = isSelected
-      ? `${styles.traceHeader} ${styles.active}`
-      : styles.traceHeader;
 
     return (
-      <div key={trace.run_id} >
-        <div className={traceHeaderClass}>
-          <div onClick={() => handleSelectTrace(trace)} className={styles.traceTitle}>
-            <span className={styles.runTypeBox}>{trace.run_type.toUpperCase()}</span>
-            {trace.name}
-          </div>
-          <div>
-            <span className={styles.traceDuration}>{(trace.latency / 1000).toFixed(2)}s</span>
-          </div>
-          {trace.children?.length > 0 && (
-            <span onClick={(e) => toggleExpand(e, trace.run_id)} className={styles.toggleIcon}>
-              {isExpanded ? <MdRemove/> : <MdAdd/>}
-            </span>
+      <div key={trace.run_id}>
+        <ToggleGroup
+          type="single"
+          orientation="vertical"
+          className="w-full flex-col items-start"
+          value={selectedTraceId ?? ''}
+          onValueChange={() => handleSelectTrace(trace)}
+        >
+          <ToggleGroupItem
+            value={trace.run_id} className="w-full">
+            <div onClick={() => handleSelectTrace(trace)}
+              className="flex-1
+              font-normal
+              flex items-center whitespace-nowrap overflow-hidden truncate gap-2"
+            >
+              <Badge variant="outline">
+                {trace.run_type.toUpperCase()}
+              </Badge>
+              {trace.name}
+            </div>
+            <div>
+              <span className="pl-2 text-xs">{(trace.latency / 1000).toFixed(2)}s</span>
+            </div>
+            {trace.children?.length > 0 && (
+              <span onClick={(e) =>
+                toggleExpand(e, trace.run_id)} className={'inline-block ml-1.5'}>
+                {isExpanded ? <MdRemove/> : <MdAdd/>}
+              </span>
+            )}
+            {trace.children?.length === 0 && <span className={'w-5'}/>}
+          </ToggleGroupItem>
+          {trace.children && isExpanded && (
+            <div className="w-full ml-2 pr-2 border-l-2 border-l-primary pl-1.5">
+              {trace.children.map(child => renderTrace(child))}
+            </div>
           )}
-          {trace.children?.length === 0 && <span className={styles.toggleIcon_empty}/>}
-        </div>
-        {trace.children && isExpanded && (
-          <div className={styles.traceChildren}>
-            {trace.children.map(child => renderTrace(child))}
-          </div>
-        )}
+        </ToggleGroup>
       </div>
     );
   };
 
   return (
-    <div className={styles.traceTree}>
-      <h3>Trace</h3>
-      {traceData && renderTrace(traceData)}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          Trace
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {traceData && renderTrace(traceData)}
+      </CardContent>
+    </Card>
   );
 };
 

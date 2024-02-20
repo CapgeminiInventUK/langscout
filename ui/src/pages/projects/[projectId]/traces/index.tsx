@@ -1,4 +1,3 @@
-import styles from './traces.module.scss';
 import React, { useEffect, useState } from 'react';
 import { getTraces } from '@/services/trace-service';
 import { useRouter } from 'next/router';
@@ -8,6 +7,7 @@ import TraceTable from '../../../../components/TraceTable';
 import { FeedbackCount, TracePercentile } from '@/models/traces-response';
 import { TraceTreeNode } from '@/models/trace-detail-response';
 import AppBar from '@/components/AppBar';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 interface DateRangeInt {
   startDate: Date;
@@ -123,9 +123,7 @@ const Traces: React.FC<TracesProps> = ({
       initialInLast !== inLast
     ) {
       const formattedStart = startDate?.toISOString();
-
       const formattedEnd = endDate?.toISOString();
-
       const newQuery = { ...router.query };
 
       if (formattedStart) {
@@ -163,9 +161,9 @@ const Traces: React.FC<TracesProps> = ({
   }, [startDate, endDate, feedbackFilters, inLast]);
 
 
-  const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleDropdownChange = (value: string) => {
     // handlePredefinedRange(event.target.value);
-    setInLast(event.target.value);
+    setInLast(value);
   };
 
   const handleFeedbackSelect = (key: string, value: string, isSelected: boolean) => {
@@ -193,20 +191,24 @@ const Traces: React.FC<TracesProps> = ({
   return (
     <div>
       <AppBar breadcrumbItems={breadcrumbItems}/>
-      <h1>Traces</h1>
-      <div className={styles.tracesContainer}>
-        <TraceTable
-          projectId={projectId}
-          onChange={handleDropdownChange}
-          traces={traces}
-        />
-        <StatsPanel latencyPercentiles={latencyPercentiles}
-          recordsCount={traces.length}
-          feedbackCounts={feedbackCounts}
-          feedbackFilters={feedbackFilters}
-          onFeedbackSelect={handleFeedbackSelect}
-        />
-      </div>
+      <ResizablePanelGroup direction="horizontal" className="flex gap-4 py-4 px-4">
+        <ResizablePanel defaultSize={80}>
+          <TraceTable
+            projectId={projectId}
+            onChange={handleDropdownChange}
+            traces={traces}
+          />
+        </ResizablePanel>
+        <ResizableHandle withHandle/>
+        <ResizablePanel defaultSize={20} minSize={10}>
+          <StatsPanel latencyPercentiles={latencyPercentiles}
+            recordsCount={traces.length}
+            feedbackCounts={feedbackCounts}
+            feedbackFilters={feedbackFilters}
+            onFeedbackSelect={handleFeedbackSelect}
+          />
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };

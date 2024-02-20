@@ -2,9 +2,10 @@ import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import { getParentPageFromUrlPath } from '@/lib/utils/get-parent-page-from-url-path';
 import { usePathname } from 'next/navigation';
-import Panel from '@/components/Panel';
-import OutlineButton from '@/components/OutlineButton';
 import AppBar from '@/components/AppBar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import { buttonVariants } from '@/components/ui/button';
 
 interface ProjectDetailsPageProps {
   projectId: string;
@@ -19,13 +20,23 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({ projectId }) =>
 
   return <>
     <AppBar breadcrumbItems={breadcrumbItems}/>
-    <div>
-      <h1>{projectId}</h1>
-      <Panel>
-        <OutlineButton href={`/projects/${projectId}/traces`}>Traces</OutlineButton>
-      </Panel>
+    <div className="py-4 px-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>{projectId}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid w-full items-center">
+            <div className="flex flex-col space-y-0">
+              <Link className={buttonVariants({ variant: 'outline' })}
+                href={`/projects/${projectId}/traces`}>Traces</Link>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
-  </>;
+  </>
+  ;
 };
 
 

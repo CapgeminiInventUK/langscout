@@ -154,6 +154,7 @@ export class ApiRepository {
             parent_run_id: {
               $ne: null,
             },
+            session_name: projectId,
           },
         },
       },
@@ -166,6 +167,7 @@ export class ApiRepository {
           start_time: 1,
           end_time: 1,
           feedback: 1,
+          error: 1,
           latency: {
             $subtract: ['$end_time', '$start_time'],
           },
@@ -405,6 +407,7 @@ export class ApiRepository {
               parent_run_id: {
                 $ne: null,
               },
+              session_name: projectId,
             },
           },
         },
@@ -483,6 +486,7 @@ export class ApiRepository {
             execution_order: 1,
             trace_id: 1,
             dotted_order: 1,
+            metadata: '$extra.metadata',
             children: {
               $map: {
                 input: '$children',
@@ -502,6 +506,7 @@ export class ApiRepository {
                   execution_order: '$$item.execution_order',
                   trace_id: '$$item.trace_id',
                   dotted_order: '$$item.dotted_order',
+                  metadata: '$$item.extra.metadata',
                   depth: '$$item.depth'
                 },
               },

@@ -1,15 +1,30 @@
-import styles from './home.module.scss';
-import { RiLoginBoxLine, RiSettings3Line, RiNodeTree, RiStackLine } from 'react-icons/ri';
+import { RiLoginBoxLine } from 'react-icons/ri';
 import { signIn, useSession } from 'next-auth/react';
-import Panel from '@/components/Panel';
-import OutlineButton from '@/components/OutlineButton';
 import AppBar from '@/components/AppBar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button, buttonVariants } from '@/components/ui/button';
+import React from 'react';
+import Link from 'next/link';
+import { BarChartIcon, GearIcon, StackIcon } from '@radix-ui/react-icons';
 
 const Home = () => {
   const { status } = useSession();
-  const breadcrumbItems = [
-    { name: '', path: undefined },
+
+  const quickLinks = [
+    {
+      name: 'CapGPT Production',
+      url: '/projects/capgpt-production/traces'
+    },
+    {
+      name: 'CapGPT Dev',
+      url: '/projects/capgpt-dev/traces'
+    },
+    {
+      name: 'CapGPT Local',
+      url: '/projects/capgpt-local/traces'
+    },
   ];
+
 
   if (status === 'loading') {
     return <p>Hang on there...</p>;
@@ -18,62 +33,69 @@ const Home = () => {
     return (
 
       <div>
-        <AppBar breadcrumbItems={breadcrumbItems}/>
-        <h1>Home</h1>
+        <AppBar breadcrumbItems={[]}/>
+        <div className="px-4 pt-4">
+          <div className="flex gap-4">
+            <div className="w-2/3">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Actions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid w-full items-center">
+                    <div className="flex flex-col space-y-2">
+                      <Link className={buttonVariants({ variant: 'outline' })} href="/projects">
+                        <StackIcon className="mr-2 h-4 w-4"/>Projects
+                      </Link>
+                      <Link className={buttonVariants({ variant: 'outline' })} href="/settings">
+                        <GearIcon className="mr-2 h-4 w-4"/>Settings
+                      </Link>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-        <div className={styles.mainContent}>
-          <div className={styles.mainPanel}>
-            <Panel>
-              <div className={styles.row_centre}>
-                <OutlineButton href="/projects">
-                  <span className={styles.icon}><RiStackLine/></span>
-                  Projects
-                </OutlineButton>
-                <br/>
-                <OutlineButton href="/settings">
-                  <span className={styles.icon}><RiSettings3Line/></span>
-                  Settings
-                </OutlineButton>
-              </div>
-            </Panel>
-          </div>
-
-          <div className={styles.quickLaunchPanel}>
-            <Panel>
-              <h3>Quick links</h3>
-              <OutlineButton href="/projects/capgpt-production/traces">
-                <span className={styles.icon}><RiNodeTree/></span>
-                CapGPT Prod Traces
-              </OutlineButton>
-              <br/>
-              <OutlineButton href="/projects/capgpt-local/traces">
-                <span className={styles.icon}><RiNodeTree/></span>
-                CapGPT Local Traces
-              </OutlineButton>
-              <br/>
-              <OutlineButton href="/projects/capgpt-dev/traces">
-                <span className={styles.icon}><RiNodeTree/></span>
-                CapGPT Dev Traces
-              </OutlineButton>
-            </Panel>
+            <div className="w-1/3">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Launch</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid w-full items-center">
+                    <div className="flex flex-col space-y-2">
+                      {quickLinks.map((link, index) => (
+                        <Link key={index} className={buttonVariants({ variant: 'outline' })}
+                          href={link.url}>
+                          <BarChartIcon className="mr-2 h-4 w-4"/>{link.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
-
     );
   }
 
   return (
     <>
-      <div className={styles.container}>
-        <Panel>
-          <h1>LangTrace</h1>
-          <pre>View your Langchain data</pre>
-          <OutlineButton onClick={() => signIn('github')}>
-            <span
-              className={styles.icon}><RiLoginBoxLine/></span>Sign in
-          </OutlineButton>
-        </Panel>
+      <div>
+        <Card>
+          <CardHeader>
+            <CardTitle>LangTrace</CardTitle>
+
+          </CardHeader>
+          <CardContent>
+            View your Langchain data
+            <Button onClick={() => signIn('github')}>
+              <RiLoginBoxLine className="mr-2 h-4 w-4"/> Sign in
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </>
   );

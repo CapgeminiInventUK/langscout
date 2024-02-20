@@ -21,6 +21,7 @@ describe('TraceService', () => {
   const mockTraceDocument: TraceDetailResponse = {
     children: [],
     end_time: '',
+    metadata: new Map<string, unknown>(),
     input: new Map<string, unknown>(),
     latency: null,
     output: new Map<string, unknown>(),

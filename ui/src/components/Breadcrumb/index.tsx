@@ -1,19 +1,19 @@
 import Link from 'next/link';
-import styles from './breadcrumb.module.scss';
 import React from 'react';
 import { RiArrowDropRightFill } from 'react-icons/ri';
 import { BreadcrumbProps } from '@/components/Breadcrumb/props';
+import { buttonVariants } from '@/components/ui/button';
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   return (
     <nav aria-label="breadcrumb">
-      <ol className={styles.breadcrumbList}>
+      <ol className="flex my-0 items-center text-sm font-light pl-0 list-none">
         {items.map((item, index) => (
           <React.Fragment key={index}>
             {index > 0 && <RiArrowDropRightFill size={20}/>}
-            <li key={index} className={styles.breadcrumbItem}>
+            <li key={index}>
               {item.path ? (
-                <Link href={item.path}>
+                <Link className={buttonVariants({ variant: 'link' })} href={item.path}>
                   {item.name}
                 </Link>
               ) : (

@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './trace-details-panel.module.scss';
 import { TraceTreeNode } from '@/models/trace-detail-response';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface TraceDetailsPanelProps {
   selectedTrace: TraceTreeNode | null;
@@ -8,26 +9,51 @@ interface TraceDetailsPanelProps {
 
 const TraceDetailsPanel: React.FC<TraceDetailsPanelProps> = ({ selectedTrace }) => {
   return (
-    <div className={styles.traceDetailsPanel}>
-      {selectedTrace && (
-        <>
-          <h2 className={styles.title}>{selectedTrace.name}</h2>
-          <div>
-            <strong>Inputs:</strong>
-            <pre className={styles.content + ' ' + styles.contentInput}>
-              {JSON.stringify(selectedTrace.inputs, null, 2)}
-            </pre>
-          </div>
-          <div className={styles.divider}/>
-          <div>
-            <strong>Outputs:</strong>
-            <pre className={styles.content}>
-              {JSON.stringify(selectedTrace.outputs?.output ?? selectedTrace.outputs, null, 2)}
-            </pre>
-          </div>
-        </>
-      )}
-    </div>
+    selectedTrace && (
+      <>
+        <h4 className="text-xl font-semibold mb-2">{selectedTrace.name}</h4>
+        <Tabs defaultValue="trace" className="w-full">
+          <TabsList>
+            <TabsTrigger value="trace">Trace</TabsTrigger>
+            <TabsTrigger value="metadata">Metadata</TabsTrigger>
+          </TabsList>
+          <TabsContent value="trace">
+            <Card className="mt-2 mb-4">
+              <CardHeader>
+                <CardTitle>Inputs</CardTitle>
+              </CardHeader>
+              <CardContent className="rounded-b-lg bg-muted py-4">
+                <code className="relative font-mono text-sm font-semibold whitespace-pre-line">
+                  {JSON.stringify(selectedTrace.inputs, null, 2)}
+                </code>
+              </CardContent>
+            </Card>
+            <Card className="my-4">
+              <CardHeader>
+                <CardTitle>Outputs</CardTitle>
+              </CardHeader>
+              <CardContent className=" rounded-b-lg bg-muted py-4">
+                <code className="relative font-mono text-sm font-semibold whitespace-pre-line">
+                  {JSON.stringify(selectedTrace.outputs?.output ?? selectedTrace.outputs, null, 2)}
+                </code>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value='metadata'>
+            <Card className="mt-2 mb-4">
+              <CardHeader>
+                <CardTitle>Metadata</CardTitle>
+              </CardHeader>
+              <CardContent className="rounded-b-lg bg-muted py-4">
+                <code className="relative font-mono text-sm font-semibold whitespace-pre-line">
+                  {JSON.stringify(selectedTrace.metadata, null, 2)}
+                </code>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </>
+    )
   );
 };
 

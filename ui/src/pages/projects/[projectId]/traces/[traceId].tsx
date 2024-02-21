@@ -8,6 +8,7 @@ import { GetServerSidePropsContext } from 'next';
 import { usePathname } from 'next/navigation';
 import { getParentPageFromUrlPath } from '@/lib/utils/get-parent-page-from-url-path';
 import AppBar from '@/components/AppBar';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 interface TraceDetailsPageProps {
   projectId: string;
@@ -39,15 +40,20 @@ const TraceDetailsPage: React.FC<TraceDetailsPageProps> = ({ projectId, traceDat
   return (
     <div>
       <AppBar breadcrumbItems={breadcrumbItems}/>
-      <div className={styles.traceDetailsContainer}>
-        <TraceTree
-          traceData={traceData}
-          expandedNodes={expandedNodes}
-          onNodeToggle={setExpandedNodes}
-          onSelectTrace={setSelectedTrace}
-        />
-        <TraceDetailsPanel selectedTrace={selectedTrace}/>
-      </div>
+      <ResizablePanelGroup direction="horizontal" className="flex gap-4 py-4 px-4">
+        <ResizablePanel defaultSize={33} minSize={20}>
+          <TraceTree
+            traceData={traceData}
+            expandedNodes={expandedNodes}
+            onNodeToggle={setExpandedNodes}
+            onSelectTrace={setSelectedTrace}
+          />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={67}>
+          <TraceDetailsPanel selectedTrace={selectedTrace}/>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };

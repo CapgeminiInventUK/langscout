@@ -19,6 +19,7 @@ describe('TraceService', () => {
   });
   const mockTraceId = 'traceId';
   const mockTraceDocument: TraceDetailResponse = {
+    error: null,
     children: [],
     end_time: '',
     metadata: new Map<string, unknown>(),

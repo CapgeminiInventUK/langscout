@@ -1,4 +1,4 @@
-# ![](./images/banner-light.png#gh-light-mode-only) ![](./images/banner-dark.png#gh-dark-mode-only)
+# ![Langtrace](./images/banner-light.png#gh-light-mode-only) ![Langtrace](./images/banner-dark.png#gh-dark-mode-only)
 
 > [!CAUTION] 
 > 🚧 🏗️ This project is currently is under active development  🚧 🏗️

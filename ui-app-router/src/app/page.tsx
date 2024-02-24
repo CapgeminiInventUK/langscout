@@ -1,8 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { signIn } from 'next-auth/react';
+import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { BarChartIcon, GearIcon, StackIcon } from '@radix-ui/react-icons';
 
@@ -26,7 +25,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   if (session) {
-    return (
+    return <>
       <div className="flex gap-4">
         <div className="w-2/3">
           <Card>
@@ -68,7 +67,7 @@ export default async function Home() {
           </Card>
         </div>
       </div>
-    );
+    </>;
   }
 
   return (

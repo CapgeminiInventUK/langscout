@@ -27,7 +27,6 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
     window.location.href = url;
   };
 
-
   return <>
     <AppBar breadcrumbItems={breadcrumbItems}/>
     <div className="py-4 px-4">

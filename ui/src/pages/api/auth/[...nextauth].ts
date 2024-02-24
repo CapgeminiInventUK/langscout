@@ -45,7 +45,6 @@ const options = {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (req: NextApiRequest, res: NextApiResponse) => {
   if (enableAuth) {
-    // Initialize NextAuth if auth is enabled
     return NextAuth(req, res, options);
   } else {
     res.status(200).json({ message: 'Authentication bypassed' });

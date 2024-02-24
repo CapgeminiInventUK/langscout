@@ -31,7 +31,6 @@ const Home = () => {
   }
   if (status === 'authenticated') {
     return (
-
       <div>
         <AppBar breadcrumbItems={[]}/>
         <div className="px-4 pt-4">

@@ -30,7 +30,7 @@ describe('TraceService', () => {
     run_type: '',
     session_name: '',
     start_time: '',
-    'run_id': mockTraceId,
+    run_id: mockTraceId,
     name: 'Test Trace',
     execution_order: 0,
     trace_id: null,

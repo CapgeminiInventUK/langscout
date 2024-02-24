@@ -13,7 +13,7 @@ interface BreadcrumbProps {
 }
 
 
-export default function Breadcrumb({ items }: BreadcrumbProps) {
+export default function Breadcrumbs({ items }: BreadcrumbProps) {
   return (
     <nav aria-label="breadcrumb">
       <ol className="flex my-0 items-center text-sm font-light pl-0 list-none">

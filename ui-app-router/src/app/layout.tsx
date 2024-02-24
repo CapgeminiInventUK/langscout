@@ -17,16 +17,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-    <body>
-    <Providers>
-      <AppBar breadcrumbItems={[]}/>
-      <main>
-        <div className="px-4 pt-4">
-          {children}
-        </div>
-      </main>
-    </Providers>
-    </body>
+      <body>
+        <Providers>
+          <AppBar breadcrumbItems={[]}/>
+          <main>
+            <div className="px-4 pt-4">
+              {children}
+            </div>
+          </main>
+        </Providers>
+      </body>
     </html>
-);
+  );
 }

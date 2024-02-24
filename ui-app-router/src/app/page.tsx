@@ -21,6 +21,10 @@ const quickLinks = [
   },
 ];
 
+export const metadata = {
+  title: 'Langtrace',
+};
+
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
@@ -57,7 +61,7 @@ export default async function Home() {
                 <div className="flex flex-col space-y-2">
                   {quickLinks.map((link, index) => (
                     <Link key={index} className={buttonVariants({ variant: 'outline' })}
-                          href={link.url}>
+                      href={link.url}>
                       <BarChartIcon className="mr-2 h-4 w-4"/>{link.name}
                     </Link>
                   ))}
@@ -77,7 +81,7 @@ export default async function Home() {
       </CardHeader>
       <CardFooter>
         <Link className={buttonVariants({ variant: 'default' })}
-              href={'/api/auth/signin'}>
+          href={'/api/auth/signin'}>
           Sign in
         </Link>
       </CardFooter>

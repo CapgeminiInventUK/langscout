@@ -1,10 +1,15 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
+import { FeedbackFilters } from '@/components/traces/contexts/traces-filter-context';
 
 export function applyFilters(
   replace: (url: string) => void,
   pathname: string,
   searchParams: ReadonlyURLSearchParams,
-  startDate?: Date, endDate?: Date) {
+  feedbackFilters: FeedbackFilters,
+  startDate?: Date,
+  endDate?: Date,
+
+) {
   const params = new URLSearchParams(searchParams);
 
   if (startDate) {
@@ -18,5 +23,12 @@ export function applyFilters(
   } else {
     params.delete('endDate');
   }
+
+  if (Object.keys(feedbackFilters).length > 0) {
+    params.set('feedbackFilters', JSON.stringify(feedbackFilters));
+  } else {
+    params.delete('feedbackFilters');
+  }
+
   replace(`${pathname}?${params.toString()}`);
 }

@@ -1,6 +1,10 @@
 import { getTraces } from '@/services/trace-service';
 import TracesPage from '@/components/traces/traces-page';
+import parseFeedbackFilters from '@/components/traces/helpers/parse-feedback-filters';
 
+export const metadata = {
+  title: 'Langtrace - Traces',
+};
 
 export default async function Traces({ params, searchParams }:
   {
@@ -10,7 +14,7 @@ export default async function Traces({ params, searchParams }:
     searchParams: {
       startDate?: string,
       endDate?: string,
-      // feedbackFilters?: string
+      feedbackFilters?: string
       // inLast?: string
     }
   }) {
@@ -25,19 +29,26 @@ export default async function Traces({ params, searchParams }:
     params.projectId,
     searchParams.startDate,
     searchParams.endDate,
-    undefined
+    searchParams.feedbackFilters
   );
 
-  const convertedStartDate = searchParams.startDate ? new Date(searchParams.startDate) : undefined;
-  const convertedEndDate = searchParams.endDate ? new Date(searchParams.endDate) : undefined;
+  const convertedStartDate = searchParams.startDate
+    ? new Date(searchParams.startDate)
+    : undefined;
+  const convertedEndDate = searchParams.endDate
+    ? new Date(searchParams.endDate)
+    : undefined;
+  const convertedFeedbackFilters = searchParams.feedbackFilters
+    ? parseFeedbackFilters(searchParams.feedbackFilters)
+    : {};
 
   return <TracesPage
     projectId={params.projectId}
     startDate={convertedStartDate}
     endDate={convertedEndDate}
+    feedbackFilters={convertedFeedbackFilters}
     traces={traces}
     latency_percentiles={latency_percentiles}
     feedback_counts={feedback_counts}
-
   />;
 }

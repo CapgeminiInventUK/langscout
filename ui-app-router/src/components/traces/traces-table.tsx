@@ -23,7 +23,6 @@ interface TraceTableProps {
 }
 
 export default function TracesTable({ projectId, traces }: TraceTableProps) {
-
   const handleRowClick = (project_id: string, run_id: string) => {
     window.location.href = `/projects/${project_id}/traces/${run_id}`;
   };

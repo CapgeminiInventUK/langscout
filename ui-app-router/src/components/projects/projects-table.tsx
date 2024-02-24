@@ -15,7 +15,7 @@ interface ProjectsTableProps {
     projects: ProjectResponse[];
 }
 
-const ProjectsTable: React.ReactNode<ProjectsTableProps> = ({ projects }) => {
+ export default function ProjectsTable ({ projects }: ProjectsTableProps) {
     const handleRowClick = (url: string) => {
         window.location.href = url;
     };
@@ -42,5 +42,3 @@ const ProjectsTable: React.ReactNode<ProjectsTableProps> = ({ projects }) => {
         </TableBody>
     </Table>
 }
-
-export default ProjectsTable;

@@ -13,13 +13,13 @@ interface BreadcrumbProps {
 }
 
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
+export default function Breadcrumb({ items }: BreadcrumbProps) {
   return (
     <nav aria-label="breadcrumb">
       <ol className="flex my-0 items-center text-sm font-light pl-0 list-none">
         {items.map((item, index) => (
           <React.Fragment key={index}>
-            {index > 0 && <ChevronRightIcon />}
+            {index > 0 && <ChevronRightIcon/>}
             <li key={index}>
               {item.path ? (
                 <Link className={buttonVariants({ variant: 'link' })} href={item.path}>
@@ -34,6 +34,4 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
       </ol>
     </nav>
   );
-};
-
-export default Breadcrumb;
+}

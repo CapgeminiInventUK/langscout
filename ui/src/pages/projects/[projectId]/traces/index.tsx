@@ -114,7 +114,6 @@ const Traces: React.FC<TracesProps> = ({
   const [inLast, setInLast] =
     useState<string | null>(initialInLast);
 
-
   useEffect(() => {
     if (
       startDate !== initialStartDate ||

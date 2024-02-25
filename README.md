@@ -13,7 +13,7 @@ It is built using NextJS, Node.js, Typescript and MongoDB.
 
 - [Prerequisites](#prerequisites)
 - [Configuration](#configuration)
-- [Running Services Individually](#running-services-individually)
+- [Running Modes](#running-modes)
     * [UI](#ui)
     * [Servers](#servers)
         + [Ingest Server](#ingest-server)
@@ -44,9 +44,13 @@ Lanchain piggybacks of the setup for Langsmith you need to setup the application
   - `LANGCHAIN_PROJECT` - the name of your project
 
 
-### Running Services Individually
+### Running Modes
 
-Each service in this project can be run individually using npm.
+#### Full Mode
+![](./images/full-mode.png)
+
+#### Headless Mode
+![](./images/headless-mode.png)
 
 #### UI
 

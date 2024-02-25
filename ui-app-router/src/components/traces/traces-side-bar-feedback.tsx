@@ -43,6 +43,8 @@ export default function TracesSideBarFeedback(
       Feedback
     </p>
     {feedback_counts.map(({ key, counts }, index) => {
+
+      console.log(feedbackFilters[key]);
       return (
         <div key={index + '-feedback-key'}>
           <p className="font-bold text-base">{key}</p>
@@ -51,26 +53,28 @@ export default function TracesSideBarFeedback(
               feedbackKey,
               feedbackValue
             ],
-            feedbackIndex) => (
-            <div key={feedbackKey} className="flex items-center space-x-2 my-1">
-              <Checkbox
-                id={feedbackIndex + '-checkbox'}
-                value={feedbackKey}
-                checked={feedbackFilters[key]?.includes(feedbackKey)}
-                onCheckedChange={(checked) => {
-                  handleFeedbackSelect(key,
-                    feedbackKey,
-                    checked.toString() === 'true');
-                }
-                }
-              />
-              <label
-                htmlFor={feedbackIndex + '-checkbox'}>
-                {`${feedbackKey}: ${feedbackValue}`}
-              </label>
+            feedbackIndex) =>
+            (
+              <div key={feedbackKey} className="flex items-center space-x-2 my-1">
+                <Checkbox
+                  id={feedbackIndex + '-checkbox'}
+                  value={feedbackKey}
+                  checked={feedbackFilters[key]?.includes(feedbackKey) ?? false}
+                  onCheckedChange={(checked) => {
+                    console.log('checked', checked);
+                    handleFeedbackSelect(key,
+                      feedbackKey,
+                      checked.toString() === 'true');
+                  }
+                  }
+                />
+                <label
+                  htmlFor={feedbackIndex + '-checkbox'}>
+                  {`${feedbackKey}: ${feedbackValue}`}
+                </label>
 
-            </div>
-          ))}
+              </div>
+            ))}
         </div>
       );
     })}

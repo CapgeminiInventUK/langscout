@@ -16,8 +16,6 @@ export default async function Traces({ params, searchParams }:
       startDate?: string,
       endDate?: string,
       feedbackFilters?: string
-
-      //TODO - inLast is not used in the original code
       inLast?: string
     }
   }) {

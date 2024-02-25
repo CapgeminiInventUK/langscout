@@ -20,10 +20,8 @@ export interface TraceTreeNode {
   totalTokens?: number;
   depth?: number;
   feedback?: { [key: string]: any }; //TODO Make this a proper type
-
-  execution_order?: number; //TODO This is only used for old format (pre version....)
-
-  trace_id?: string; //TODO This is only used for new format (post version....)
-  dotted_order?: string; //TODO This is only used for new format (post version....)
+  execution_order?: number; // (<= langsmith-sdk v0.0.90)
+  trace_id?: string; // (>= langsmith-sdk v0.0.90)
+  dotted_order?: string; // (>= langsmith-sdk v0.0.90)
 
 }

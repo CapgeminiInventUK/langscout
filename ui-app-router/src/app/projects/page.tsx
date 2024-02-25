@@ -4,7 +4,7 @@ import { getProjects } from '@/services/projects-service';
 import ProjectsTable from '@/components/projects/projects-table';
 
 export const metadata = {
-  title: 'Langtrace - Projects',
+  title: 'Langtrace | Projects',
 };
 
 export default async function Projects() {

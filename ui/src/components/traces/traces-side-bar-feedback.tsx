@@ -43,8 +43,6 @@ export default function TracesSideBarFeedback(
       Feedback
     </p>
     {feedback_counts.map(({ key, counts }, index) => {
-
-      console.log(feedbackFilters[key]);
       return (
         <div key={index + '-feedback-key'}>
           <p className="font-bold text-base">{key}</p>
@@ -61,7 +59,6 @@ export default function TracesSideBarFeedback(
                   value={feedbackKey}
                   checked={feedbackFilters[key]?.includes(feedbackKey) ?? false}
                   onCheckedChange={(checked) => {
-                    console.log('checked', checked);
                     handleFeedbackSelect(key,
                       feedbackKey,
                       checked.toString() === 'true');

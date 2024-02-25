@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3100",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -26,21 +26,21 @@
     "next-themes": "0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-resizable-panels": "2.0.9",
+    "react-resizable-panels": "2.0.11",
     "tailwind-merge": "2.2.1",
     "tailwindcss-animate": "1.0.7",
     "zod": "3.22.4"
   },
   "devDependencies": {
     "@types/node": "20.11.20",
-    "@types/react": "18.2.57",
+    "@types/react": "18.2.58",
     "@types/react-dom": "18.2.19",
-    "autoprefixer": "10.0.1",
-    "eslint": "8.56.0",
+    "autoprefixer": "10.4.17",
+    "eslint": "8.57.0",
     "eslint-config-next": "14.1.0",
     "eslint-plugin-unicorn": "51.0.1",
     "postcss": "8.4.35",
-    "tailwindcss": "3.3.0",
-    "typescript": "5"
+    "tailwindcss": "3.4.1",
+    "typescript": "5.3.3"
   }
 }

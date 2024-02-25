@@ -16,7 +16,7 @@ const AppBar: React.FC<AppBarProps> = ({ breadcrumbItems }) => {
     <div className="border-b">
       <div className="flex h-12 items-center px-4">
         {
-          breadcrumbItems.length === 0 && <h1 className="text-2xl font-semibold">LangTrace</h1> }
+          breadcrumbItems.length === 0 && <h1 className="text-2xl font-semibold">Langtrace</h1> }
         {breadcrumbItems.length >= 1 && <Breadcrumb items={breadcrumbItems}/>}
         {status === 'authenticated' &&
           <Button variant="outline" size="icon" onClick={() => signOut()}

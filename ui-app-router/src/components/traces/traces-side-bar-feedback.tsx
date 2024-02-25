@@ -13,10 +13,12 @@ export default function TracesSideBarFeedback(
 ): ReactElement {
   let {
     feedbackFilters,
-    setFeedbackFilters
+    setFeedbackFilters,
+    setChangePending,
   } = useContext(TracesFilterContext);
 
   const handleFeedbackSelect = (key: string, value: string, isSelected: boolean) => {
+    setChangePending(true);
     const newFilters = { ...feedbackFilters };
 
     if (isSelected) {

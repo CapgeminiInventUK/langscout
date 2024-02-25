@@ -30,6 +30,10 @@ export default function TracesPage({
   feedback_counts,
   feedbackFilters: inputFeedbackFilters
 }: TracesPageProps) {
+
+  const [changePending, setChangePending] =
+    useState<boolean>(false);
+
   const [startDate, setStartDate] =
     useState<Date | undefined>(inputStartDate);
   const [endDate, setEndDate] =
@@ -43,13 +47,18 @@ export default function TracesPage({
     endDate: endDate,
     setEndDate: setEndDate,
     feedbackFilters: feedbackFilters,
-    setFeedbackFilters: setFeedbackFilters
+    setFeedbackFilters: setFeedbackFilters,
+    changePending: changePending,
+    setChangePending: setChangePending,
     // inLast: inLast
   }}>
     <div>
-      <ResizablePanelGroup direction="horizontal" className="flex gap-4 py-4 px-4">
+      <ResizablePanelGroup direction="horizontal" className="flex gap-4">
         <ResizablePanel defaultSize={80}>
-          <TracesTable traces={traces} projectId={projectId}/>
+          <TracesTable
+            traces={traces}
+            projectId={projectId}
+          />
         </ResizablePanel>
         <ResizableHandle withHandle/>
         <ResizablePanel defaultSize={20} minSize={15}>

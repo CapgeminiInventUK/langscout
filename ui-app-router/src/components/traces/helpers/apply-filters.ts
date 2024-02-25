@@ -6,19 +6,19 @@ export function applyFilters(
   pathname: string,
   searchParams: ReadonlyURLSearchParams,
   feedbackFilters: FeedbackFilters,
+  setChangePending: (changePending: boolean) => void,
   startDate?: Date,
   endDate?: Date,
-
 ) {
   const params = new URLSearchParams(searchParams);
 
-  if (startDate) {
+  if (startDate !== undefined) {
     params.set('startDate', startDate.toISOString());
   } else {
     params.delete('startDate');
   }
 
-  if (endDate) {
+  if (endDate !== undefined) {
     params.set('endDate', endDate.toISOString());
   } else {
     params.delete('endDate');
@@ -30,5 +30,6 @@ export function applyFilters(
     params.delete('feedbackFilters');
   }
 
+  setChangePending(false);
   replace(`${pathname}?${params.toString()}`);
 }

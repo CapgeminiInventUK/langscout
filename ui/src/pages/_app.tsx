@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <>
       <Head>
-        <title>LangTrace</title>
+        <title>Langtrace</title>
       </Head>
       <SessionProvider session={session}>
         <Component  {...pageProps} />

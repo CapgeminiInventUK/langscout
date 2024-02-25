@@ -85,7 +85,7 @@ const Home = () => {
       <div>
         <Card>
           <CardHeader>
-            <CardTitle>LangTrace</CardTitle>
+            <CardTitle>Langtrace</CardTitle>
 
           </CardHeader>
           <CardContent>

@@ -86,7 +86,6 @@ const StatsPanel: React.FC<StatsPanelProps> = ({
                       htmlFor={feedbackIndex + '-checkbox'}>
                       {`${feedbackKey}: ${feedbackValue}`}
                     </label>
-
                   </div>
                 ))}
               </div>

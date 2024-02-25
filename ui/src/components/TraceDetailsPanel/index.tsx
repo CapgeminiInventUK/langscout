@@ -23,8 +23,8 @@ const TraceDetailsPanel: React.FC<TraceDetailsPanelProps> = ({ selectedTrace }) 
                 <CardTitle>Inputs</CardTitle>
               </CardHeader>
               <CardContent className="rounded-b-lg bg-muted py-4">
-                <code className="relative font-mono text-sm font-semibold whitespace-pre-line">
-                  {JSON.stringify(selectedTrace.inputs, null, 2)}
+                <code
+                  className="relative block p-2 overflow-x-auto font-mono text-sm font-semibold whitespace-pre-wrap">                  {JSON.stringify(selectedTrace.inputs, null, 2)}
                 </code>
               </CardContent>
             </Card>
@@ -33,20 +33,20 @@ const TraceDetailsPanel: React.FC<TraceDetailsPanelProps> = ({ selectedTrace }) 
                 <CardTitle>Outputs</CardTitle>
               </CardHeader>
               <CardContent className=" rounded-b-lg bg-muted py-4">
-                <code className="relative font-mono text-sm font-semibold whitespace-pre-line">
-                  {JSON.stringify(selectedTrace.outputs?.output ?? selectedTrace.outputs, null, 2)}
+                <code
+                  className="relative block p-2 overflow-x-auto font-mono text-sm font-semibold whitespace-pre-wrap">                  {JSON.stringify(selectedTrace.outputs?.output ?? selectedTrace.outputs, null, 2)}
                 </code>
               </CardContent>
             </Card>
           </TabsContent>
-          <TabsContent value='metadata'>
+          <TabsContent value="metadata">
             <Card className="mt-2 mb-4">
               <CardHeader>
                 <CardTitle>Metadata</CardTitle>
               </CardHeader>
               <CardContent className="rounded-b-lg bg-muted py-4">
-                <code className="relative font-mono text-sm font-semibold whitespace-pre-line">
-                  {JSON.stringify(selectedTrace.metadata, null, 2)}
+                <code
+                  className="relative block p-2 overflow-x-auto font-mono text-sm font-semibold whitespace-pre-wrap">                  {JSON.stringify(selectedTrace.metadata, null, 2)}
                 </code>
               </CardContent>
             </Card>

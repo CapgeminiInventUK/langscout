@@ -42,9 +42,9 @@ export default async function Home() {
                   <Link className={buttonVariants({ variant: 'outline' })} href="/projects">
                     <StackIcon className="mr-2 h-4 w-4"/>Projects
                   </Link>
-                  <Link className={buttonVariants({ variant: 'outline' })} href="/settings">
-                    <GearIcon className="mr-2 h-4 w-4"/>Settings
-                  </Link>
+                  {/*<Link className={buttonVariants({ variant: 'outline' })} href="/settings">*/}
+                  {/*  <GearIcon className="mr-2 h-4 w-4"/>Settings*/}
+                  {/*</Link>*/}
                 </div>
               </div>
             </CardContent>

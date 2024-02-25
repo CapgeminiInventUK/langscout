@@ -1,7 +1,7 @@
 {
   "name": "langtrace-triggers",
   "version": "0.0.1",
-  "description": "MongoDB Trigger for LangTrace",
+  "description": "MongoDB Trigger for Langtrace",
   "main": "index.js",
   "type": "module",
   "scripts": {

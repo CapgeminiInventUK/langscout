@@ -2,19 +2,19 @@ on:
   workflow_dispatch:
     inputs:
       langtrace-ingest-image-tag:
-        description: 'LangTrace Ingress Docker image tag'
+        description: 'Langtrace Ingress Docker image tag'
         required: false
       langtrace-ui-image-tag:
-        description: 'LangTrace UI Docker image tag'
+        description: 'Langtrace UI Docker image tag'
         required: false
       langtrace-api-image-tag:
-        description: 'LangTrace API Docker image tag'
+        description: 'Langtrace API Docker image tag'
         required: false
 
 jobs:
   push_ingest_to_acr:
     if: ${{ !cancelled() && inputs.langtrace-ingest-image-tag != null }}
-    name: Build and push LangTrace ingest component to Azure ACR
+    name: Build and push Langtrace ingest component to Azure ACR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -51,7 +51,7 @@ jobs:
   
   push_ui_to_acr:
     if: ${{ !cancelled() && inputs.langtrace-ui-image-tag != null }}
-    name: Build and push LangTrace UI component to Azure ACR
+    name: Build and push Langtrace UI component to Azure ACR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -91,7 +91,7 @@ jobs:
 
   push_api_to_acr:
     if: ${{ !cancelled() && inputs.langtrace-api-image-tag != null }}
-    name: Build and push LangTrace API component to Azure ACR
+    name: Build and push Langtrace API component to Azure ACR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

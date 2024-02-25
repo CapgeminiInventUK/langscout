@@ -5,7 +5,7 @@
 
 ## Overview
 
-LangTrace is a tool that allows users to ingest, view, and analyze data sent from Langchain for each run.
+Langtrace is a tool that allows users to ingest, view, and analyze data sent from Langchain for each run.
 
 It is built using NextJS, Node.js, Typescript and MongoDB.
 
@@ -13,7 +13,7 @@ It is built using NextJS, Node.js, Typescript and MongoDB.
 
 - [Prerequisites](#prerequisites)
 - [Configuration](#configuration)
-- [Running Services Individually](#running-services-individually)
+- [Running Modes](#running-modes)
     * [UI](#ui)
     * [Servers](#servers)
         + [Ingest Server](#ingest-server)
@@ -32,7 +32,7 @@ It is built using NextJS, Node.js, Typescript and MongoDB.
 
 #### Langchain Configuration
 
-> Note: LangTrace is currently configured to use the `langsmith` project. This will be configurable in the future.
+> Note: Langtrace is currently configured to use the `langsmith` project. This will be configurable in the future.
 
 Lanchain piggybacks of the setup for Langsmith you need to setup the application in a similar way to Langsmith
 
@@ -40,13 +40,17 @@ Lanchain piggybacks of the setup for Langsmith you need to setup the application
   - `yarn add @langsmith/langsmith`
 - Add the following VARs to your Langchain app
   - `LANGCHAIN_TRACING_V2` - set to `true`
-  - `LANGCHAIN_ENDPOINT` - the URL of your LangTrace API
+  - `LANGCHAIN_ENDPOINT` - the URL of your Langtrace API
   - `LANGCHAIN_PROJECT` - the name of your project
 
 
-### Running Services Individually
+### Running Modes
 
-Each service in this project can be run individually using npm.
+#### Full Mode
+![](./images/full-mode.png)
+
+#### Headless Mode
+![](./images/headless-mode.png)
 
 #### UI
 

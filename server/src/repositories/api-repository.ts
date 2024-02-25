@@ -486,6 +486,7 @@ export class ApiRepository {
             execution_order: 1,
             trace_id: 1,
             dotted_order: 1,
+            feedback: 1,
             metadata: '$extra.metadata',
             children: {
               $map: {
@@ -506,6 +507,7 @@ export class ApiRepository {
                   execution_order: '$$item.execution_order',
                   trace_id: '$$item.trace_id',
                   dotted_order: '$$item.dotted_order',
+                  feedback: '$$item.feedback',
                   metadata: '$$item.extra.metadata',
                   depth: '$$item.depth'
                 },

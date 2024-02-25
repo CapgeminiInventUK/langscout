@@ -1,11 +1,11 @@
 import React from 'react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/global/app-bar/breadcrumbs';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import SignOutIconButton from '@/components/global/app-bar/sign-out-icon-button';
 import ThemeToggle from '@/components/global/app-bar/theme-toggle';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
+import { authOptions } from '@/lib/utils/auth-options';
 
 interface AppBarProps {
   breadcrumbItems: BreadcrumbItem[];

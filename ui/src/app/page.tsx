@@ -1,9 +1,9 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
-import { BarChartIcon, GearIcon, StackIcon } from '@radix-ui/react-icons';
+import { BarChartIcon, StackIcon } from '@radix-ui/react-icons';
+import { authOptions } from '@/lib/utils/auth-options';
 
 
 const quickLinks = [

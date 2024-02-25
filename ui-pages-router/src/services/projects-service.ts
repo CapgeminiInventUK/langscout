@@ -1,5 +1,5 @@
 import config from '@/lib/utils/config';
-import { ProjectResponse } from '@/models/responses/projects-response';
+import { ProjectResponse } from '@/models/projects-response';
 
 export async function getProjects(): Promise<ProjectResponse[]> {
   try {

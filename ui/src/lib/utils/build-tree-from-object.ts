@@ -1,4 +1,4 @@
-import { TraceTreeNode } from '@/models/trace-detail-response';
+import { TraceTreeNode } from '@/models/responses/trace-detail-response';
 import { compareTimestamps } from '@/lib/utils/compare-timestamps-to-nano';
 
 export function buildTreeFromObject(aggregatedObject: TraceTreeNode): TraceTreeNode {

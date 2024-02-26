@@ -1,6 +1,7 @@
 {
   "name": "langtrace-server",
   "version": "1.0.0",
+  "license": "GPL-3.0",
   "main": "src/ingestor-server.ts",
   "scripts": {
     "start:langtrace": "ts-node src/langtrace-server.ts",

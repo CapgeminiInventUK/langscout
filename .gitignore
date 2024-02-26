@@ -723,5 +723,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/triggers/trial.cjs
-/triggers/addUsageToAllRecords.cjs
+/functions/trial.cjs
+/functions/addUsageToAllRecords.cjs

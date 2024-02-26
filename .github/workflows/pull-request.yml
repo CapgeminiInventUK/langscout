@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: ${{ matrix.project }}
+      - name: Run audit
+        run: npm audit
+        working-directory: ${{ matrix.project }}
       - name: Run lint
         run: npm run lint
         working-directory: ${{ matrix.project }}

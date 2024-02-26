@@ -20,7 +20,6 @@ export default async function Trace({ params }:
 
   return <TracePage
     traceData={traceData}
-    projectId={projectId}
     traceId={traceId}
   />;
 }

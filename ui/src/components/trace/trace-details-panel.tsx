@@ -3,7 +3,6 @@
 import { useContext } from 'react';
 import { TraceContext } from '@/components/trace/contexts/trace-context';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TraceDetailsMetadataPanel from '@/components/trace/trace-details-metadata-panel';
 import TraceDetailsInputOutputPanel from '@/components/trace/trace-details-inputs-output-panel';
 import TraceDetailsFeedbackPanel from '@/components/trace/trace-details-feedback-panel';

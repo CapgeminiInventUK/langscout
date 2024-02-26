@@ -10,10 +10,9 @@ import { useState } from 'react';
 interface TracePageProps {
   traceData: TraceTreeNode;
   traceId: string;
-  projectId: string;
 }
 
-export default function TracePage({ traceData, projectId, traceId }: TracePageProps) {
+export default function TracePage({ traceData, traceId }: TracePageProps) {
   const [selectedTraceId, setSelectedTraceId] =
     useState<string | undefined>(traceData.run_id);
 

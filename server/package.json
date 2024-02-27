@@ -2,6 +2,13 @@
   "name": "langtrace-server",
   "version": "1.0.0",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CapgeminiInventUK/langtrace"
+  },
+  "bugs": {
+    "url": "https://github.com/CapgeminiInventUK/langtrace/issues"
+  },
   "main": "src/ingestor-server.ts",
   "scripts": {
     "start:langtrace": "ts-node src/langtrace-server.ts",

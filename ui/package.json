@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CapgeminiInventUK/langtrace"
+  },
+  "bugs": {
+    "url": "https://github.com/CapgeminiInventUK/langtrace/issues"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

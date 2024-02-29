@@ -40,8 +40,8 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@types/node": "20.11.21",
-    "@types/react": "18.2.60",
+    "@types/node": "20.11.24",
+    "@types/react": "18.2.61",
     "@types/react-dom": "18.2.19",
     "autoprefixer": "10.4.17",
     "eslint": "8.57.0",

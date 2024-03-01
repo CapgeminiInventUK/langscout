@@ -33,6 +33,8 @@ export function convertRangeToDateRange(range: string): DateRange {
     return { startDate: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000), endDate: now };
   } else if (range === '30d') {
     return { startDate: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), endDate: now };
+  } else if (range === '90d') {
+    return { startDate: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000), endDate: now };
   } else {
     throw new Error('Invalid range ' + range);
   }

@@ -68,6 +68,7 @@ export default function TracesSideBar({
             <SelectItem value="7d">Last 7 days</SelectItem>
             <SelectItem value="14d">Last 14 days</SelectItem>
             <SelectItem value="30d">Last 30 days</SelectItem>
+            <SelectItem value="90d">Last 90 days</SelectItem>
           </SelectContent>
         </Select>
         <Separator className="my-4"/>

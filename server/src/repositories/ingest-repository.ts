@@ -26,12 +26,12 @@ export class IngestRepository {
 
   async updateTrace(langtraceId: string, updateData: TraceData): Promise<UpdateResult> {
     const collection = this.db.collection(this.collectionName);
-    return collection.updateOne({ run_id: langtraceId }, { $set: updateData });
+    return collection.updateOne({ run_id: { $eq: langtraceId } }, { $set: { updateData } });
   }
 
   async insertFeedbackOnTraceByRunId(feedback: CreateFeedback) {
     const collection = this.db.collection('traces');
-    await collection.updateOne({ run_id: feedback.run_id }, { $set: { feedback } });
+    await collection.updateOne({ run_id: { $eq: feedback.run_id } }, { $set: { feedback } });
   }
 
   async updateFeedbackOnTraceByFeedbackId(

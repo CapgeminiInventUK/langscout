@@ -2,10 +2,9 @@ version: '3.8'
 services:
   langtrace-ingest:
     build:
-      context: ./server
       dockerfile: Dockerfile.ingest
     image: langtrace-ingest:local
     ports:
       - "1984:1984"
     env_file:
-      - ./server/.env
+      - ./packages/ingest/.env

@@ -2,10 +2,15 @@ version: '3.8'
 services:
   langtrace-ui:
     build:
-      context: ./ui
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.ui
       args:
-        langtrace_api_url: http://langtrace-api:1994
+        LANGTRACE_API_URL: http://langtrace-api:1994
+        NEXTAUTH_ENABLED: true
+        NEXTAUTH_URL: http://langtrace-ui:3000
+        NEXTAUTH_SECRET: secret
+        NEXTAUTH_GITHUB_ID: id
+        NEXTAUTH_GITHUB_SECRET: secret
+        NEXTAUTH_GITHUB_ORGANISATION: organisation
     image: langtrace-ui:local
     ports:
       - "3000:3000"
@@ -14,20 +19,18 @@ services:
 
   langtrace-ingest:
     build:
-      context: ./server
       dockerfile: Dockerfile.ingest
     image: langtrace-ingest:local
     ports:
       - "1984:1984"
     env_file:
-      - ./server/.env
+      - ./packages/ingest/.env
 
   langtrace-api:
     build:
-      context: ./server
-      dockerfile: Dockerfile.langtrace
+      dockerfile: Dockerfile.api
     image: langtrace-api:local
     ports:
       - "1994:1994"
     env_file:
-      - ./server/.env
+      - ./packages/api/.env

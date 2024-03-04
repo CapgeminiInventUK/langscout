@@ -43,12 +43,11 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
         with:
-          context: ./server
-          file: ./server/Dockerfile.ingest
+          file: ./Dockerfile.ingest
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  
+
   push_ui_to_acr:
     if: ${{ !cancelled() && inputs.langtrace-ui-image-tag != null }}
     name: Build and push Langtrace UI component to Azure ACR
@@ -79,8 +78,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
         with:
-          context: ./ui
-          file: ./ui/Dockerfile
+          file: ./Dockerfile.ui
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -119,8 +117,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
         with:
-          context: ./server
-          file: ./server/Dockerfile.langtrace
+          file: ./Dockerfile.api
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

@@ -1,0 +1,49 @@
+FROM node:20.11.1-alpine3.19@sha256:c0a3badbd8a0a760de903e00cedbca94588e609299820557e72cba2a53dbaa2c AS base
+
+
+FROM base AS deps
+
+WORKDIR /app
+
+# Copy root worksplace level package.json
+COPY package.json package-lock.json ./
+# Copy relevant packages for the api workspace
+COPY ./packages/api ./packages/api
+COPY ./packages/models ./packages/models
+RUN npm ci --frozen-lockfile
+
+
+FROM base AS builder
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/packages/api/node_modules ./node_modules
+# Copy in packages/models as this is simlinked in package.json. npm workspaces...sigh
+COPY --from=deps /app/packages/models ./packages/models
+COPY ./packages/api/src ./src
+COPY ./packages/api/tsconfig.json ./
+COPY ./packages/api/package.json ./
+
+RUN npm run build
+
+FROM base AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 express
+
+COPY --from=builder --chown=express:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=express:nodejs /app/dist ./
+
+USER express
+
+EXPOSE 1994
+ENV PORT 1994
+
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "index.js"]

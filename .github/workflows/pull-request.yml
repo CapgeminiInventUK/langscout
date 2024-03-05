@@ -5,28 +5,21 @@ on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: [ui, server]
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Setup Node.js
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: 'npm'
-          cache-dependency-path: ${{ matrix.project }}/package-lock.json
+          cache-dependency-path: package-lock.json
       - name: Install dependencies
-        run: npm install
-        working-directory: ${{ matrix.project }}
+        run: npm ci
       - name: Run audit
         run: npm audit
-        working-directory: ${{ matrix.project }}
       - name: Run lint
-        run: npm run lint
-        working-directory: ${{ matrix.project }}
+        run: npm run lint --workspaces
       - name: Build
-        run: npm run build
+        run: npm run build --workspaces
         env:
           LANGTRACE_API_URL: "http://localhost:1994"
-        working-directory: ${{ matrix.project }}

@@ -1,0 +1,77 @@
+FROM node:20.11.1-alpine3.19@sha256:c0a3badbd8a0a760de903e00cedbca94588e609299820557e72cba2a53dbaa2c AS base
+
+ARG LANGTRACE_API_URL
+
+ARG NEXTAUTH_ENABLE
+ARG NEXTAUTH_URL
+ARG NEXTAUTH_SECRET
+
+ARG NEXTAUTH_GITHUB_ID
+ARG NEXTAUTH_GITHUB_SECRET
+ARG NEXTAUTH_GITHUB_ORGANISATION
+
+ENV LANGTRACE_API_URL=$LANGTRACE_API_URL
+
+ENV NEXTAUTH_ENABLE=$NEXTAUTH_ENABLE
+ENV NEXTAUTH_URL=$NEXTAUTH_URL
+ENV NEXTAUTH_SECRET=$NEXTAUTH_SECRET
+
+ENV NEXTAUTH_GITHUB_ID=$NEXTAUTH_GITHUB_ID
+ENV NEXTAUTH_GITHUB_SECRET=$NEXTAUTH_GITHUB_SECRET
+ENV NEXTAUTH_GITHUB_ORGANISATION=$NEXTAUTH_GITHUB_ORGANISATION
+
+
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+COPY ./packages/ui ./packages/ui
+COPY ./packages/models ./packages/models
+RUN npm ci --frozen-lockfile
+
+
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/packages/ui/node_modules ./node_modules
+COPY ./packages/ui/src ./src
+COPY ./packages/ui/public ./public
+COPY ./packages/ui/tailwind.config.ts ./
+COPY ./packages/ui/components.json ./
+COPY ./packages/ui/next-env.d.ts ./
+COPY ./packages/ui/postcss.config.js ./
+COPY ./packages/ui/next.config.mjs ./
+COPY ./packages/ui/tsconfig.json ./
+COPY ./packages/ui/package.json ./
+
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN npm run build
+
+
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT 3000
+
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]

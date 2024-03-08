@@ -15,6 +15,10 @@ jobs:
           cache-dependency-path: package-lock.json
       - name: Install dependencies
         run: npm ci
+      - name: List directories in the repository root
+        run: |
+          echo "Listing directories in the root:"
+        ls -l | grep '^d'
       - name: Run audit
         run: npm audit
       - name: Run lint

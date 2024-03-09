@@ -87,10 +87,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
           # This is here to placate the build process and can be overridden at runtime.
           build-args: |
-            langtrace_api_url=http://localhost:1994
+            LANGTRACE_API_URL=http://localhost:1994
 
   push_api_to_ghcr:
     if: ${{ !cancelled() && inputs.langtrace-api-image-tag != null }}

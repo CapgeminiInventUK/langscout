@@ -37,7 +37,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 #COPY --from=deps /app/packages/ui/node_modules ./node_modules
 COPY ./packages/ui/src ./src
-COPY ./packages/ui/public ./public
+#COPY ./packages/ui/public ./public
 COPY ./packages/ui/tailwind.config.ts ./
 COPY ./packages/ui/components.json ./
 COPY ./packages/ui/postcss.config.js ./

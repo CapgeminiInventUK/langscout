@@ -40,7 +40,6 @@ COPY ./packages/ui/src ./src
 COPY ./packages/ui/public ./public
 COPY ./packages/ui/tailwind.config.ts ./
 COPY ./packages/ui/components.json ./
-COPY ./packages/ui/next-env.d.ts ./
 COPY ./packages/ui/postcss.config.js ./
 COPY ./packages/ui/next.config.mjs ./
 COPY ./packages/ui/tsconfig.json ./

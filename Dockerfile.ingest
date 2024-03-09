@@ -18,7 +18,7 @@ FROM base AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages/ingest/node_modules ./node_modules
+#COPY --from=deps /app/packages/ingest/node_modules ./node_modules
 # Copy in packages/models as this is simlinked in package.json. npm workspaces...sigh
 COPY --from=deps /app/packages/models ./packages/models
 COPY ./packages/ingest/src ./src

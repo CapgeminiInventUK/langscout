@@ -1,0 +1,22 @@
+{
+  "name": "@langtrace/models",
+  "version": "1.0.0",
+  "license": "GPL-3.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "postinstall": "tsc --build",
+    "build": "tsc --build",
+    "lint": "eslint .",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "7.1.1",
+    "@typescript-eslint/parser": "7.1.1",
+    "ts-node": "10.9.2"
+  }
+}

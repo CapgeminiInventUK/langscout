@@ -1,0 +1,24 @@
+{
+  "name": "@langtrace/ingest",
+  "version": "1.0.0",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "lint": "eslint .",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@langtrace/models": "*",
+    "dotenv": "16.4.5",
+    "express": "4.18.3",
+    "mongodb": "6.4.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "7.1.1",
+    "@typescript-eslint/parser": "7.1.1"
+  }
+}

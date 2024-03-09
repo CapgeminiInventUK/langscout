@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import TracesTable from '@/components/traces/traces-table';
 import { FeedbackCount, TracePercentile } from '@/models/responses/traces-response';
@@ -10,7 +10,6 @@ import {
   FeedbackFilters,
   TracesFilterContext
 } from '@/components/traces/contexts/traces-filter-context';
-import { useBreadcrumbs } from '@/contexts/breadcrump-context';
 
 interface TracesPageProps {
   projectId: string;

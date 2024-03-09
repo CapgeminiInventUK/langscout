@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <AppBar breadcrumbItems={[]}/>
+          <AppBar/>
           <main>
             <div className="px-4 pt-4">
               {children}

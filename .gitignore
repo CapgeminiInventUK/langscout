@@ -714,6 +714,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env.docker
 
 # vercel
 .vercel
@@ -723,3 +724,4 @@ yarn-error.log*
 next-env.d.ts
 /functions/trial.cjs
 /functions/addUsageToAllRecords.cjs
+!/packages/ui/.env.docker

@@ -28,7 +28,7 @@ export const metadata = {
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  if (session) {
+  if (session || process.env.NEXTAUTH_ENABLE !== 'true') {
     return <>
       <div className="flex gap-4">
         <div className="w-2/3">

@@ -15,7 +15,8 @@ export default async function AppBar() {
         <Breadcrumbs/>
         <div className="ml-auto flex items-end space-x-2">
           <ThemeToggle/>
-          {session &&
+          {(session && process.env.NEXTAUTH_ENABLE === 'true')
+            &&
             <SignOutIconButton/>
           }
         </div>

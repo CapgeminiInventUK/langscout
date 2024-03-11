@@ -40,6 +40,7 @@ It is built using Next.js, Node.js 20, Typescript and MongoDB Atlas.
 - Ingests trace data from Langchain/Langsmith
 - Handles feedback creation and updating
 - UI to view trace data
+- UI authentication providers (Github, Microsoft AD)
 - MongoDB Trigger to add token usage data to the trace data
 
 ### Limitations

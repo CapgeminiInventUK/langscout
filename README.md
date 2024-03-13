@@ -10,8 +10,8 @@
       <a href="https://github.com/CapgeminiInventUK/langtrace/issues/new?labels=bug">
          <strong>Report Bug</strong>
       </a> ·
-      <a href="https://github.com/CapgeminiInventUK/langtrace/issues/new?labels=enhancement">
-         <strong>Feature Request</strong>
+      <a href="https://github.com/CapgeminiInventUK/langtrace/discussions/new?category=ideas">
+         <strong>Ideas</strong>
       </a> ·
       <a href="https://discord.gg/VH95CUQHqH">
          <strong>Discord</strong>

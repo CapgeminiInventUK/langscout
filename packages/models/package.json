@@ -9,7 +9,7 @@
     "postinstall": "tsc --build",
     "build": "tsc --build",
     "lint": "eslint .",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

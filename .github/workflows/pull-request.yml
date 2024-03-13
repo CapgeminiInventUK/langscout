@@ -23,3 +23,5 @@ jobs:
         run: npm run build --workspaces
         env:
           LANGTRACE_API_URL: "http://localhost:1994"
+      - name: Test
+        run: npm run test --workspaces

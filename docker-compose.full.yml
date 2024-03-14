@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   langtrace-ui:
-    image: ghcr.io/capgeminiinventuk/langtrace-ui:latest
+    image: ghcr.io/capgeminiinventuk/langtrace-ui:latest@sha256:0f63e95013722f4456e5b278cc41b069db568499e1a1b87cea4e828abd12d366
     ports:
       - "3000:3000"
     env_file:
@@ -10,14 +10,14 @@ services:
       - langtrace-api
 
   langtrace-ingest:
-    image: ghcr.io/capgeminiinventuk/langtrace-ingest:latest
+    image: ghcr.io/capgeminiinventuk/langtrace-ingest:latest@sha256:eb2b430de4ab80b9cc10568136b0bc9faf2c3395b6381358fbac40a71e0c6fc5
     ports:
       - "1984:1984"
     env_file:
       - ./packages/ingest/.env
 
   langtrace-api:
-    image: ghcr.io/capgeminiinventuk/langtrace-api:latest
+    image: ghcr.io/capgeminiinventuk/langtrace-api:latest@sha256:984a909214c344e7df0b407e03165c747ddd5d63e533e81b9c27cce7e327c5cc
     ports:
       - "1994:1994"
     env_file:

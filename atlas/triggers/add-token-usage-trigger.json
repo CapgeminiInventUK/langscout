@@ -1,0 +1,52 @@
+{
+  "name": "add-token-usage",
+  "type": "DATABASE",
+  "disabled": false,
+  "config": {
+    "service_name": "<service-name>",
+    "database": "langtrace",
+    "collection": "traces",
+    "operation_types": ["UPDATE", "CREATE"],
+    "full_document": true,
+    "full_document_before_change": false,
+    "tolerate_resume_errors": false,
+    "unordered": true,
+    "match": {
+      "fullDocument.run_type": "llm",
+      "fullDocument.end_time": {
+        "$exists": true,
+        "$ne": null
+      },
+      "fullDocument.extra.tokens": {
+        "$exists": false
+      },
+      "fullDocument.outputs.generations": {
+        "$exists": true,
+        "$ne": null
+      },
+      "fullDocument.inputs.messages": {
+        "$exists": true,
+        "$ne": null
+      }
+    },
+    "maximum_throughput": false,
+    "skip_catchup_events": false,
+    "project": {
+      "fullDocument.end_time": 1,
+      "fullDocument.run_type": 1,
+      "fullDocument.outputs.generations": 1,
+      "fullDocument.extra.invocation_params.model": 1,
+      "fullDocument.inputs.messages": 1,
+      "ns.coll": 1,
+      "documentKey._id": 1,
+      "operationType": 1
+    }
+  },
+  "event_processors": {
+    "FUNCTION": {
+      "config": {
+        "function_name": "add-token-usage"
+      }
+    }
+  }
+}

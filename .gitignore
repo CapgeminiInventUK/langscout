@@ -721,6 +721,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/functions/trial.cjs
-/functions/addUsageToAllRecords.cjs
+/atlas/test/trial.cjs
+/atlas/test/addUsageToAllRecords.cjs
 !/packages/ui/.env.docker

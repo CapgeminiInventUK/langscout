@@ -20,6 +20,7 @@
 </div>
 
 ## Contents
+
 - [Overview](#overview)
 - [Current Features](#current-features)
 - [Running Modes](#running-modes)
@@ -51,7 +52,8 @@ It is built using Next.js, Node.js 20, Typescript and MongoDB Atlas.
 
 ## Running Modes
 
-Langtrace can be run in two modes: [Full Mode](#full-mode) and [Headless Mode](#headless-mode). Full mode runs the UI 
+Langtrace can be run in two modes: [Full Mode](#full-mode) and [Headless Mode](#headless-mode). Full
+mode runs the UI
 and APIs together.
 
 Headless mode runs the ingestion api only
@@ -97,12 +99,15 @@ It's assumed to view data you will use MongoDB Atlas Charts
 ### Setup Functions for automated token usage data
 
 > MongoDB Atlas required for this feature. If you are using MongoDB outside of Atlas you will
-> need to handle the updates seperately.
+> need to handle the updates separately.
 
-Example of a function to add token usage data to the trace data in ./functions/token-usage.js
+Example of a function to add token usage data to the trace data
+in `./atlas/functions/add-token-usage.js`
 
 Create a trigger in MongoDB Atlas to run the function on the traces collection (
 LANGTRACE_TRACES_MONGODB_COLLECTION_NAME)
+
+#### Steps in UI
 
 - In the MongoDB Atlas UI, navigate to Triggers
 - Create a new trigger
@@ -146,7 +151,22 @@ LANGTRACE_TRACES_MONGODB_COLLECTION_NAME)
     }
     ```
 - Got to function and select the function you created and paste the code from the function file
-  ./functions/token-usage.js
+  ./atlas/functions/add-token-usage.js
+
+#### Steps in atlas app service CLI
+
+> Assumes you have an existing project configured for defining you Atlas infrastructure
+
+- Install the [MongoDB Atlas CLI](https://www.mongodb.com/docs/atlas/app-services/cli/)
+- Copy the contents of ./atlas/functions/ into the functions folder in your project
+- Copy the contents of ./atlas/trigger/ into the trigger folder in your project
+- In the trigger file set the following fields
+    - `service-name` - the name of your service
+    - `database` - the name of your database (if different from langtrace)
+    - `collection` - the name of your collection (if different from traces)
+      For further information on configuration see the [Trigger Configuration Files documentation]
+      (https://www.mongodb.com/docs/atlas/app-services/reference/config/triggers/)
+- Deploy changes
 
 ## Running Services
 
@@ -200,8 +220,10 @@ docker-compose up --build -f docker-compose.headless.yml
 
 - [Prerequisites](#development-prerequisites)
 - [Configuration](#development-configuration)
-- [Running the UI](#running-the-ui)
 - [Running the Services](#running-the-services)
+  - [UI](#ui)
+  - [Ingest Server](#ingest-server)
+  - [Langtrace API](#langtrace-api)
 
 ### Development Prerequisites
 
@@ -212,16 +234,11 @@ docker-compose up --build -f docker-compose.headless.yml
 
 ### Development Configuration
 
-- In ./ui copy .env.example to .env and set the values
-- In ./server copy .env.example to .env and set the values
+- In ./packages/ui copy .env.example to .env and set the values
+- In ./packages/api copy .env.example to .env and set the values
+- In ./packages/ingest copy .env.example to .env and set the values
 
-### Running the UI
-
-Navigate to the UI service directory:
-
-```bash
-cd ui
-```
+### Running the services
 
 Install the dependencies:
 
@@ -229,45 +246,27 @@ Install the dependencies:
 npm install
 ```
 
-Start the service:
+##### UI
 
 ```bash
-npm start
-```
-
-### Running the Services
-
-Both servers are within the `server` directory. You will need to start both servers in order to run
-the application. There are two entry points for the servers.
-
-```bash
-cd server
-```
-
-Install the dependencies:
-
-```bash
-npm install
-```
-
-##### Ingest Server
-
-Make sure you have navigated to the folder and installed the dependencies as described above.
-
-Start server:
-
-```bash
-npm run start:ingestor
+npm run dev --workspace=@langtrace/ui
 ```
 
 ##### Langtrace API
 
-Make sure you have navigated to the folder and installed the dependencies as described above.
-
-Start server:
+This is the API that the UI uses to get data from MongoDB
 
 ```bash
-npm run start:langtrace
+npm run dev --workspace=@langtrace/api
 
 ```
+
+##### Ingest Server
+
+This is the server that listens for data from Langchain
+
+```bash
+npm run dev --workspace=@langtrace/ingest
+```
+
 

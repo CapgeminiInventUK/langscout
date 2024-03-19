@@ -5,28 +5,15 @@ import Link from 'next/link';
 import { BarChartIcon, StackIcon } from '@radix-ui/react-icons';
 import { authOptions } from '@/lib/utils/auth-options';
 
-
-const quickLinks = [
-  {
-    name: 'CapGPT Production',
-    url: '/projects/capgpt-production/traces'
-  },
-  {
-    name: 'CapGPT Dev',
-    url: '/projects/capgpt-dev/traces'
-  },
-  {
-    name: 'CapGPT Local',
-    url: '/projects/capgpt-local/traces'
-  },
-];
-
 export const metadata = {
   title: 'Langtrace',
 };
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+
+  const linksString = process.env.QUICK_LINKS!;
+  const quickLinks = JSON.parse(linksString) as { name: string, url: string }[];
 
   if (session || process.env.NEXTAUTH_ENABLE !== 'true') {
     return <>

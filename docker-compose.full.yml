@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   langtrace-ui:
-    image: ghcr.io/capgeminiinventuk/langtrace-ui:latest@sha256:0f63e95013722f4456e5b278cc41b069db568499e1a1b87cea4e828abd12d366
+    image: ghcr.io/capgeminiinventuk/langtrace-ui:latest@sha256:83a8b015f1579b34c3f6aa41ca706029022b473e3f94ce452f7ff8593096848e
     ports:
       - "3000:3000"
     env_file:

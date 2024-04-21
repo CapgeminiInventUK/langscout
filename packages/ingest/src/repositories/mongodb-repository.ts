@@ -25,11 +25,11 @@ export class MongodbRepository {
 
   async updateTrace(langtraceId: string, updateData: TraceData): Promise<UpdateResult> {
     const collection = this.db.collection(this.collectionName);
-    return collection.updateOne({ run_id: { $eq: langtraceId } }, { $set: { updateData } });
+    return collection.updateOne({ run_id: { $eq: langtraceId } }, { $set: { ...updateData } });
   }
 
   async insertFeedbackOnTraceByRunId(feedback: CreateFeedback) {
-    const collection = this.db.collection('traces');
+    const collection = this.db.collection(this.collectionName);
     await collection.updateOne({ run_id: { $eq: feedback.run_id } }, { $set: { feedback } });
   }
 
@@ -37,7 +37,7 @@ export class MongodbRepository {
     feedbackId: string,
     feedbackData: UpdateFeedback):
     Promise<UpdateResult> {
-    const collection = this.db.collection('traces');
+    const collection = this.db.collection(this.collectionName);
 
     const setOperation: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(feedbackData)) {

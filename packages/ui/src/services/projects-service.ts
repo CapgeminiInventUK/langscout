@@ -6,6 +6,7 @@ export async function getProjects(): Promise<ProjectResponse[]> {
     const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/projects`);
 
     if (!response.ok) {
+      console.error(response);
       throw new Error('Network response was not ok');
     }
     const data = await response.json();

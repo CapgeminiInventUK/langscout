@@ -17,7 +17,7 @@ services:
       - ./packages/ingest/.env
 
   langtrace-api:
-    image: ghcr.io/capgeminiinventuk/langtrace-api:latest@sha256:ecda33eea750ac8aaeda5695274aa2788b183bf1559fc040d1e2ff05c99b49fa
+    image: ghcr.io/capgeminiinventuk/langtrace-api:latest@sha256:eeeaabfe26ea94fb19e27bfc3f2e160bc9ae22eaa1ed04a01ebf991276d1b781
     ports:
       - "1994:1994"
     env_file:

@@ -10,7 +10,7 @@ services:
       - langtrace-api
 
   langtrace-ingest:
-    image: ghcr.io/capgeminiinventuk/langtrace-ingest:latest@sha256:b500069352fb9253d19debcc7782f8d43499f1ff081bf1c944f6484e50263d86
+    image: ghcr.io/capgeminiinventuk/langtrace-ingest:latest@sha256:617d44f246958b2b3535b34ec784696b6b12957bf47c18a464f5bf72b7cf9e42
     ports:
       - "1984:1984"
     env_file:

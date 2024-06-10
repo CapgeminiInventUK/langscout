@@ -43,7 +43,7 @@ jobs:
             type=semver,pattern={{version}},value=${{ inputs.langtrace-ingest-image-tag }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
         with:
           file: ./Dockerfile.ingest
           push: true
@@ -81,7 +81,7 @@ jobs:
             type=semver,pattern={{version}},value=${{ inputs.langtrace-ui-image-tag }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
         with:
           file: ./Dockerfile.ui
           push: true
@@ -122,7 +122,7 @@ jobs:
             type=semver,pattern={{version}},value=${{ inputs.langtrace-api-image-tag }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
         with:
           file: ./Dockerfile.api
           push: true

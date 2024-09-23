@@ -18,14 +18,18 @@ export class MongodbRepository {
     });
   }
 
-  async insertTrace(langscoutData: TraceData): Promise<void> {
+  async insertTrace(data: TraceData): Promise<void> {
     const collection = this.db.collection(this.collectionName);
-    await collection.insertOne(langscoutData);
+    await collection.insertOne(data);
   }
 
-  async updateTrace(langscoutId: string, updateData: TraceData): Promise<UpdateResult> {
+  async updateTrace(id: string, updateData: TraceData): Promise<UpdateResult> {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+      throw new Error(`Invalid UUID v4 format (${id}) for updateTrace`);
+    }
+
     const collection = this.db.collection(this.collectionName);
-    return collection.updateOne({ run_id: { $eq: langscoutId } }, { $set: { ...updateData } });
+    return collection.updateOne({ run_id: { $eq: id } }, { $set: { ...updateData } });
   }
 
   async insertFeedbackOnTraceByRunId(feedback: CreateFeedback) {

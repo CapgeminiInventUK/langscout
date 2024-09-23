@@ -8,11 +8,8 @@ const langchainService = new LangchainToLangscoutService();
 // Updated /batch route
 router.post('/batch', (req, res) => {
   console.debug('POST /api/runs/batch');
-  console.log('Received batch request:');
 
-  if (Array.isArray(req.body)) {
-    console.log(`It was an array and the length was ${req.body.length}`);
-  } else if (typeof req.body === 'object' && req.body !== null) {
+  if (typeof req.body === 'object' && req.body !== null) {
     const keys = Object.keys(req.body);
     keys.forEach(async (key) => {
       if (key === 'post') {
@@ -43,7 +40,7 @@ router.post('/batch', (req, res) => {
       }
     });
   } else {
-    console.log('Received data is neither an array nor a JSON object');
+    console.error('Received data is neither an array nor a JSON object');
   }
 
   res.status(200).json({ message: 'Batch request processed' });

@@ -4,7 +4,7 @@
   "disabled": false,
   "config": {
     "service_name": "<service-name>",
-    "database": "langtrace",
+    "database": "langscout",
     "collection": "traces",
     "operation_types": ["UPDATE", "CREATE"],
     "full_document": true,

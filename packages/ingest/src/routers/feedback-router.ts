@@ -1,9 +1,9 @@
 import { Router, Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import { LangchainToLangtraceService } from '../services/langchain-to-langtrace-service';
-import { CreateFeedback, UpdateFeedback } from '@langtrace/models';
+import { LangchainToLangscoutService } from '../services/langchain-to-langscout-service';
+import { CreateFeedback, UpdateFeedback } from '@langscout/models';
 
 export const feedbackRouter = Router();
-const langchainService = new LangchainToLangtraceService();
+const langchainService = new LangchainToLangscoutService();
 
 feedbackRouter.post('/', async (req: ExpressRequest, res: ExpressResponse) => {
   console.debug('POST /api/feedback');

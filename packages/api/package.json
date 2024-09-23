@@ -1,5 +1,5 @@
 {
-  "name": "@langtrace/api",
+  "name": "@langscout/api",
   "version": "1.0.0",
   "license": "GPL-3.0",
   "private": true,
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@langtrace/models": "*",
+    "@langscout/models": "*",
     "dotenv": "16.4.5",
     "express": "4.21.0",
     "mongodb": "6.9.0"

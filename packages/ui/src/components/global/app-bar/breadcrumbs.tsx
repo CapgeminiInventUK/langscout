@@ -40,7 +40,7 @@ export default function Breadcrumbs() {
   return <>{
     breadcrumbMap.length === 1 &&
     <Link className={buttonVariants({ variant: 'link' })} href={'/'}><h1
-      className="text-xl font-semibold">Langtrace</h1></Link>
+      className="text-xl font-semibold">Langscout</h1></Link>
   }
   {breadcrumbMap.length > 1 && (
     <Breadcrumb>

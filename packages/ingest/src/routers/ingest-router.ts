@@ -1,9 +1,9 @@
 import { Router, Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import { LangchainToLangtraceService } from '../services/langchain-to-langtrace-service';
+import { LangchainToLangscoutService } from '../services/langchain-to-langscout-service';
 import { sleepBeforeRetry } from '../utils/sleep-before-retry';
 
 export const langchainIngestRouter = Router();
-const langchainService = new LangchainToLangtraceService();
+const langchainService = new LangchainToLangscoutService();
 
 langchainIngestRouter.post('/', async (req: ExpressRequest, res: ExpressResponse) => {
   console.debug('POST /api/runs');

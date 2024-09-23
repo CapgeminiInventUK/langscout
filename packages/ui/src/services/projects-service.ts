@@ -3,7 +3,7 @@ import { ProjectResponse } from '@/models/responses/projects-response';
 
 export async function getProjects(): Promise<ProjectResponse[]> {
   try {
-    const response = await fetch(`${config.langtraceApiUrl}/langtrace/api/projects`);
+    const response = await fetch(`${config.langscoutApiUrl}/langscout/api/projects`);
 
     if (!response.ok) {
       console.error(response);

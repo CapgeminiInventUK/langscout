@@ -1,7 +1,7 @@
-import { TraceData, CreateFeedback, UpdateFeedback } from '@langtrace/models';
+import { TraceData, CreateFeedback, UpdateFeedback } from '@langscout/models';
 import { MongodbRepository } from '../repositories/mongodb-repository';
 
-export class LangchainToLangtraceService {
+export class LangchainToLangscoutService {
   private repository: MongodbRepository;
 
   constructor() {

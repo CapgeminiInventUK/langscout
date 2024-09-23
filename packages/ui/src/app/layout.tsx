@@ -6,7 +6,7 @@ import AppBar from '@/components/global/app-bar/app-bar';
 
 
 export const metadata: Metadata = {
-  title: 'Langtrace',
+  title: 'Langscout',
 };
 
 export default function RootLayout({

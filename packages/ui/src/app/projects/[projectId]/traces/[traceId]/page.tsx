@@ -3,7 +3,7 @@ import TracePage from '@/components/trace/trace-page';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Langtrace | Trace',
+  title: 'Langscout | Trace',
 };
 
 export default async function Trace({ params }:

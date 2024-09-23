@@ -11,7 +11,7 @@ type EnvConfig = {
 
 const configs: EnvConfig[] = [
   {
-    key: 'LANGTRACE_API_URL',
+    key: 'LANGSCOUT_API_URL',
     required: true,
     type: 'url'
   },

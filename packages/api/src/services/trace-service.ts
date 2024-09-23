@@ -1,5 +1,5 @@
 import { Document } from 'bson';
-import { TracesResponse } from '@langtrace/models';
+import { TracesResponse } from '@langscout/models';
 import { MongodbRepository } from '../repositories/mongodb-repository';
 import { FeedbackFilters } from '../routers/traces-router';
 

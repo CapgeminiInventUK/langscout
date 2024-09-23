@@ -1,20 +1,20 @@
 on:
   workflow_dispatch:
     inputs:
-      langtrace-ingest-image-tag:
-        description: 'Langtrace Ingress Docker image tag'
+      langscout-ingest-image-tag:
+        description: 'Langscout Ingress Docker image tag'
         required: false
-      langtrace-ui-image-tag:
-        description: 'Langtrace UI Docker image tag'
+      langscout-ui-image-tag:
+        description: 'Langscout UI Docker image tag'
         required: false
-      langtrace-api-image-tag:
-        description: 'Langtrace API Docker image tag'
+      langscout-api-image-tag:
+        description: 'Langscout API Docker image tag'
         required: false
 
 jobs:
   push_ingest_to_ghcr:
-    if: ${{ !cancelled() && inputs.langtrace-ingest-image-tag != null }}
-    name: Build and push Langtrace ingest component to Github Container Registry
+    if: ${{ !cancelled() && inputs.langscout-ingest-image-tag != null }}
+    name: Build and push Langscout ingest component to Github Container Registry
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -34,13 +34,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/langtrace-ingest
+          images: ghcr.io/${{ github.repository_owner }}/langscout-ingest
           tags: |
             type=schedule
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
-            type=semver,pattern={{version}},value=${{ inputs.langtrace-ingest-image-tag }}
+            type=semver,pattern={{version}},value=${{ inputs.langscout-ingest-image-tag }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6
@@ -51,8 +51,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   push_ui_to_ghcr:
-    if: ${{ !cancelled() && inputs.langtrace-ui-image-tag != null }}
-    name: Build and push Langtrace UI component to Github Container Registry
+    if: ${{ !cancelled() && inputs.langscout-ui-image-tag != null }}
+    name: Build and push Langscout UI component to Github Container Registry
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -72,13 +72,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/langtrace-ui
+          images: ghcr.io/${{ github.repository_owner }}/langscout-ui
           tags: |
             type=schedule
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
-            type=semver,pattern={{version}},value=${{ inputs.langtrace-ui-image-tag }}
+            type=semver,pattern={{version}},value=${{ inputs.langscout-ui-image-tag }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6
@@ -89,11 +89,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           # This is here to placate the build process and can be overridden at runtime.
           build-args: |
-            LANGTRACE_API_URL=http://localhost:1994
+            LANGSCOUT_API_URL=http://localhost:1994
 
   push_api_to_ghcr:
-    if: ${{ !cancelled() && inputs.langtrace-api-image-tag != null }}
-    name: Build and push Langtrace API component to Github Container Registry
+    if: ${{ !cancelled() && inputs.langscout-api-image-tag != null }}
+    name: Build and push Langscout API component to Github Container Registry
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -113,13 +113,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/langtrace-api
+          images: ghcr.io/${{ github.repository_owner }}/langscout-api
           tags: |
             type=schedule
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
-            type=semver,pattern={{version}},value=${{ inputs.langtrace-api-image-tag }}
+            type=semver,pattern={{version}},value=${{ inputs.langscout-api-image-tag }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6

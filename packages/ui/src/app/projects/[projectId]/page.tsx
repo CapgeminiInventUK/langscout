@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 export const metadata = {
-  title: 'Langtrace | Project View',
+  title: 'Langscout | Project View',
 };
 
 export default function ProjectPage({ params }:

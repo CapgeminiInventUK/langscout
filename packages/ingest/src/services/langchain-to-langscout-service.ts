@@ -31,6 +31,12 @@ export class LangchainToLangscoutService {
   }
 
   async updateTrace(traceId: string, langchainData: TraceData): Promise<boolean> {
+    if (!langchainData.id) {
+      throw new Error('id is required in data');
+    }
+    langchainData.run_id = langchainData.id;
+    delete langchainData.id;
+    
     this.convertToDates(langchainData);
 
     const updateResult = await this.repository.updateTrace(traceId, langchainData);

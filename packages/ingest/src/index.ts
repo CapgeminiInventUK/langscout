@@ -3,14 +3,14 @@ import { langchainIngestRouter } from './routers/ingest-router';
 import 'dotenv/config';
 import { feedbackRouter } from './routers/feedback-router';
 import { infoRouter } from './routers/info-router';
-// import audit from 'express-requests-logger';
+import audit from 'express-requests-logger';
 
 const ingestServer = express();
-// ingestServer.use(audit(
-// {
-//   doubleAudit: true,
-// }  
-// ));
+ingestServer.use(audit(
+  {
+    doubleAudit: true,
+  }
+));
 
 ingestServer.use(express.json({ limit: '50mb' }));
 ingestServer.use('/api/runs', langchainIngestRouter);

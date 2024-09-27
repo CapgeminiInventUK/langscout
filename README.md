@@ -1,16 +1,16 @@
-# ![Langtrace](./images/banner-light.png#gh-light-mode-only) ![Langtrace](./images/banner-dark.png#gh-dark-mode-only)
+# ![Langscout](./images/banner-light.png#gh-light-mode-only) ![Langscout](./images/banner-dark.png#gh-dark-mode-only)
 
 <div align="center">
 
-![GitHub License](https://img.shields.io/github/license/CapgeminiInventUK/langtrace?style=flat-square)
+![GitHub License](https://img.shields.io/github/license/CapgeminiInventUK/langscout?style=flat-square)
 
 </div>
 <div align="center">
    <div>
-      <a href="https://github.com/CapgeminiInventUK/langtrace/issues/new?labels=bug">
+      <a href="https://github.com/CapgeminiInventUK/langscout/issues/new?labels=bug">
          <strong>Report Bug</strong>
       </a> ·
-      <a href="https://github.com/CapgeminiInventUK/langtrace/discussions/new?category=ideas">
+      <a href="https://github.com/CapgeminiInventUK/langscout/discussions/new?category=ideas">
          <strong>Ideas</strong>
       </a> ·
       <a href="https://discord.gg/VH95CUQHqH">
@@ -30,7 +30,7 @@
 
 ## Overview
 
-Langtrace is an LLM tracing tool that consumes the data from Langchain and saves the data to
+Langscout is an LLM tracing tool that consumes the data from Langchain and saves the data to
 MongoDB allowing for easy querying and visualization of the data through either the UI or MongoDB
 Atlas Charts.
 
@@ -52,7 +52,7 @@ It is built using Next.js, Node.js 20, Typescript and MongoDB Atlas.
 
 ## Running Modes
 
-Langtrace can be run in two modes: [Full Mode](#full-mode) and [Headless Mode](#headless-mode). Full
+Langscout can be run in two modes: [Full Mode](#full-mode) and [Headless Mode](#headless-mode). Full
 mode runs the UI
 and APIs together.
 
@@ -63,7 +63,7 @@ Headless mode runs the ingestion api only
 This will start 3 services:
 
 - UI
-- Langtrace API (backend for the UI)
+- Langscout API (backend for the UI)
 - Ingest Server
 
 ![](./images/full-mode.png)
@@ -86,15 +86,15 @@ It's assumed to view data you will use MongoDB Atlas Charts
 ### Create/Provision cluster in MongoDB Atlas
 
 - Create/Provision cluster in [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-- Create a database in the cluster and set LANGTRACE_MONGODB_DB_NAME to the name of the database
-  in the .env file in /server. Example langtrace
-- Create a collection in the database and set LANGTRACE_TRACES_MONGODB_COLLECTION_NAME to the name
+- Create a database in the cluster and set LANGSCOUT_MONGODB_DB_NAME to the name of the database
+  in the .env file in /server. Example langscout
+- Create a collection in the database and set LANGSCOUT_TRACES_MONGODB_COLLECTION_NAME to the name
   of the collection
   in the .env file in /server. Example traces
 - Create a readWrite user for the trace collection and setup a connection string for that user on
-  LANGTRACE_INGEST_MONGODB_URI
+  LANGSCOUT_INGEST_MONGODB_URI
 - Create a readOnly user for the trace collection and setup a connection string for that user on
-  LANGTRACE_API_MONGODB_URI
+  LANGSCOUT_API_MONGODB_URI
 
 ### Setup Functions for automated token usage data
 
@@ -105,7 +105,7 @@ Example of a function to add token usage data to the trace data
 in `./atlas/functions/add-token-usage.js`
 
 Create a trigger in MongoDB Atlas to run the function on the traces collection (
-LANGTRACE_TRACES_MONGODB_COLLECTION_NAME)
+LANGSCOUT_TRACES_MONGODB_COLLECTION_NAME)
 
 #### Steps in UI
 
@@ -162,7 +162,7 @@ LANGTRACE_TRACES_MONGODB_COLLECTION_NAME)
 - Copy the contents of ./atlas/trigger/ into the trigger folder in your project
 - In the trigger file set the following fields
     - `service-name` - the name of your service
-    - `database` - the name of your database (if different from langtrace)
+    - `database` - the name of your database (if different from langscout)
     - `collection` - the name of your collection (if different from traces)
       For further information on configuration see the [Trigger Configuration Files documentation]
       (https://www.mongodb.com/docs/atlas/app-services/reference/config/triggers/)
@@ -188,13 +188,13 @@ LANGTRACE_TRACES_MONGODB_COLLECTION_NAME)
 
 #### Langchain Configuration
 
-> Note: Langtrace is currently configured to use the `langsmith-sdk`.
+> Note: Langscout is currently configured to use the `langsmith-sdk`.
 
 - Add Langsmith dependency to your Langchain app
     - `pip install langsmith` or `npm i langsmith`
 - Add the following VARs to your Langchain app
     - `LANGCHAIN_TRACING_V2` - set to `true`
-    - `LANGCHAIN_ENDPOINT` - the URL of your Langtrace API
+    - `LANGCHAIN_ENDPOINT` - the URL of your Langscout API
     - `LANGCHAIN_PROJECT` - the name of your project
 
 ### Running via Docker
@@ -223,7 +223,7 @@ docker-compose up --build -f docker-compose.headless.yml
 - [Running the Services](#running-the-services)
   - [UI](#ui)
   - [Ingest Server](#ingest-server)
-  - [Langtrace API](#langtrace-api)
+  - [Langscout API](#langscout-api)
 
 ### Development Prerequisites
 
@@ -249,15 +249,15 @@ npm install
 ##### UI
 
 ```bash
-npm run dev --workspace=@langtrace/ui
+npm run dev --workspace=@langscout/ui
 ```
 
-##### Langtrace API
+##### Langscout API
 
 This is the API that the UI uses to get data from MongoDB
 
 ```bash
-npm run dev --workspace=@langtrace/api
+npm run dev --workspace=@langscout/api
 
 ```
 
@@ -266,7 +266,7 @@ npm run dev --workspace=@langtrace/api
 This is the server that listens for data from Langchain
 
 ```bash
-npm run dev --workspace=@langtrace/ingest
+npm run dev --workspace=@langscout/ingest
 ```
 
 

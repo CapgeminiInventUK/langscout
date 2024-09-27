@@ -1,23 +1,23 @@
 version: '3.8'
 services:
-  langtrace-ui:
-    image: ghcr.io/capgeminiinventuk/langtrace-ui:latest@sha256:69a6cb4fd7bd4c4c91f421c256695c878335ab6e1a6931b3a02a31bdfffe0ca5
+  langscout-ui:
+    image: ghcr.io/capgeminiinventuk/langscout-ui:latest@sha256:69a6cb4fd7bd4c4c91f421c256695c878335ab6e1a6931b3a02a31bdfffe0ca5
     ports:
       - "3000:3000"
     env_file:
       - ./packages/ui/.env.docker
     depends_on:
-      - langtrace-api
+      - langscout-api
 
-  langtrace-ingest:
-    image: ghcr.io/capgeminiinventuk/langtrace-ingest:latest@sha256:617d44f246958b2b3535b34ec784696b6b12957bf47c18a464f5bf72b7cf9e42
+  langscout-ingest:
+    image: ghcr.io/capgeminiinventuk/langscout-ingest:latest@sha256:617d44f246958b2b3535b34ec784696b6b12957bf47c18a464f5bf72b7cf9e42
     ports:
       - "1984:1984"
     env_file:
       - ./packages/ingest/.env
 
-  langtrace-api:
-    image: ghcr.io/capgeminiinventuk/langtrace-api:latest@sha256:eeeaabfe26ea94fb19e27bfc3f2e160bc9ae22eaa1ed04a01ebf991276d1b781
+  langscout-api:
+    image: ghcr.io/capgeminiinventuk/langscout-api:latest@sha256:eeeaabfe26ea94fb19e27bfc3f2e160bc9ae22eaa1ed04a01ebf991276d1b781
     ports:
       - "1994:1994"
     env_file:

@@ -4,7 +4,7 @@ import parseFeedbackFilters from '@/components/traces/helpers/parse-feedback-fil
 import { convertRangeToDateRange } from '@/components/traces/helpers/handle-predefined-range';
 
 export const metadata = {
-  title: 'Langtrace | Traces',
+  title: 'Langscout | Traces',
 };
 
 export default async function Traces({ params, searchParams }:

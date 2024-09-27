@@ -1,7 +1,7 @@
 {
-  "name": "langtrace-triggers",
+  "name": "langscout-triggers",
   "version": "0.0.1",
-  "description": "MongoDB Trigger for Langtrace",
+  "description": "MongoDB Trigger for Langscout",
   "main": "index.js",
   "type": "module",
   "scripts": {

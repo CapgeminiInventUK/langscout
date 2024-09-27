@@ -1,29 +1,29 @@
 version: '3.8'
 services:
-  langtrace-ui:
+  langscout-ui:
     build:
       dockerfile: Dockerfile.ui
-    image: langtrace-ui:local
+    image: langscout-ui:local
     ports:
       - "3000:3000"
     env_file:
       - ./packages/ui/.env.docker
     depends_on:
-      - langtrace-api
+      - langscout-api
 
-  langtrace-ingest:
+  langscout-ingest:
     build:
       dockerfile: Dockerfile.ingest
-    image: langtrace-ingest:local
+    image: langscout-ingest:local
     ports:
       - "1984:1984"
     env_file:
       - ./packages/ingest/.env
 
-  langtrace-api:
+  langscout-api:
     build:
       dockerfile: Dockerfile.api
-    image: langtrace-api:local
+    image: langscout-api:local
     ports:
       - "1994:1994"
     env_file:

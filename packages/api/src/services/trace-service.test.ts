@@ -1,5 +1,5 @@
 import { TraceService } from './trace-service';
-import { TraceDetailResponse, TracesResponse, TracePercentile } from '@langtrace/models';
+import { TraceDetailResponse, TracesResponse, TracePercentile } from '@langscout/models';
 import { MongodbRepository } from '../repositories/mongodb-repository';
 
 jest.mock('../repositories/mongodb-repository');

@@ -10,9 +10,9 @@ ingest_server.set('query parser', function (str: string) {
   return qs.parse(str);
 });
 
-ingest_server.use('/langtrace/api/projects', projectsRouter);
+ingest_server.use('/langscout/api/projects', projectsRouter);
 
 const PORT = process.env.PORT || 1994;
 ingest_server.listen(PORT, () => {
-  console.info(`Langtrace server is running on port ${PORT}`);
+  console.info(`Langscout server is running on port ${PORT}`);
 });

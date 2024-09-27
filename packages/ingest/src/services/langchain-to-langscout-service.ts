@@ -1,7 +1,7 @@
-import { TraceData, CreateFeedback, UpdateFeedback } from '@langtrace/models';
+import { TraceData, CreateFeedback, UpdateFeedback } from '@langscout/models';
 import { MongodbRepository } from '../repositories/mongodb-repository';
 
-export class LangchainToLangtraceService {
+export class LangchainToLangscoutService {
   private repository: MongodbRepository;
 
   constructor() {
@@ -31,6 +31,15 @@ export class LangchainToLangtraceService {
   }
 
   async updateTrace(traceId: string, langchainData: TraceData): Promise<boolean> {
+    if (!langchainData.id) {
+      throw new Error('id is required in data');
+    }
+    
+
+
+    langchainData.run_id = langchainData.id;
+    delete langchainData.id;
+
     this.convertToDates(langchainData);
 
     const updateResult = await this.repository.updateTrace(traceId, langchainData);

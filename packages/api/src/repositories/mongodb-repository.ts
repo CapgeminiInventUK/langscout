@@ -2,21 +2,21 @@ import { Collection, Db, MongoClient } from 'mongodb';
 import 'dotenv/config';
 import { FeedbackFilters } from '../routers/traces-router';
 import { Document } from 'bson';
-import { TracePercentile, FeedbackCountResponse, TraceDetailResponse } from '@langtrace/models';
+import { TracePercentile, FeedbackCountResponse, TraceDetailResponse } from '@langscout/models';
 
 export class MongodbRepository {
   private db: Db | undefined;
-  private collectionName = process.env.LANGTRACE_TRACES_MONGODB_COLLECTION_NAME!;
+  private collectionName = process.env.LANGSCOUT_TRACES_MONGODB_COLLECTION_NAME!;
   private client: MongoClient;
 
   constructor() {
-    const connectionString = process.env.LANGTRACE_API_MONGODB_URI!;
+    const connectionString = process.env.LANGSCOUT_API_MONGODB_URI!;
     this.client = new MongoClient(connectionString);
   }
 
   async init(): Promise<void> {
     await this.client.connect();
-    const dbName = process.env.LANGTRACE_MONGODB_DB_NAME;
+    const dbName = process.env.LANGSCOUT_MONGODB_DB_NAME;
     this.db = this.client.db(dbName);
   }
 

@@ -6,7 +6,7 @@ import { BarChartIcon, StackIcon } from '@radix-ui/react-icons';
 import { authOptions } from '@/lib/utils/auth-options';
 
 export const metadata = {
-  title: 'Langtrace',
+  title: 'Langscout',
 };
 
 export default async function Home() {

@@ -9,7 +9,7 @@ export async function getTraces(
   endDate?: string,
   feedbackFilters?: string
 ): Promise<TracesResponse> {
-  let url = `${config.langtraceApiUrl}/langtrace/api/projects/${projectId}/traces`;
+  let url = `${config.langscoutApiUrl}/langscout/api/projects/${projectId}/traces`;
   const queryParams = new URLSearchParams();
   if (startDate && startDate.trim() !== '') {
     queryParams.append('startDate', startDate);
@@ -54,7 +54,7 @@ export async function getTraces(
 
 export async function getTraceTree(projectId: string, traceId: string): Promise<TraceTreeNode> {
   const response = await fetch(
-    `${config.langtraceApiUrl}/langtrace/api/projects/${projectId}/traces/tree/${traceId}`
+    `${config.langscoutApiUrl}/langscout/api/projects/${projectId}/traces/tree/${traceId}`
   );
 
   if (!response.ok) {

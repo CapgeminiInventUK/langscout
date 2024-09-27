@@ -4,6 +4,7 @@
 
 # User-specific stuff
 .idea/**/workspace.xml
+.idea/material_theme_project_new.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries

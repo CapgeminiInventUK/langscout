@@ -1,4 +1,9 @@
-import { TraceData, CreateFeedback, UpdateFeedback } from '@langscout/models';
+import {
+  CreateTraceRequest,
+  UpdateTraceRequest,
+  CreateFeedback,
+  UpdateFeedback, UpdateTraceDatabase, CreateTraceDatabase
+} from '@langscout/models';
 import { MongodbRepository } from '../repositories/mongodb-repository';
 
 export class LangchainToLangscoutService {
@@ -8,41 +13,43 @@ export class LangchainToLangscoutService {
     this.repository = new MongodbRepository();
   }
 
-  private convertToDates(data: TraceData): void {
-    if (data.start_time) {
-      data.start_time = new Date(data.start_time);
-    }
-    if (data.end_time) {
-      data.end_time = new Date(data.end_time);
-    }
+  private convertToDate(time: number | string): Date {
+    return new Date(typeof time === 'number' ? time * 1000 : time);
   }
 
-  async createTrace(langchainData: TraceData): Promise<string> {
+  async createTrace(langchainData: CreateTraceRequest): Promise<string> {
     if (!langchainData.id) {
       throw new Error('id is required in data');
     }
-    langchainData.run_id = langchainData.id;
-    delete langchainData.id;
 
-    this.convertToDates(langchainData);
+    const insertData: CreateTraceDatabase = {
+      ...langchainData,
+      run_id: langchainData.id,
+      start_time: this.convertToDate(langchainData.start_time),
+      end_time: langchainData.end_time
+        ? this.convertToDate(langchainData.end_time)
+        : undefined,
+    };
 
-    await this.repository.insertTrace(langchainData);
-    return langchainData.run_id;
+    await this.repository.insertTrace(insertData);
+    return insertData.run_id;
   }
 
-  async updateTrace(traceId: string, langchainData: TraceData): Promise<boolean> {
+  async updateTrace(traceId: string, langchainData: UpdateTraceRequest): Promise<boolean> {
     if (!langchainData.id) {
       throw new Error('id is required in data');
     }
-    
 
+    const updateData: UpdateTraceDatabase = {
+      ...langchainData,
+      run_id: langchainData.id,
+      start_time: this.convertToDate(langchainData.start_time),
+      end_time: langchainData.end_time
+        ? this.convertToDate(langchainData.end_time)
+        : undefined,
+    };
 
-    langchainData.run_id = langchainData.id;
-    delete langchainData.id;
-
-    this.convertToDates(langchainData);
-
-    const updateResult = await this.repository.updateTrace(traceId, langchainData);
+    const updateResult = await this.repository.updateTrace(traceId, updateData);
     return updateResult.matchedCount > 0;
   }
 

@@ -1,5 +1,6 @@
 export { CreateFeedback, UpdateFeedback } from './requests/feedback-request';
-export { TraceData } from './requests/trace-request';
+export { CreateTraceRequest, CreateTraceDatabase, UpdateTraceDatabase, UpdateTraceRequest }
+  from './requests/trace-request';
 
 export { FeedbackCountResponse } from './responses/feedback-count-response';
 export { TraceDetailResponse } from './responses/trace-detail-response';

@@ -1,6 +1,11 @@
 import { Db, MongoClient, UpdateResult } from 'mongodb';
 import 'dotenv/config';
-import { CreateFeedback, UpdateFeedback, TraceData } from '@langscout/models';
+import {
+  CreateFeedback,
+  UpdateFeedback,
+  CreateTraceDatabase,
+  UpdateTraceDatabase
+} from '@langscout/models';
 
 export class MongodbRepository {
   private db!: Db;
@@ -18,12 +23,12 @@ export class MongodbRepository {
     });
   }
 
-  async insertTrace(data: TraceData): Promise<void> {
+  async insertTrace(data: CreateTraceDatabase): Promise<void> {
     const collection = this.db.collection(this.collectionName);
     await collection.insertOne(data);
   }
 
-  async updateTrace(id: string, updateData: TraceData): Promise<UpdateResult> {
+  async updateTrace(id: string, updateData: UpdateTraceDatabase): Promise<UpdateResult> {
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
       throw new Error(`Invalid UUID v4 format (${id}) for updateTrace`);
     }

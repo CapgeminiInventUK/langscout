@@ -56,7 +56,7 @@ export default function TraceTree() {
               font-normal
               flex items-center whitespace-nowrap overflow-hidden truncate gap-2"
             >
-              <Badge variant="outline">
+              <Badge variant="default">
                 {trace.run_type.toUpperCase()}
               </Badge>
               {trace.name}
@@ -73,7 +73,7 @@ export default function TraceTree() {
             {trace.children?.length === 0 && <span className={'w-5'}/>}
           </ToggleGroupItem>
           {trace.children && isExpanded && (
-            <div className="w-full ml-2 pr-2 border-l-2 border-l-primary pl-1.5">
+            <div className="w-full ml-2 pr-2 border-l-2 pl-1.5 border-l-border">
               {trace.children.map(child => renderTrace(child))}
             </div>
           )}

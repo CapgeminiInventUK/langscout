@@ -19,8 +19,8 @@ export default function RootLayout({
       <body>
         <Providers>
           <AppBar/>
-          <main>
-            <div className="px-4 pt-4">
+          <main className={'max-w-full flex justify-center'}>
+            <div className="px-4 pt-4 w-full max-w-screen-2xl">
               {children}
             </div>
           </main>

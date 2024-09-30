@@ -20,7 +20,9 @@ router.post('/batch', async (req: ExpressRequest<never, never, BatchTraceRequest
         console.error(`Error creating run: ${error}`);
       }
     }
-  } else if (req.body.patch) {
+  }
+
+  if (req.body.patch) {
     for (const record of req.body.patch) {
       try {
         const runId = record.id!;

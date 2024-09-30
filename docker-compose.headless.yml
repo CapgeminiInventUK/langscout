@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   langscout-ingest:
-    image: ghcr.io/capgeminiinventuk/langscout-ingest:latest@sha256:617d44f246958b2b3535b34ec784696b6b12957bf47c18a464f5bf72b7cf9e42
+    image: ghcr.io/capgeminiinventuk/langscout-ingest:latest@sha256:68f4ae475086adae4fd10733b0ef59395b0eb52c87b0a48c7196d4cb9fd00ab1
     ports:
       - "1984:1984"
     env_file:

@@ -21,7 +21,8 @@ export const TracesFilterContext = createContext<TracesFilterContextProps>({
   endDate: undefined,
   feedbackFilters: {},
   changePending: false,
-  setChangePending: (_: boolean) => {},
+  setChangePending: (_: boolean) => {
+  },
   setStartDate: (_: Date) => {
   },
   setEndDate: (_: Date) => {

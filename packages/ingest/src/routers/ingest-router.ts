@@ -1,52 +1,42 @@
 import { Router, Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import { LangchainToLangscoutService } from '../services/langchain-to-langscout-service';
 import { sleepBeforeRetry } from '../utils/sleep-before-retry';
+import { BatchTraceRequest, CreateTraceRequest, UpdateTraceRequest } from '@langscout/models';
 
 const router = Router();
 const langchainService = new LangchainToLangscoutService();
 
-// Updated /batch route
-router.post('/batch', (req, res) => {
+router.post('/batch', async (req: ExpressRequest<never, never, BatchTraceRequest>,
+  res: ExpressResponse) => {
+
   console.debug('POST /api/runs/batch');
 
-  if (typeof req.body === 'object' && req.body !== null) {
-    const keys = Object.keys(req.body);
-    keys.forEach(async (key) => {
-      if (key === 'post') {
-        if (Array.isArray(req.body[key])) {
-          for (const record of req.body[key]) {
-            try {
-              const runId = await langchainService.createTrace(record);
-              console.debug(`Created run with id ${runId}`);
-            } catch (error) {
-              console.error(`Error creating run: ${error}`);
-            }
-          }
-        }
-      } else if (key === 'patch') {
-        if (Array.isArray(req.body[key])) {
-          for (const record of req.body[key]) {
-            try {
-              const runId = record.id;
-              const success = await langchainService.updateTrace(runId, record);
-              console.debug(`Updated run with id ${runId} with success: ${success}`);
-            } catch (error) {
-              console.error(`Error updating run: ${error}`);
-            }
-          }
-        }
-      } else {
-        console.error(`Invalid key: ${key}`);
+  if (req.body.post) {
+    for (const record of req.body.post) {
+      try {
+        const runId = await langchainService.createTrace(record);
+        console.debug(`Created run with id ${runId}`);
+      } catch (error) {
+        console.error(`Error creating run: ${error}`);
       }
-    });
-  } else {
-    console.error('Received data is neither an array nor a JSON object');
+    }
+  } else if (req.body.patch) {
+    for (const record of req.body.patch) {
+      try {
+        const runId = record.id!;
+        const success = await langchainService.updateTrace(runId, record);
+        console.debug(`Updated run with id ${runId} with success: ${success}`);
+      } catch (error) {
+        console.error(`Error updating run: ${error}`);
+      }
+    }
   }
 
   res.status(200).json({ message: 'Batch request processed' });
 });
 
-router.post('/', async (req: ExpressRequest, res: ExpressResponse) => {
+router.post('/', async (req: ExpressRequest<never, never, CreateTraceRequest>,
+  res: ExpressResponse) => {
   console.debug('POST /api/runs');
   try {
     const runData = req.body;
@@ -63,7 +53,9 @@ router.post('/', async (req: ExpressRequest, res: ExpressResponse) => {
   }
 });
 
-router.patch('/:runId', async (req: ExpressRequest, res: ExpressResponse) => {
+router.patch('/:runId', async (req: ExpressRequest<{
+  runId: string
+}, never, UpdateTraceRequest>, res: ExpressResponse) => {
   console.debug('PATCH /api/runs/:runId');
   const runId = req.params.runId;
   const updateData = req.body;

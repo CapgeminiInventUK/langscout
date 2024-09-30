@@ -21,3 +21,8 @@ export interface UpdateTraceDatabase extends Omit<UpdateTraceRequest, 'start_tim
   start_time: Date;
   end_time?: Date;
 }
+
+export interface BatchTraceRequest {
+  post: CreateTraceRequest[];
+  patch: UpdateTraceRequest[];
+}

@@ -12,10 +12,10 @@ import {
 } from '@/components/ui/table';
 
 interface ProjectsTableProps {
-    projects: ProjectResponse[];
+  projects: ProjectResponse[];
 }
 
-export default function ProjectsTable ({ projects }: ProjectsTableProps) {
+export default function ProjectsTable({ projects }: ProjectsTableProps) {
   const handleRowClick = (url: string) => {
     window.location.href = url;
   };

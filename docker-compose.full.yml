@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   langscout-ui:
-    image: ghcr.io/capgeminiinventuk/langscout-ui:0.1.0-beta
+    image: ghcr.io/capgeminiinventuk/langscout-ui:latest
     ports:
       - "3000:3000"
     env_file:
@@ -10,7 +10,7 @@ services:
       - langscout-api
 
   langscout-ingest:
-    image: ghcr.io/capgeminiinventuk/langscout-ingest:0.1.0-beta
+    image: ghcr.io/capgeminiinventuk/langscout-ingest:latest
     ports:
       - "1984:1984"
     env_file:
@@ -19,7 +19,7 @@ services:
       - langscout-mongodb
 
   langscout-api:
-    image: ghcr.io/capgeminiinventuk/langscout-api:0.1.0-beta
+    image: ghcr.io/capgeminiinventuk/langscout-api:latest
     ports:
       - "1994:1994"
     env_file:

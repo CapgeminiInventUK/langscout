@@ -10,6 +10,7 @@ services:
       - ./packages/ui/.env.docker
     depends_on:
       - langscout-api
+      - langscout-mongodb
 
   langscout-ingest:
     build:
@@ -18,7 +19,9 @@ services:
     ports:
       - "1984:1984"
     env_file:
-      - ./packages/ingest/.env
+      - ./packages/ingest/.env.docker
+    depends_on:
+      - langscout-mongodb
 
   langscout-api:
     build:
@@ -27,4 +30,12 @@ services:
     ports:
       - "1994:1994"
     env_file:
-      - ./packages/api/.env
+      - ./packages/api/.env.docker
+
+  langscout-mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example

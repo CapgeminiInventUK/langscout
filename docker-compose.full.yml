@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   langscout-ui:
-    image: ghcr.io/capgeminiinventuk/langscout-ui:latest@sha256:69a6cb4fd7bd4c4c91f421c256695c878335ab6e1a6931b3a02a31bdfffe0ca5
+    image: ghcr.io/capgeminiinventuk/langscout-ui:0.1.0-beta
     ports:
       - "3000:3000"
     env_file:
@@ -10,15 +10,28 @@ services:
       - langscout-api
 
   langscout-ingest:
-    image: ghcr.io/capgeminiinventuk/langscout-ingest:latest@sha256:617d44f246958b2b3535b34ec784696b6b12957bf47c18a464f5bf72b7cf9e42
+    image: ghcr.io/capgeminiinventuk/langscout-ingest:0.1.0-beta
     ports:
       - "1984:1984"
     env_file:
-      - ./packages/ingest/.env
+      - ./packages/ingest/.env.docker
+    depends_on:
+      - langscout-mongodb
 
   langscout-api:
-    image: ghcr.io/capgeminiinventuk/langscout-api:latest@sha256:eeeaabfe26ea94fb19e27bfc3f2e160bc9ae22eaa1ed04a01ebf991276d1b781
+    image: ghcr.io/capgeminiinventuk/langscout-api:0.1.0-beta
     ports:
       - "1994:1994"
     env_file:
-      - ./packages/api/.env
+      - ./packages/api/.env.docker
+    depends_on:
+      - langscout-mongodb
+
+  langscout-mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    command: mongod --bind_ip_all

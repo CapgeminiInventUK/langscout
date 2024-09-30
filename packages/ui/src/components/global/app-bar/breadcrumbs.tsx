@@ -47,14 +47,14 @@ export default function Breadcrumbs() {
       <BreadcrumbList>
         {breadcrumbMap.map((item, index) => <>
           {index > 0 &&
-              <BreadcrumbSeparator key={index+'-separator'}/>}
-          <BreadcrumbItem key={index+'-item'}>
+              <BreadcrumbSeparator key={index + '-separator'}/>}
+          <BreadcrumbItem key={index + '-item'}>
             {item.href ? (
-              <BreadcrumbLink  key={index+'-link'} href={item.href}>
+              <BreadcrumbLink key={index + '-link'} href={item.href}>
                 {item.label}
               </BreadcrumbLink>
             ) : (
-              <BreadcrumbPage key={index+'-page'}>{item.label}</BreadcrumbPage>
+              <BreadcrumbPage key={index + '-page'}>{item.label}</BreadcrumbPage>
             )}
           </BreadcrumbItem>
         </>)}

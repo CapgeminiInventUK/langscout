@@ -14,7 +14,8 @@
       {
         "case": "kebabCase",
         "ignore": [
-          "^\\[.*\\]\\.tsx$" // Next.js dynamic routes
+          "^\\[.*\\]\\.tsx$"
+          // Next.js dynamic routes
         ]
       }
     ],

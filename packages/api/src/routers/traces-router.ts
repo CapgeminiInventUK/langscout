@@ -14,7 +14,7 @@ tracesRouter.get('/:projectId/traces', async (req, res) => {
   console.debug('GET /traces');
   try {
     const productId = req.params.projectId;
-    const { startDate, endDate,  feedbackFilter } = req.query;
+    const { startDate, endDate, feedbackFilter } = req.query;
 
     let start, end, filters;
 
@@ -65,7 +65,7 @@ tracesRouter.get('/:projectId/traces/tree/:traceId', async (req, res) => {
     if (!trace) {
       return res.status(404).json({ message: 'Trace not found' });
     }
-    return res.json( trace );
+    return res.json(trace);
   } catch (error: unknown) {
     console.error(error);
     if (error instanceof Error) {

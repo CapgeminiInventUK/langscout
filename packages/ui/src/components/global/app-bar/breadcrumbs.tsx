@@ -23,28 +23,26 @@ export default function Breadcrumbs() {
   }
 
   const breadcrumbMap = segments.reduce((acc, segment, index) => {
-    const label = segment.charAt(0).toUpperCase() + segment.slice(1);
-
     if (index < segments.length - 1) {
       const href = `/${segments.slice(0, index + 1).join('/')}`;
-      acc.push({ href, label });
+      acc.push({ href, label: segment });
     } else {
-      acc.push({ label });
+      acc.push({ label: segment });
     }
 
 
     return acc;
-  }, [{ href: '/', label: 'Home' } as Breadcrumb]);
+  }, [{ href: '/', label: 'home' } as Breadcrumb]);
 
 
   return <>{
     breadcrumbMap.length === 1 &&
     <Link className={buttonVariants({ variant: 'link' })} href={'/'}><h1
-      className="text-xl font-semibold">Langscout</h1></Link>
+      className="text-xl font-semibold">langscout</h1></Link>
   }
   {breadcrumbMap.length > 1 && (
     <Breadcrumb>
-      <BreadcrumbList>
+      <BreadcrumbList key={'breadcrumb-list'}>
         {breadcrumbMap.map((item, index) => <>
           {index > 0 &&
               <BreadcrumbSeparator key={index + '-separator'}/>}

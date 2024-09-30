@@ -51,8 +51,6 @@ export default function TracesSideBar({
         <CardTitle>Details</CardTitle>
       </CardHeader>
       <CardContent>
-
-        {/*Set value=inLast*/}
         <Select defaultValue={'7d'} onValueChange={(value) => handlePredefinedRange(
           value,
           setStartDate,

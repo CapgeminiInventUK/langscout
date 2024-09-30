@@ -60,7 +60,7 @@ export default function TracesPage({
             projectId={projectId}
           />
         </ResizablePanel>
-        <ResizableHandle withHandle/>
+        <ResizableHandle />
         <ResizablePanel defaultSize={20} minSize={15}>
           <TracesSideBar
             traceCount={traces.length}

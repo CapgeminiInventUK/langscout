@@ -21,10 +21,10 @@ router.get('/', (req, res) => {
     version: 'langscout-0.0.1',
     batch_ingest_config: {
       scale_up_qsize_trigger: 1000,
-      scale_up_nthreads_limit: 10,
-      scale_down_nempty_trigger: 5,
+      scale_up_nthreads_limit: 16,
+      scale_down_nempty_trigger: 4,
       size_limit: 100,
-      size_limit_bytes: null, // 1 MB as an example
+      size_limit_bytes: 20971520,
     },
   };
   res.json(info);

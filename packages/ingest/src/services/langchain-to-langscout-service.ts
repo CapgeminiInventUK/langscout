@@ -32,7 +32,7 @@ export class LangchainToLangscoutService {
     };
 
     await this.repository.insertTrace(insertData);
-    return insertData.run_id;
+    return langchainData.id;
   }
 
   async updateTrace(traceId: string, langchainData: UpdateTraceRequest): Promise<boolean> {

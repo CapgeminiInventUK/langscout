@@ -1,5 +1,5 @@
 import { TraceService } from './trace-service';
-import { TraceDetailResponse, TracesResponse, TracePercentile } from '@langscout/models';
+import { TraceData, TracesResponse, TracePercentile } from '@langscout/models';
 import { MongodbRepository } from '../repositories/mongodb-repository';
 
 jest.mock('../repositories/mongodb-repository');
@@ -16,36 +16,28 @@ describe('TraceService', () => {
     (service as any).repository = mockRepository;
   });
   const mockTraceId = 'traceId';
-  const mockTraceDocument: TraceDetailResponse = {
+  const mockTraceDocument: TraceData = {
+    id: 'traceId',
     error: null,
-    children: [],
-    end_time: '',
-    metadata: new Map<string, unknown>(),
-    input: new Map<string, unknown>(),
+    child_runs: [],
+    end_time: new Date().getTime(),
+    extra: new Map<string, unknown>(),
+    inputs: new Map<string, unknown>(),
     latency: null,
-    output: new Map<string, unknown>(),
+    outputs: new Map<string, unknown>(),
     parent_run_id: null,
-    run_type: '',
-    session_name: '',
-    start_time: '',
+    run_type: 'llm',
+    start_time: new Date().getTime(),
     run_id: mockTraceId,
     name: 'Test Trace',
-    execution_order: 0,
     trace_id: null,
     dotted_order: null,
-
   };
 
 
   describe('getTraces', () => {
     it('should get all traces when both start and end date are populated', async () => {
-      const expectedResult: TraceDetailResponse[] = [{
-        run_id: mockTraceId,
-        latency: 7418,
-        start_time: '2023-12-29T20:06:43.539+00:00',
-        end_time: '2023-12-29T20:06:50.957+00:00'
-      } as TraceDetailResponse
-      ];
+      const expectedResult: TraceData[] = [mockTraceDocument];
       mockRepository.getTraces.mockResolvedValue(expectedResult);
 
       mockRepository.getFeedbackCounts.mockResolvedValue(

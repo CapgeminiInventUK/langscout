@@ -10,16 +10,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
 import { convertTimestampToDatetime } from '@/lib/utils/convert-timestamp-to-datetime';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Badge } from '@/components/ui/badge';
 import getStatusCellContentForTrace
   from '@/components/traces/helpers/get-status-cell-content-for-trace';
+import { TraceData } from '@langscout/models';
 
 interface TraceTableProps {
   projectId: string;
-  traces: TraceTreeNode[];
+  traces: TraceData[];
 }
 
 export default function TracesTable({ projectId, traces }: TraceTableProps) {
@@ -97,19 +97,19 @@ export default function TracesTable({ projectId, traces }: TraceTableProps) {
                     </HoverCardTrigger>
                   </HoverCard>
                 </TableCell>
-                <TableCell>{trace.feedback?.key
+                <TableCell>{trace.feedback_stats
                   ? <HoverCard openDelay={300}>
                     <HoverCardContent>
                       <div>
-                        <p>{trace.feedback.comment ?? 'No comment left'}</p>
+                        <p>{trace.feedback_stats['comment'] ?? 'No comment left'}</p>
                       </div>
                     </HoverCardContent>
                     <HoverCardTrigger>
-                      {`${trace.feedback.key}: ${
-                        trace.feedback.score !== undefined ?
-                          trace.feedback.score :
-                          trace.feedback.value
-                      }`}
+                      {
+                        `${trace.feedback_stats['key']}: ${
+                          'key' in trace.feedback_stats && 'score' in trace.feedback_stats ? trace.feedback_stats['score'] 
+                            : trace.feedback_stats['value']}`
+                      }
                     </HoverCardTrigger>
                   </HoverCard>
                   : ''}</TableCell>

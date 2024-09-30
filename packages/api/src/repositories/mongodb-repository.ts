@@ -2,7 +2,7 @@ import { Collection, Db, MongoClient } from 'mongodb';
 import 'dotenv/config';
 import { FeedbackFilters } from '../routers/traces-router';
 import { Document } from 'bson';
-import { TracePercentile, FeedbackCountResponse, TraceDetailResponse } from '@langscout/models';
+import { TracePercentile, FeedbackCountResponse, TraceData } from '@langscout/models';
 
 export class MongodbRepository {
   private db: Db | undefined;
@@ -126,7 +126,7 @@ export class MongodbRepository {
     projectId: string,
     startDate?: Date,
     endDate?: Date,
-    feedbackFilters?: FeedbackFilters): Promise<TraceDetailResponse[]> {
+    feedbackFilters?: FeedbackFilters): Promise<TraceData[]> {
 
     const feedbackFilter = this.createMatchForFilters(feedbackFilters);
 
@@ -146,7 +146,7 @@ export class MongodbRepository {
           startWith: '$run_id',
           connectFromField: 'run_id',
           connectToField: 'parent_run_id',
-          as: 'children',
+          as: 'child_runs',
           depthField: 'depth',
           restrictSearchWithMatch: {
             parent_run_id: {
@@ -164,14 +164,14 @@ export class MongodbRepository {
           name: 1,
           start_time: 1,
           end_time: 1,
-          feedback: 1,
+          feedback_stats: 1,
           error: 1,
           latency: {
             $subtract: ['$end_time', '$start_time'],
           },
           totalInputCost: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -194,7 +194,7 @@ export class MongodbRepository {
           },
           totalInputTokenCount: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -217,7 +217,7 @@ export class MongodbRepository {
           },
           totalOutputCost: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -240,7 +240,7 @@ export class MongodbRepository {
           },
           totalOutputTokenCount: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -263,7 +263,7 @@ export class MongodbRepository {
           },
           totalCost: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -286,7 +286,7 @@ export class MongodbRepository {
           },
           totalTokens: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -319,7 +319,7 @@ export class MongodbRepository {
 
     const collection = await this.getCollection();
     return await collection
-      .aggregate<TraceDetailResponse>(pipeline)
+      .aggregate<TraceData>(pipeline)
       .toArray();
   }
 
@@ -383,9 +383,9 @@ export class MongodbRepository {
     });
   }
 
-  async getTraceTreeById(projectId: string, run_id: string): Promise<TraceDetailResponse[]> {
+  async getTraceTreeById(projectId: string, run_id: string): Promise<TraceData[]> {
     const collection = await this.getCollection();
-    return collection.aggregate<TraceDetailResponse>(
+    return collection.aggregate<TraceData>(
       [
         {
           $match: {
@@ -399,7 +399,7 @@ export class MongodbRepository {
             startWith: '$run_id',
             connectFromField: 'run_id',
             connectToField: 'parent_run_id',
-            as: 'children',
+            as: 'child_runs',
             depthField: 'depth',
             restrictSearchWithMatch: {
               parent_run_id: {
@@ -430,9 +430,9 @@ export class MongodbRepository {
                 else: '$$REMOVE',
               },
             },
-            children: {
+            child_runs: {
               $map: {
-                input: '$children',
+                input: '$child_runs',
                 as: 'record',
                 in: {
                   $mergeObjects: [
@@ -485,10 +485,11 @@ export class MongodbRepository {
             trace_id: 1,
             dotted_order: 1,
             feedback: 1,
-            metadata: '$extra.metadata',
-            children: {
+            // metadata: '$extra.metadata',
+            extra: 1,
+            child_runs: {
               $map: {
-                input: '$children',
+                input: '$child_runs',
                 as: 'item',
                 in: {
                   name: '$$item.name',
@@ -506,7 +507,7 @@ export class MongodbRepository {
                   trace_id: '$$item.trace_id',
                   dotted_order: '$$item.dotted_order',
                   feedback: '$$item.feedback',
-                  metadata: '$$item.extra.metadata',
+                  extra: '$$item.extra',
                   depth: '$$item.depth'
                 },
               },

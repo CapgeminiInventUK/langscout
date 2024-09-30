@@ -1,17 +1,17 @@
 import { createContext } from 'react';
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
+import { TraceData } from '@langscout/models';
 
 interface TraceContextProps {
   traceId: string;
   selectedTraceId?: string;
-  traceData?: TraceTreeNode;
+  traceData?: TraceData;
   expandedNodes: Set<String>;
   setExpandedNodes: (expandedNodes: ((prevState: Set<string>) =>
     Set<string>) | Set<string>
   ) => void;
   setSelectedTraceId: (_: string) => void;
-  onSelectTrace: (_: TraceTreeNode) => void;
-  selectedTrace?: TraceTreeNode;
+  onSelectTrace: (_: TraceData) => void;
+  selectedTrace?: TraceData;
 }
 
 export const TraceContext = createContext<TraceContextProps>({
@@ -24,6 +24,6 @@ export const TraceContext = createContext<TraceContextProps>({
   setSelectedTraceId: (_: string) => {
   },
   selectedTrace: undefined,
-  onSelectTrace: (_: TraceTreeNode) => {
+  onSelectTrace: (_: TraceData) => {
   },
 });

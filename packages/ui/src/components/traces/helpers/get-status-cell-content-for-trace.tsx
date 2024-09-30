@@ -1,4 +1,3 @@
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
 import { ReactElement } from 'react';
 import {
   CheckIcon,
@@ -8,8 +7,9 @@ import {
 } from '@radix-ui/react-icons';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Badge } from '@/components/ui/badge';
+import { TraceData } from '@langscout/models';
 
-export default function getStatusCellContentForTrace(trace: TraceTreeNode): ReactElement {
+export default function getStatusCellContentForTrace(trace: TraceData): ReactElement {
   if (trace.error) {
     return <HoverCard openDelay={300}>
       <HoverCardContent className="text-start w-full max-h-36 overflow-auto">

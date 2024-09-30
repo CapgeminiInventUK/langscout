@@ -1,7 +1,7 @@
 import { TracesResponse } from '@/models/responses/traces-response';
 import config from '@/lib/utils/config';
 import { buildTreeFromObject } from '@/lib/utils/build-tree-from-object';
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
+import { TraceData } from '@langscout/models';
 
 export async function getTraces(
   projectId: string,
@@ -52,15 +52,19 @@ export async function getTraces(
 }
 
 
-export async function getTraceTree(projectId: string, traceId: string): Promise<TraceTreeNode> {
+export async function getTraceTree(projectId: string, traceId: string): Promise<TraceData | null> {
   const response = await fetch(
     `${config.langscoutApiUrl}/langscout/api/projects/${projectId}/traces/tree/${traceId}`
   );
+  // If 404
+  if (response.status === 404) {
+    return null;
+  }
 
-  if (!response.ok) {
+  if (response.status !== 404 && !response.ok) {
     throw new Error('Network response was not ok');
   }
   const data = await response.json();
 
-  return buildTreeFromObject(data as TraceTreeNode);
+  return buildTreeFromObject(data as TraceData);
 }

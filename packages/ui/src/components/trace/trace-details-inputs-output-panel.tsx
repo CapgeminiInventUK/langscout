@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
 import CodeBlock from '@/components/global/code-block';
+import { TraceData } from '@langscout/models';
 
 interface TraceDetailsInputOutputPanelProps {
-  selectedTrace: TraceTreeNode;
+  selectedTrace: TraceData;
 }
 
 export default function TraceDetailsInputOutputPanel(

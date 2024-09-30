@@ -1,9 +1,9 @@
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
 import { compareTimestamps } from '@/lib/utils/compare-timestamps-to-nano';
+import { TraceData } from '@langscout/models';
 
-export function buildTreeFromObject(aggregatedObject: TraceTreeNode): TraceTreeNode {
-  const rootNode = { ...aggregatedObject, children: [] };
-  const flatChildren = aggregatedObject.children;
+export function buildTreeFromObject(aggregatedObject: TraceData): TraceData {
+  const rootNode = { ...aggregatedObject, child_runs: [] };
+  const flatChildren = aggregatedObject.child_runs;
   flatChildren.sort((a, b) => {
     if (a.depth !== undefined && b.depth !== undefined) {
       // Handle Records that were for when we had execution_order (old format)
@@ -35,17 +35,17 @@ export function buildTreeFromObject(aggregatedObject: TraceTreeNode): TraceTreeN
     return 0;
   });
 
-  const nodesMap = new Map<string, TraceTreeNode>();
+  const nodesMap = new Map<string, TraceData>();
   nodesMap.set(aggregatedObject.run_id, rootNode);
   flatChildren.forEach(child => {
-    const node = { ...child, children: [] };
+    const node = { ...child, child_runs: [] };
     nodesMap.set(child.run_id, node);
   });
 
   flatChildren.forEach(child => {
     const parentNode = nodesMap.get(child.parent_run_id)!;
     if (parentNode) {
-      parentNode.children.push(nodesMap.get(child.run_id)!);
+      parentNode.child_runs.push(nodesMap.get(child.run_id)!);
     }
   });
   return rootNode;

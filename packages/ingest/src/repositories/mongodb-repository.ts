@@ -39,7 +39,9 @@ export class MongodbRepository {
 
   async insertFeedbackOnTraceByRunId(feedback: CreateFeedback) {
     const collection = this.db.collection(this.collectionName);
-    await collection.updateOne({ run_id: { $eq: feedback.run_id } }, { $set: { feedback } });
+    await collection.updateOne(
+      { run_id: { $eq: feedback.run_id } },
+      { $set: { feedback_stats: feedback } });
   }
 
   async updateFeedbackOnTraceByFeedbackId(
@@ -50,10 +52,10 @@ export class MongodbRepository {
 
     const setOperation: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(feedbackData)) {
-      setOperation[`feedback.${key}`] = value;
+      setOperation[`feedback_stats.${key}`] = value;
     }
 
-    return await collection.updateOne({ 'feedback.id': feedbackId },
+    return await collection.updateOne({ 'feedback_stats.id': feedbackId },
       { $set: setOperation });
   }
 }

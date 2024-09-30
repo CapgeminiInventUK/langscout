@@ -10,7 +10,7 @@ services:
       - langscout-mongodb
 
   langscout-mongodb:
-    image: mongo:latest
+    image: mongo:latest@sha256:a3d0dec40b95df592c7e7eef603019ba03b164998c3b394739e0dd4cd45d490d
     ports:
       - "27017:27017"
     environment:

@@ -43,7 +43,6 @@ export class LangchainToLangscoutService {
     const updateData: UpdateTraceDatabase = {
       ...langchainData,
       run_id: langchainData.id,
-      start_time: this.convertToDate(langchainData.start_time),
       end_time: langchainData.end_time
         ? this.convertToDate(langchainData.end_time)
         : undefined,

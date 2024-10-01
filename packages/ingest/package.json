@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@types/express-requests-logger": "4.0.0",
-    "@typescript-eslint/eslint-plugin": "8.7.0",
-    "@typescript-eslint/parser": "8.7.0"
+    "@typescript-eslint/eslint-plugin": "8.8.0",
+    "@typescript-eslint/parser": "8.8.0"
   }
 }

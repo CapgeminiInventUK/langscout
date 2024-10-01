@@ -3,8 +3,8 @@ interface DateTime {
   time: string;
 }
 
-export function convertTimestampToDatetime(timestamp: string): DateTime {
-  const dateObj = new Date(timestamp);
+export function convertTimestampToDatetime(timestamp: string | number): DateTime {
+  const dateObj = new Date(typeof timestamp === 'number' ? timestamp * 1000 : timestamp);
 
   const date = dateObj.toLocaleDateString('en-GB', {
     day: '2-digit',

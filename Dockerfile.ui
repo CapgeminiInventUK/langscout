@@ -35,7 +35,7 @@ RUN npm ci --frozen-lockfile
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-#COPY --from=deps /app/packages/ui/node_modules ./node_modules
+COPY --from=deps /app/packages/models ./packages/models
 COPY ./packages/ui/src ./src
 #COPY ./packages/ui/public ./public
 COPY ./packages/ui/tailwind.config.ts ./

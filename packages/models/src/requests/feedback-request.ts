@@ -1,4 +1,4 @@
-import { FeedbackCreate } from 'langsmith/dist/schemas';
+import { FeedbackCreate } from 'langsmith/schemas';
 
 export interface CreateFeedback extends FeedbackCreate {
   run_id: string;

@@ -15,8 +15,9 @@ export default function TraceDetailsMetadataPanel(
     </CardHeader>
     <CardContent className="rounded-b-lg bg-muted py-4">
       <CodeBlock>
-        {JSON.stringify(selectedTrace.extra['metadata'], null, 2)}
+        {JSON.stringify(selectedTrace.extra?.['metadata'], null, 2)}
       </CodeBlock>
     </CardContent>
   </Card>;
+
 }

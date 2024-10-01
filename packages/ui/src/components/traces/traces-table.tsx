@@ -44,8 +44,10 @@ export default function TracesTable({ projectId, traces }: TraceTableProps) {
           </TableHeader>
           <TableBody>
             {traces.map(trace => {
-              const runDate = convertTimestampToDatetime(trace.start_time);
-              const endDate = trace.end_time ? convertTimestampToDatetime(trace.end_time) : null;
+              const runDate = trace.start_time
+                ? convertTimestampToDatetime(trace.start_time) : null;
+              const endDate = trace.end_time
+                ? convertTimestampToDatetime(trace.end_time) : null;
               return <TableRow
                 key={trace.run_id}
                 onClick={() => handleRowClick(projectId, trace.run_id)}>
@@ -53,12 +55,12 @@ export default function TracesTable({ projectId, traces }: TraceTableProps) {
                 <TableCell className="w-6 text-center">
                   {getStatusCellContentForTrace(trace)}
                 </TableCell>
-                <TableCell>{runDate.date} @ {runDate.time}</TableCell>
+                <TableCell>{runDate?.date} @ {runDate?.time}</TableCell>
                 <TableCell>
                   {trace.latency && <HoverCard openDelay={300}>
                     <HoverCardContent>
                       <div>
-                        <p>Start: {runDate.date} @ {runDate.time}</p>
+                        {runDate && <p>Start: {runDate.date} @ {runDate.time}</p>}
                         {endDate && <p>End: {endDate.date} @ {endDate.time}</p>}
                       </div>
                     </HoverCardContent>

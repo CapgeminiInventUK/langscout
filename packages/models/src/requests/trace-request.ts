@@ -1,4 +1,4 @@
-import { RunCreate, RunUpdate } from 'langsmith/dist/schemas';
+import { RunCreate, RunUpdate } from 'langsmith/schemas';
 
 export interface CreateTraceRequest extends Omit<RunCreate, 'start_time' | 'end_time'> {
   start_time: string | number;

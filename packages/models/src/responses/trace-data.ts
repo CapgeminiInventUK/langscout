@@ -1,5 +1,5 @@
 
-import { Run } from 'langsmith/dist/schemas';
+import { Run } from 'langsmith/schemas';
 
 //TODO Rename
 export interface TraceData extends Omit<Run, 'child_runs'>{

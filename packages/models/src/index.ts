@@ -1,5 +1,5 @@
-export { CreateFeedback, UpdateFeedback } from './requests/feedback-request';
-export {
+export type { CreateFeedback, UpdateFeedback } from './requests/feedback-request';
+export type {
   CreateTraceRequest,
   CreateTraceDatabase,
   UpdateTraceDatabase,
@@ -7,9 +7,9 @@ export {
   BatchTraceRequest,
 } from './requests/trace-request';
 
-export { ProjectResponse } from './responses/project-response';
+export type { ProjectResponse } from './responses/project-response';
 
-export { FeedbackCountResponse } from './responses/feedback-count-response';
-export { TraceData } from './responses/trace-data';
-export { TracePercentile } from './responses/traces-percentiles-response';
-export { TracesResponse } from './responses/traces-response';
+export type { FeedbackCountResponse } from './responses/feedback-count-response';
+export type { TraceData } from './responses/trace-data';
+export type { TracePercentile } from './responses/traces-percentiles-response';
+export type { TracesResponse } from './responses/traces-response';

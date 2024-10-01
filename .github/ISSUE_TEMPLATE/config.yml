@@ -1,4 +1,10 @@
 contact_links:
-  - name: Get Help
+  - name: Ideas and Feature Requests
+    url: https://github.com/CapgeminiInventUK/langscout/discussions/new?category=ideas
+    about: Create a new discussion to suggest an idea or feature for LangScout.
+  - name: Get Help (Discussions)
+    url: https://github.com/CapgeminiInventUK/langscout/discussions/new?category=q-a
+    about: Create a new discussion to ask for help under the Q&A category for LangScout.
+  - name: Get Support & Updates (Discord)
     url: https://discord.gg/P3Mg76Qg9U
-    about: If you need more support join our Discord server.
+    about: If you need more support or want to keep up to date on LangScout news, join our Discord server.

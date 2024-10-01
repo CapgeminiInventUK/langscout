@@ -1,0 +1,21 @@
+name: Bug Report
+description: Report a bug to help us improve LangScout.
+title: "bug: "
+labels: ["Possible bug"]
+body:
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: Provide a clear and concise description of the bug, including what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Describe the steps to reproduce the bug. Include detailed steps, code snippets, or reproduction repositories.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: Add any other relevant information, including screenshots if applicable.

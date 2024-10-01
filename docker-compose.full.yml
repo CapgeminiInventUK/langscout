@@ -19,7 +19,7 @@ services:
       - langscout-mongodb
 
   langscout-api:
-    image: ghcr.io/capgeminiinventuk/langscout-api:latest@sha256:8c8f7d8e0c0e9a9c1854245f6e8900b3464c991849dbe8e945989e2fee9da59d
+    image: ghcr.io/capgeminiinventuk/langscout-api:latest@sha256:7252381f49b5e966e61f085ae02eef6cdefbbbe2dacb1fd052324605604a70c4
     ports:
       - "1994:1994"
     env_file:

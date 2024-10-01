@@ -18,7 +18,7 @@ export default function TraceDetailsPanel() {
           <TabsList>
             <TabsTrigger value="trace">Trace</TabsTrigger>
             <TabsTrigger value="metadata">Metadata</TabsTrigger>
-            {selectedTrace?.feedback !== undefined && (
+            {selectedTrace.feedback_stats && (
               <TabsTrigger value="feedback">Feedback</TabsTrigger>
             )}
           </TabsList>
@@ -28,9 +28,9 @@ export default function TraceDetailsPanel() {
           <TabsContent value="metadata">
             <TraceDetailsMetadataPanel selectedTrace={selectedTrace}/>
           </TabsContent>
-          {selectedTrace?.feedback !== undefined && (
+          {selectedTrace.feedback_stats && (
             <TabsContent value="feedback">
-              <TraceDetailsFeedbackPanel feedback={selectedTrace.feedback}/>
+              <TraceDetailsFeedbackPanel feedback={selectedTrace.feedback_stats}/>
             </TabsContent>
           )}
         </Tabs>

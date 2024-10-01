@@ -484,8 +484,7 @@ export class MongodbRepository {
             execution_order: 1,
             trace_id: 1,
             dotted_order: 1,
-            feedback: 1,
-            // metadata: '$extra.metadata',
+            feedback_stats: 1,
             extra: 1,
             child_runs: {
               $map: {
@@ -506,7 +505,7 @@ export class MongodbRepository {
                   execution_order: '$$item.execution_order',
                   trace_id: '$$item.trace_id',
                   dotted_order: '$$item.dotted_order',
-                  feedback: '$$item.feedback',
+                  feedback_stats: '$$item.feedback_stats',
                   extra: '$$item.extra',
                   depth: '$$item.depth'
                 },

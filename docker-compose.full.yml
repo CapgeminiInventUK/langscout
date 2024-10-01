@@ -10,7 +10,7 @@ services:
       - langscout-api
 
   langscout-ingest:
-    image: ghcr.io/capgeminiinventuk/langscout-ingest:latest@sha256:68f4ae475086adae4fd10733b0ef59395b0eb52c87b0a48c7196d4cb9fd00ab1
+    image: ghcr.io/capgeminiinventuk/langscout-ingest:latest@sha256:c89cc1c745efdd03aae153f2b6be72ae5e72718414560b2f6370b1e4bda0d947
     ports:
       - "1984:1984"
     env_file:

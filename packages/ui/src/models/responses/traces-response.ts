@@ -7,9 +7,9 @@ export interface TracePercentile {
 
 export interface FeedbackCount {
   key: string;
+  feedbackType: string;
   counts: { [key: string]: number };
 }
-
 
 export interface TracesResponse {
   traces: TraceData[];

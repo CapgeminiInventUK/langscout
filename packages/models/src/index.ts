@@ -4,8 +4,10 @@ export {
   CreateTraceDatabase,
   UpdateTraceDatabase,
   UpdateTraceRequest,
-  BatchTraceRequest
+  BatchTraceRequest,
 } from './requests/trace-request';
+
+export { ProjectResponse } from './responses/project-response';
 
 export { FeedbackCountResponse } from './responses/feedback-count-response';
 export { TraceData } from './responses/trace-data';

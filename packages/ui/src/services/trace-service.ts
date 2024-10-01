@@ -56,7 +56,7 @@ export async function getTraceTree(projectId: string, traceId: string): Promise<
   const response = await fetch(
     `${config.langscoutApiUrl}/langscout/api/projects/${projectId}/traces/tree/${traceId}`
   );
-  // If 404
+
   if (response.status === 404) {
     return null;
   }

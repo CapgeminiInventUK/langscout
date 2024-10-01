@@ -1,8 +1,12 @@
 import { Collection, Db, MongoClient } from 'mongodb';
 import 'dotenv/config';
 import { FeedbackFilters } from '../routers/traces-router';
-import { Document } from 'bson';
-import { TracePercentile, FeedbackCountResponse, TraceData } from '@langscout/models';
+import {
+  TracePercentile,
+  FeedbackCountResponse,
+  TraceData,
+  ProjectResponse
+} from '@langscout/models';
 
 export class MongodbRepository {
   private db: Db | undefined;
@@ -56,8 +60,8 @@ export class MongodbRepository {
         }
 
         orConditions.push(
-          { 'feedback.key': key, 'feedback.value': { $in: typedValues } },
-          { 'feedback.key': key, 'feedback.score': { $in: typedValues } }
+          { 'feedback_stats.key': key, 'feedback_stats.value': { $in: typedValues } },
+          { 'feedback_stats.key': key, 'feedback_stats.score': { $in: typedValues } }
         );
       }
 
@@ -68,7 +72,7 @@ export class MongodbRepository {
     return feedbackFilter;
   }
 
-  async getProjects(): Promise<Document[]> {
+  async getProjects(): Promise<ProjectResponse[]> {
     const now: Date = new Date();
     const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -119,7 +123,7 @@ export class MongodbRepository {
       ];
 
 
-    return await collection.aggregate(aggregation).toArray();
+    return await collection.aggregate<ProjectResponse>(aggregation).toArray();
   }
 
   async getTraces(
@@ -529,7 +533,7 @@ export class MongodbRepository {
             parent_run_id: null,
             ...(startDate && { 'start_time': { $gte: startDate } }),
             ...(endDate && { 'end_time': { $lte: endDate } }),
-            feedback: {
+            feedback_stats: {
               $exists: true,
             },
             'session_name': projectId
@@ -537,13 +541,13 @@ export class MongodbRepository {
         },
         {
           $project: {
-            feedbackKey: '$feedback.key',
+            feedbackKey: '$feedback_stats.key',
             feedbackType: {
               $cond: {
                 if: {
                   $or: [
-                    { $eq: ['$feedback.score', true] },
-                    { $eq: ['$feedback.score', false] },
+                    { $eq: ['$feedback_stats.score', true] },
+                    { $eq: ['$feedback_stats.score', false] },
                   ],
                 },
                 then: 'score',
@@ -554,18 +558,18 @@ export class MongodbRepository {
               $cond: [
                 {
                   $or: [
-                    { $eq: ['$feedback.score', true] },
-                    { $eq: ['$feedback.score', false] },
+                    { $eq: ['$feedback_stats.score', true] },
+                    { $eq: ['$feedback_stats.score', false] },
                   ],
                 },
                 {
                   $cond: [
-                    { $eq: ['$feedback.score', true] },
+                    { $eq: ['$feedback_stats.score', true] },
                     'true',
                     'false',
                   ],
                 },
-                { $ifNull: ['$feedback.value', 'None'] },
+                { $ifNull: ['$feedback_stats.value', 'None'] },
               ],
             },
           },
@@ -605,7 +609,7 @@ export class MongodbRepository {
           $project: {
             _id: 0,
             key: '$_id.key',
-            type: '$_id.type',
+            feedbackType: '$_id.type',
             counts: {
               $arrayToObject: {
                 $map: {

@@ -6,7 +6,6 @@ export const projectsRouter = Router();
 
 const projectsService = new ProjectsService();
 
-
 projectsRouter.use('/', tracesRouter);
 
 projectsRouter.get('/', async (req: ExpressRequest, res: ExpressResponse) => {
@@ -14,6 +13,6 @@ projectsRouter.get('/', async (req: ExpressRequest, res: ExpressResponse) => {
 
   const projects = await projectsService.getProjects();
 
-  res.json(projects);
+  return res.json(projects);
 });
 

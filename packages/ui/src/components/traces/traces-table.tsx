@@ -107,7 +107,8 @@ export default function TracesTable({ projectId, traces }: TraceTableProps) {
                     <HoverCardTrigger>
                       {
                         `${trace.feedback_stats['key']}: ${
-                          'key' in trace.feedback_stats && 'score' in trace.feedback_stats ? trace.feedback_stats['score'] 
+                          'key' in trace.feedback_stats && 'score' in trace.feedback_stats
+                            ? trace.feedback_stats['score']
                             : trace.feedback_stats['value']}`
                       }
                     </HoverCardTrigger>

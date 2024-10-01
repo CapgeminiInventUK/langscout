@@ -1,5 +1,5 @@
 import { MongodbRepository } from '../repositories/mongodb-repository';
-import { Document } from 'bson';
+import { ProjectResponse } from '@langscout/models';
 
 export class ProjectsService {
   private repository: MongodbRepository;
@@ -8,7 +8,7 @@ export class ProjectsService {
     this.repository = new MongodbRepository();
   }
 
-  async getProjects(): Promise<Document[]> {
+  async getProjects(): Promise<ProjectResponse[]> {
     return await this.repository.getProjects();
   }
 }

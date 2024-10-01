@@ -1,6 +1,5 @@
 'use client';
 
-import { ProjectResponse } from '@/models/responses/projects-response';
 import React from 'react';
 import {
   Table,
@@ -10,6 +9,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { ProjectResponse } from '@langscout/models';
 
 interface ProjectsTableProps {
   projects: ProjectResponse[];

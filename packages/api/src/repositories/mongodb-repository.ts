@@ -1,8 +1,12 @@
 import { Collection, Db, MongoClient } from 'mongodb';
 import 'dotenv/config';
 import { FeedbackFilters } from '../routers/traces-router';
-import { Document } from 'bson';
-import { TracePercentile, FeedbackCountResponse, TraceDetailResponse } from '@langscout/models';
+import {
+  TracePercentile,
+  FeedbackCountResponse,
+  TraceData,
+  ProjectResponse
+} from '@langscout/models';
 
 export class MongodbRepository {
   private db: Db | undefined;
@@ -56,8 +60,8 @@ export class MongodbRepository {
         }
 
         orConditions.push(
-          { 'feedback.key': key, 'feedback.value': { $in: typedValues } },
-          { 'feedback.key': key, 'feedback.score': { $in: typedValues } }
+          { 'feedback_stats.key': key, 'feedback_stats.value': { $in: typedValues } },
+          { 'feedback_stats.key': key, 'feedback_stats.score': { $in: typedValues } }
         );
       }
 
@@ -68,7 +72,7 @@ export class MongodbRepository {
     return feedbackFilter;
   }
 
-  async getProjects(): Promise<Document[]> {
+  async getProjects(): Promise<ProjectResponse[]> {
     const now: Date = new Date();
     const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -119,14 +123,14 @@ export class MongodbRepository {
       ];
 
 
-    return await collection.aggregate(aggregation).toArray();
+    return await collection.aggregate<ProjectResponse>(aggregation).toArray();
   }
 
   async getTraces(
     projectId: string,
     startDate?: Date,
     endDate?: Date,
-    feedbackFilters?: FeedbackFilters): Promise<TraceDetailResponse[]> {
+    feedbackFilters?: FeedbackFilters): Promise<TraceData[]> {
 
     const feedbackFilter = this.createMatchForFilters(feedbackFilters);
 
@@ -146,7 +150,7 @@ export class MongodbRepository {
           startWith: '$run_id',
           connectFromField: 'run_id',
           connectToField: 'parent_run_id',
-          as: 'children',
+          as: 'child_runs',
           depthField: 'depth',
           restrictSearchWithMatch: {
             parent_run_id: {
@@ -164,14 +168,14 @@ export class MongodbRepository {
           name: 1,
           start_time: 1,
           end_time: 1,
-          feedback: 1,
+          feedback_stats: 1,
           error: 1,
           latency: {
             $subtract: ['$end_time', '$start_time'],
           },
           totalInputCost: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -194,7 +198,7 @@ export class MongodbRepository {
           },
           totalInputTokenCount: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -217,7 +221,7 @@ export class MongodbRepository {
           },
           totalOutputCost: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -240,7 +244,7 @@ export class MongodbRepository {
           },
           totalOutputTokenCount: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -263,7 +267,7 @@ export class MongodbRepository {
           },
           totalCost: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -286,7 +290,7 @@ export class MongodbRepository {
           },
           totalTokens: {
             $reduce: {
-              input: '$children',
+              input: '$child_runs',
               initialValue: 0,
               in: {
                 $add: [
@@ -319,7 +323,7 @@ export class MongodbRepository {
 
     const collection = await this.getCollection();
     return await collection
-      .aggregate<TraceDetailResponse>(pipeline)
+      .aggregate<TraceData>(pipeline)
       .toArray();
   }
 
@@ -383,9 +387,9 @@ export class MongodbRepository {
     });
   }
 
-  async getTraceTreeById(projectId: string, run_id: string): Promise<TraceDetailResponse[]> {
+  async getTraceTreeById(projectId: string, run_id: string): Promise<TraceData[]> {
     const collection = await this.getCollection();
-    return collection.aggregate<TraceDetailResponse>(
+    return collection.aggregate<TraceData>(
       [
         {
           $match: {
@@ -399,7 +403,7 @@ export class MongodbRepository {
             startWith: '$run_id',
             connectFromField: 'run_id',
             connectToField: 'parent_run_id',
-            as: 'children',
+            as: 'child_runs',
             depthField: 'depth',
             restrictSearchWithMatch: {
               parent_run_id: {
@@ -430,9 +434,9 @@ export class MongodbRepository {
                 else: '$$REMOVE',
               },
             },
-            children: {
+            child_runs: {
               $map: {
-                input: '$children',
+                input: '$child_runs',
                 as: 'record',
                 in: {
                   $mergeObjects: [
@@ -484,11 +488,11 @@ export class MongodbRepository {
             execution_order: 1,
             trace_id: 1,
             dotted_order: 1,
-            feedback: 1,
-            metadata: '$extra.metadata',
-            children: {
+            feedback_stats: 1,
+            extra: 1,
+            child_runs: {
               $map: {
-                input: '$children',
+                input: '$child_runs',
                 as: 'item',
                 in: {
                   name: '$$item.name',
@@ -505,8 +509,8 @@ export class MongodbRepository {
                   execution_order: '$$item.execution_order',
                   trace_id: '$$item.trace_id',
                   dotted_order: '$$item.dotted_order',
-                  feedback: '$$item.feedback',
-                  metadata: '$$item.extra.metadata',
+                  feedback_stats: '$$item.feedback_stats',
+                  extra: '$$item.extra',
                   depth: '$$item.depth'
                 },
               },
@@ -529,7 +533,7 @@ export class MongodbRepository {
             parent_run_id: null,
             ...(startDate && { 'start_time': { $gte: startDate } }),
             ...(endDate && { 'end_time': { $lte: endDate } }),
-            feedback: {
+            feedback_stats: {
               $exists: true,
             },
             'session_name': projectId
@@ -537,13 +541,13 @@ export class MongodbRepository {
         },
         {
           $project: {
-            feedbackKey: '$feedback.key',
+            feedbackKey: '$feedback_stats.key',
             feedbackType: {
               $cond: {
                 if: {
                   $or: [
-                    { $eq: ['$feedback.score', true] },
-                    { $eq: ['$feedback.score', false] },
+                    { $eq: ['$feedback_stats.score', true] },
+                    { $eq: ['$feedback_stats.score', false] },
                   ],
                 },
                 then: 'score',
@@ -554,18 +558,18 @@ export class MongodbRepository {
               $cond: [
                 {
                   $or: [
-                    { $eq: ['$feedback.score', true] },
-                    { $eq: ['$feedback.score', false] },
+                    { $eq: ['$feedback_stats.score', true] },
+                    { $eq: ['$feedback_stats.score', false] },
                   ],
                 },
                 {
                   $cond: [
-                    { $eq: ['$feedback.score', true] },
+                    { $eq: ['$feedback_stats.score', true] },
                     'true',
                     'false',
                   ],
                 },
-                { $ifNull: ['$feedback.value', 'None'] },
+                { $ifNull: ['$feedback_stats.value', 'None'] },
               ],
             },
           },
@@ -605,7 +609,7 @@ export class MongodbRepository {
           $project: {
             _id: 0,
             key: '$_id.key',
-            type: '$_id.type',
+            feedbackType: '$_id.type',
             counts: {
               $arrayToObject: {
                 $map: {

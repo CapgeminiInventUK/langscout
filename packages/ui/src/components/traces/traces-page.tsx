@@ -4,19 +4,19 @@ import { useState } from 'react';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import TracesTable from '@/components/traces/traces-table';
 import { FeedbackCount, TracePercentile } from '@/models/responses/traces-response';
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
 import TracesSideBar from '@/components/traces/traces-side-bar';
 import {
   FeedbackFilters,
   TracesFilterContext
 } from '@/components/traces/contexts/traces-filter-context';
+import { TraceData } from '@langscout/models';
 
 interface TracesPageProps {
   projectId: string;
   startDate?: Date;
   endDate?: Date;
   feedbackFilters?: FeedbackFilters;
-  traces: TraceTreeNode[];
+  traces: TraceData[];
   latency_percentiles: TracePercentile[];
   feedback_counts: FeedbackCount[];
 }

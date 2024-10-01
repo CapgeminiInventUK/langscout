@@ -1,4 +1,4 @@
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
+import { TraceData } from '@langscout/models';
 
 export interface TracePercentile {
   percentile: number;
@@ -7,12 +7,12 @@ export interface TracePercentile {
 
 export interface FeedbackCount {
   key: string;
+  feedbackType: string;
   counts: { [key: string]: number };
 }
 
-
 export interface TracesResponse {
-  traces: TraceTreeNode[];
+  traces: TraceData[];
   latency_percentiles: TracePercentile[];
   feedback_counts: FeedbackCount[];
 }

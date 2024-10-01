@@ -152,6 +152,35 @@ LANGSCOUT_TRACES_MONGODB_COLLECTION_NAME)
     ```
 - Got to function and select the function you created and paste the code from the function file
   ./atlas/functions/add-token-usage.js
+- Repeat process for add-latency.js
+  - Match
+    ```json5
+    {
+      "fullDocument.run_type": "llm",
+      "fullDocument.end_time": {
+        "$exists": true,
+        "$ne": null
+      },
+      "fullDocument.latency": {
+        "$exists": false
+      }
+    }
+    ```
+  - Project
+    ```json5
+    {
+      "fullDocument.end_time": 1,
+      "fullDocument.run_type": 1,
+      "fullDocument.latency": 1,
+      "ns.coll": 1,
+      "documentKey._id": 1,
+      "operationType": 1
+    }
+    ```
+- Go to Triggers and Dependencies in MongoDB Atlas and add `js-tiktoken-mongodb` version 0.0.3
+- Finally, you need to add the encoding for tokens to a new table called `encoding` in the same
+  database `LANGSCOUT_TRACES_MONGODB_COLLECTION_NAME`. Import the file `./atlas/encoding.json` to
+  that table
 
 #### Steps in atlas app service CLI
 

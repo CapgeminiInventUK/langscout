@@ -1,17 +1,9 @@
-export interface CreateFeedback {
-  id: string;
-  run_id: string;
-  key: string;
-  score?: number | boolean;
-  value?: string;
-  comment?: string;
+import { FeedbackCreate } from 'langsmith/dist/schemas';
 
-  [key: string]: unknown;
+export interface CreateFeedback extends FeedbackCreate {
+  run_id: string;
 }
 
-export interface UpdateFeedback {
-  score?: number | boolean;
-  value?: string;
-  correction?: { [key: string]: unknown };
-  comment?: string;
+export interface UpdateFeedback extends FeedbackCreate {
+  run_id: string;
 }

@@ -5,12 +5,21 @@ import { CreateFeedback, UpdateFeedback } from '@langscout/models';
 export const feedbackRouter = Router();
 const langchainService = new LangchainToLangscoutService();
 
-feedbackRouter.post('/', async (req: ExpressRequest, res: ExpressResponse) => {
+feedbackRouter.post('/', async (
+  req: ExpressRequest<never, never, CreateFeedback>,
+  res: ExpressResponse) => {
   console.debug('POST /api/feedback');
   try {
-    const runData = req.body as CreateFeedback;
-    await langchainService.createFeedback(runData);
+    const runData = req.body;
+    if (!runData.run_id) {
+      return res.status(400).json({ message: 'run_id is required' });
+    }
 
+    // Default feedbacl id to the run_id
+    if(!runData.id){
+      runData.id = runData.run_id;
+    }
+    await langchainService.createFeedback(runData);
     console.debug(`Created feedback with id ${runData.id} in run ${runData.run_id}`);
 
     res.status(201).json(
@@ -26,10 +35,12 @@ feedbackRouter.post('/', async (req: ExpressRequest, res: ExpressResponse) => {
   }
 });
 
-feedbackRouter.patch('/:feedbackId', async (req: ExpressRequest, res: ExpressResponse) => {
+feedbackRouter.patch('/:feedbackId', async (req: ExpressRequest<{
+  feedbackId: string
+}, never, UpdateFeedback>, res: ExpressResponse) => {
   console.debug('PATCH /api/feedback/:feedbackId');
   const feedbackId = req.params.feedbackId;
-  const updateData = req.body as UpdateFeedback;
+  const updateData = req.body;
 
   const success = await langchainService.updateFeedback(feedbackId, updateData);
   if (!success) {

@@ -6,7 +6,7 @@ import { TraceContext } from '@/components/trace/contexts/trace-context';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Badge } from '@/components/ui/badge';
-import { TraceTreeNode } from '@/models/responses/trace-detail-response';
+import { TraceData } from '@langscout/models';
 
 export default function TraceTree() {
 
@@ -19,7 +19,7 @@ export default function TraceTree() {
     onSelectTrace
   } = useContext(TraceContext);
 
-  const handleSelectTrace = (trace: TraceTreeNode) => {
+  const handleSelectTrace = (trace: TraceData) => {
     onSelectTrace(trace);
     setSelectedTraceId(trace.run_id);
   };
@@ -37,7 +37,7 @@ export default function TraceTree() {
     });
   };
 
-  const renderTrace = (trace: TraceTreeNode) => {
+  const renderTrace = (trace: TraceData) => {
     const isExpanded = expandedNodes.has(trace.run_id);
 
     return (
@@ -51,8 +51,7 @@ export default function TraceTree() {
         >
           <ToggleGroupItem
             value={trace.run_id} className="w-full pl-1.5">
-            <div onClick={() => handleSelectTrace(trace)}
-              className="flex-1
+            <div onClick={() => handleSelectTrace(trace)} className="flex-1
               font-normal
               flex items-center whitespace-nowrap overflow-hidden truncate gap-2"
             >
@@ -62,19 +61,21 @@ export default function TraceTree() {
               {trace.name}
             </div>
             <div>
-              <span className="pl-2 text-xs">{(trace.latency / 1000).toFixed(2)}s</span>
+              <span className="pl-2 text-xs">
+                {trace.latency !== null ? (trace.latency / 1000).toFixed(2) + 's' : 'N/A'}
+              </span>
             </div>
-            {trace.children?.length > 0 && (
+            {trace.child_runs?.length > 0 && (
               <span onClick={(e) =>
                 toggleExpand(e, trace.run_id)} className={'inline-block ml-1.5'}>
                 {isExpanded ? <MinusIcon/> : <PlusIcon/>}
               </span>
             )}
-            {trace.children?.length === 0 && <span className={'w-5'}/>}
+            {trace.child_runs?.length === 0 && <span className={'w-5'}/>}
           </ToggleGroupItem>
-          {trace.children && isExpanded && (
+          {trace.child_runs && isExpanded && (
             <div className="w-full ml-2 pr-2 border-l-2 pl-1.5 border-l-border">
-              {trace.children.map(child => renderTrace(child))}
+              {trace.child_runs.map(child => renderTrace(child))}
             </div>
           )}
         </ToggleGroup>

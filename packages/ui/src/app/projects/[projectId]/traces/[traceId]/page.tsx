@@ -18,6 +18,10 @@ export default async function Trace({ params }:
   const projectId = params.projectId as string;
   const traceData = await getTraceTree(projectId, traceId);
 
+  if (!traceData) {
+    return <div>Trace not found</div>;
+  }
+
   return <TracePage
     traceData={traceData}
     traceId={traceId}

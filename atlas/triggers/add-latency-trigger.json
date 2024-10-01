@@ -1,0 +1,42 @@
+{
+  "name": "add-latency",
+  "type": "DATABASE",
+  "disabled": false,
+  "config": {
+    "service_name": "<service-name>",
+    "database": "langscout",
+    "collection": "traces",
+    "operation_types": ["UPDATE", "CREATE"],
+    "full_document": true,
+    "full_document_before_change": false,
+    "tolerate_resume_errors": false,
+    "unordered": true,
+    "match": {
+      "fullDocument.start_time": {
+        "$exists": true,
+        "$ne": null
+      },
+      "fullDocument.end_time": {
+        "$exists": true,
+        "$ne": null
+      }
+    },
+    "maximum_throughput": false,
+    "skip_catchup_events": false,
+    "project": {
+      "fullDocument.start_time": 1,
+      "fullDocument.end_time": 1,
+      "fullDocument.latency": 1,
+      "ns.coll": 1,
+      "documentKey._id": 1,
+      "operationType": 1
+    }
+  },
+  "event_processors": {
+    "FUNCTION": {
+      "config": {
+        "function_name": "add-latency"
+      }
+    }
+  }
+}

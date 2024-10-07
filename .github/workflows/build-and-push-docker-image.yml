@@ -21,7 +21,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Log in to the Container registry
         uses: docker/login-action@3b8fed7e4b60203b2aa0ecc6c6d6d91d12c06760
@@ -59,7 +59,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Log in to the Container registry
         uses: docker/login-action@3b8fed7e4b60203b2aa0ecc6c6d6d91d12c06760
@@ -100,7 +100,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Log in to the Container registry
         uses: docker/login-action@3b8fed7e4b60203b2aa0ecc6c6d6d91d12c06760

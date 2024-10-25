@@ -15,10 +15,10 @@
     "@langscout/models": "*",
     "dotenv": "16.4.5",
     "express": "4.21.1",
-    "mongodb": "6.9.0"
+    "mongodb": "6.10.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "8.8.1",
-    "@typescript-eslint/parser": "8.8.1"
+    "@typescript-eslint/eslint-plugin": "8.11.0",
+    "@typescript-eslint/parser": "8.11.0"
   }
 }

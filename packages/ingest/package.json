@@ -16,11 +16,11 @@
     "dotenv": "16.4.5",
     "express-requests-logger": "4.0.1",
     "express": "4.21.1",
-    "mongodb": "6.9.0"
+    "mongodb": "6.10.0"
   },
   "devDependencies": {
     "@types/express-requests-logger": "4.0.0",
-    "@typescript-eslint/eslint-plugin": "8.8.1",
-    "@typescript-eslint/parser": "8.8.1"
+    "@typescript-eslint/eslint-plugin": "8.11.0",
+    "@typescript-eslint/parser": "8.11.0"
   }
 }

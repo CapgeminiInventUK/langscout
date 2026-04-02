@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Log in to the Container registry
-        uses: docker/login-action@7ca345011ac4304463197fac0e56eab1bc7e6af0
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -62,7 +62,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Log in to the Container registry
-        uses: docker/login-action@7ca345011ac4304463197fac0e56eab1bc7e6af0
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -103,7 +103,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Log in to the Container registry
-        uses: docker/login-action@7ca345011ac4304463197fac0e56eab1bc7e6af0
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
